@@ -32,16 +32,105 @@
             color: #1d1d1f;
             margin-bottom: 20px;
         }
+
+        /* Botón de copiar */
+        .controls {
+            display: flex;
+            gap: 12px;
+            align-items: center;
+        }
+        .btn-copy {
+            background-color: #0a84ff;
+            color: white;
+            border: none;
+            padding: 10px 16px;
+            border-radius: 10px;
+            font-size: 15px;
+            cursor: pointer;
+            transition: background-color 0.15s ease;
+        }
+        .btn-copy:active { transform: translateY(1px); }
+        .btn-copy:disabled {
+            background-color: #7fb6ff;
+            cursor: default;
+        }
+        .sr-only {
+            position: absolute;
+            width: 1px;
+            height: 1px;
+            padding: 0;
+            margin: -1px;
+            overflow: hidden;
+            clip: rect(0,0,0,0);
+            white-space: nowrap;
+            border: 0;
+        }
     </style>
 </head>
 <body>
     <div class="container">
         <h1>Análisis de Portafolio</h1>
-        <p>
+        <p id="descripcion">
             Bienvenido a la sección de análisis de portafolio. Aquí podrás realizar un análisis detallado de tu cartera de inversiones, 
             evaluando el rendimiento, la diversificación y los riesgos asociados. Esta herramienta te ayudará a tomar decisiones 
             informadas sobre tus inversiones.
         </p>
+
+        <div class="controls" aria-live="polite">
+            <button id="copyBtn" class="btn-copy" type="button" aria-describedby="copyDesc">Copiar texto</button>
+            <span id="copyDesc" class="sr-only">Copia el texto del párrafo anterior al portapapeles</span>
+        </div>
     </div>
+
+    <script>
+        (function() {
+            const p = document.getElementById('descripcion');
+            const btn = document.getElementById('copyBtn');
+
+            async function fallbackCopyTextToClipboard(text) {
+                const textarea = document.createElement('textarea');
+                textarea.value = text;
+                // Evita que la textarea sea visible en el diseño
+                textarea.style.position = 'fixed';
+                textarea.style.top = '-9999px';
+                document.body.appendChild(textarea);
+                textarea.focus();
+                textarea.select();
+                try {
+                    document.execCommand('copy');
+                } catch (err) {
+                    console.error('Fallo el copy fallback', err);
+                }
+                document.body.removeChild(textarea);
+            }
+
+            async function copyText(text) {
+                if (navigator.clipboard && navigator.clipboard.writeText) {
+                    return navigator.clipboard.writeText(text);
+                } else {
+                    return fallbackCopyTextToClipboard(text);
+                }
+            }
+
+            btn.addEventListener('click', async () => {
+                const text = p.innerText || p.textContent;
+                btn.disabled = true;
+                const originalText = btn.textContent;
+                try {
+                    await copyText(text);
+                    btn.textContent = '¡Copiado!';
+                } catch (err) {
+                    console.error('No se pudo copiar:', err);
+                    btn.textContent = 'Error al copiar';
+                } finally {
+                    // Restaurar el texto del botón después de 1.5s
+                    setTimeout(() => {
+                        btn.textContent = originalText;
+                        btn.disabled = false;
+                    }, 1500);
+                }
+            });
+        })();
+    </script>
 </body>
 </html>
