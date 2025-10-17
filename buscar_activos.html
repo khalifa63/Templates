@@ -137,6 +137,39 @@
     <button id="copyBtn" class="copy-btn" style="display: none;">Copiar respuesta</button>
 </div>
 <script>
+const ratiosPorDefecto = {
+    "Swing": {
+        "Value": "• P/E < 20 • P/B < 2 • ROE > 12% • Margen operativo > 10% • Debt/Equity < 0.8 • EPS YoY > 0% • FCF positivo • RSI 45–60 • Volumen > 1.2× promedio 20d • MACD cruce alcista",
+        "Growth": "• Ingresos YoY > 15% • EPS YoY > 20% • Margen operativo > 15% • ROE > 15% • ROIC > 10% • PER < 30 (ajustado crecimiento) • FCF creciente • RSI 50–65 • Volumen > 1.5× 20d • Base técnica activa",
+        "Dividend Investing": "• Dividend Yield > 3% • Payout < 70% • ROE > 10% • Debt/Equity < 0.6 • PER < 20 • FCF estable • ≥ 5 años dividendos crecientes • RSI 45–60 • Volatilidad baja • MA50 estable",
+        "CAN SLIM": "C: EPS trimestral > 25–50% A: EPS CAGR 3Y > 15–20% N: Novedad/sector/max 52s S: Volumen > 1.5× L: RS > 80 I: Fondos institucionales ↑ M: Mercado alcista • Breakout confirmado • RSI 55–70"
+    },
+    "Largo plazo": {
+        "Value": "• P/E < 15 • P/B < 1.5 • EV/EBITDA < 10 • PEG < 1.5 • ROE > 15% • Margen neto > 10% • Debt/Equity < 0.6 • FCF Yield > 5% • Crecimiento EPS 5Y positivo • Margen bruto estable",
+        "Growth": "• Ingresos CAGR 5Y > 15% • EPS CAGR 5Y > 20% • ROE > 15% • ROIC > 10% • Margen operativo > 15% • PER < 40 • Debt/Equity < 0.8 • Alta inversión I+D • Margen bruto > 50%",
+        "Dividend Investing": "• Dividend Yield > 3% • Payout Ratio < 70% • PER < 20 • ROE > 10% • Debt/Equity < 0.6 • FCF positivo y constante • 5–10 años crecimiento dividendos • Beta < 1",
+        "CAN SLIM": "C: EPS trimestral > 25% A: EPS CAGR 3–5Y > 15–20% N: Innovación/disrupción S: Volumen creciente L: RS > 80 I: Inst. participación ↑ M: Macro bullish • Margen bruto alto • ROIC >12%"
+    },
+    "Mediano plazo": {
+        "Value": "• P/E < 18 • P/B < 1.8 • ROE > 12% • Margen operativo > 12% • Debt/Equity < 0.7 • EPS YoY > 5% • FCF positivo",
+        "Growth": "• Ingresos YoY > 12% • EPS YoY > 15% • Margen operativo > 13% • ROE > 13% • ROIC > 9% • PER < 35 • FCF creciente",
+        "Dividend Investing": "• Dividend Yield > 2.5% • Payout < 65% • ROE > 10% • Debt/Equity < 0.65 • PER < 22 • FCF estable",
+        "CAN SLIM": "C: EPS trimestral > 20% A: EPS CAGR 3Y > 13% N: Novedad/sector/max 52s S: Volumen > 1.3× L: RS > 75 I: Fondos institucionales ↑ M: Mercado favorable"
+    }
+};
+
+function setRatiosPorDefecto() {
+    const horizonte = document.getElementById("horizonte").value;
+    const estrategia = document.getElementById("estrategia").value;
+    const ratiosText = ratiosPorDefecto[horizonte] && ratiosPorDefecto[horizonte][estrategia] ? ratiosPorDefecto[horizonte][estrategia] : "";
+    document.getElementById("ratios").value = ratiosText;
+}
+
+// Inicialización por defecto
+document.getElementById("horizonte").addEventListener("change", setRatiosPorDefecto);
+document.getElementById("estrategia").addEventListener("change", setRatiosPorDefecto);
+window.addEventListener("DOMContentLoaded", setRatiosPorDefecto);
+
 document.getElementById("analisisForm").addEventListener("submit", function(e){
     e.preventDefault();
     const horizonte = document.getElementById("horizonte").value;
