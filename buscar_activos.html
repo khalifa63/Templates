@@ -50,7 +50,7 @@
             gap: 18px;
             margin-bottom: 8px;
         }
-        button {
+        button, .copy-btn {
             margin-top: 18px;
             padding: 12px 24px;
             background: #2e77ff;
@@ -62,7 +62,7 @@
             cursor: pointer;
             transition: background 0.3s;
         }
-        button:hover {
+        button:hover, .copy-btn:hover {
             background: #1247aa;
         }
         .plantilla {
@@ -72,6 +72,10 @@
             border-radius: 12px;
             margin-top: 32px;
             font-size: 15px;
+        }
+        .copy-btn {
+            display: block;
+            margin: 18px 0 0 0;
         }
     </style>
 </head>
@@ -117,8 +121,8 @@
             <option value="Cash / Liquidez">Cash / Liquidez</option>
         </select>
 
-        <label for="ratios">Ratios fundamentales mínimos (máx 200 caracteres):</label>
-        <textarea id="ratios" maxlength="200" required></textarea>
+        <label for="ratios">Ratios fundamentales mínimos (máx 500 caracteres):</label>
+        <textarea id="ratios" maxlength="500" required></textarea>
 
         <label>Perfil de riesgo:</label>
         <div class="radio-group">
@@ -130,6 +134,7 @@
         <button type="submit">Enviar</button>
     </form>
     <div id="plantillaResultado" class="plantilla" style="display: none;"></div>
+    <button id="copyBtn" class="copy-btn" style="display: none;">Copiar respuesta</button>
 </div>
 <script>
 document.getElementById("analisisForm").addEventListener("submit", function(e){
@@ -165,6 +170,14 @@ Perfil de riesgo: [${riesgo}].`;
 
     document.getElementById("plantillaResultado").style.display = "block";
     document.getElementById("plantillaResultado").textContent = plantilla;
+    document.getElementById("copyBtn").style.display = "block";
+});
+
+document.getElementById("copyBtn").addEventListener("click", function(){
+    const text = document.getElementById("plantillaResultado").textContent;
+    navigator.clipboard.writeText(text).then(() => {
+        alert("Respuesta copiada al portapapeles");
+    });
 });
 </script>
 </body>
