@@ -1,1 +1,208 @@
-<p>sfsg</p>
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Generar Informe de Ticker</title>
+    <style>
+        body {
+            font-family: -apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Oxygen,Ubuntu,Cantarell,sans-serif;
+            background: #f5f5f7;
+            color: #1d1d1f;
+            margin: 0;
+            padding: 24px;
+        }
+        .container {
+            max-width: 800px;
+            background: #fff;
+            padding: 36px;
+            border-radius: 16px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.09);
+            margin: 0 auto;
+        }
+        h1 {
+            font-size: 2.2rem;
+            font-weight: 670;
+            margin-bottom: 18px;
+        }
+        label {
+            display: block;
+            margin-top: 18px;
+            margin-bottom: 5px;
+            font-weight: 500;
+        }
+        input[type="text"], input[type="number"] {
+            padding: 10px; font-size: 16px; border:1px solid #d2d2d7; border-radius:8px;
+            width: 100%; max-width: 350px; margin-bottom: 10px;
+        }
+        button {
+            margin-top: 16px; background:#1760e8; color:#fff;
+            padding: 12px 22px; font-weight:bold; font-size: 15px;
+            border: none; border-radius: 8px; cursor: pointer;
+            transition: background 0.3s;
+        }
+        button:hover {
+            background: #1247aa;
+        }
+        .informe {
+            padding: 22px;
+            margin-top: 36px;
+            background: #eef3fa;
+            border-radius: 12px;
+            font-size: 15px;
+            white-space: pre-wrap;
+        }
+        .copy-btn {
+            margin: 20px 0 0 0;
+            border: none; background: #34d058;
+            color: #fff; font-size: 15px; font-weight: bold;
+            padding: 10px 22px; border-radius: 8px;
+            cursor: pointer; transition: background 0.3s;
+        }
+        .copy-btn:hover { background: #22863a; }
+    </style>
+</head>
+<body>
+<div class="container">
+    <h1>Informe Profesional del Ticker</h1>
+    <label for="ticker">Ticker del activo:</label>
+    <input type="text" id="ticker" maxlength="10" placeholder="Ejemplo: MSFT" required>
+
+    <label for="inversion">Inversión total disponible (USD):</label>
+    <input type="number" id="inversion" step="1" min="1" max="999999"
+           placeholder="Ejemplo: 400" value="400" required>
+
+    <button id="generarBtn">Generar informe</button>
+
+    <div id="informeSalida" class="informe" style="display:none;"></div>
+    <button id="copyBtn" class="copy-btn" style="display:none;">Copiar informe</button>
+</div>
+
+<script>
+function fechaActualStr() {
+    const hoy = new Date();
+    return hoy.toISOString().split('T')[0];
+}
+
+document.getElementById("generarBtn").onclick = function() {
+    const ticker = document.getElementById("ticker").value.trim() || "N/D";
+    const inversion = document.getElementById("inversion").value.trim() || "N/D";
+    const fecha = fechaActualStr();
+
+    const plantilla = 
+`ROL:
+Eres un Analista Financiero Senior con doctorado en Mercados de Capitales, especializado en análisis fundamental, técnico y macroeconómico de acciones, ETFs y activos globales. Aplica un enfoque bottom-up (empresa) y top-down (mercado). Investiga en los medios financieros más recientes y confiables: Investor Relations, Bloomberg, Reuters, Yahoo Finance, MarketScreener, Seeking Alpha.
+
+INSTRUCCIONES:
+Completa de forma profesional, clara y precisa la siguiente plantilla para el ticker ${ticker}, con:
+- Inversión total disponible: USD $${inversion}
+
+Si algún dato no está disponible, indica “N/D”.
+
+FORMATO DE SALIDA:
+- Genera un **texto estructurado con tablas profesional** con:
+  - Títulos jerarquizados (H1, H2, H3)
+  - Tabla de contenidos (opcional)
+  - Tablas para ratios y cálculos
+  - Párrafos de justificación claros y concisos
+  - Sección final "Anexos y Fuentes" con links y fechas exactas
+ - No debes incluir las citas, “cite”.
+ - No generar Json al final. 
+
+📅 Fecha: ${fecha} (fecha de consulta)
+
+I. Datos Generales del Activo
+- Ticker: ${ticker} – [Nombre completo]
+- Precio actual: [Precio en USD] (Fuente: [sitio] — [fecha de consulta]) [barata , cara, justamente valorada]
+- Descripción: [Breve resumen]
+- Insider ownership: [%] >= 20%
+- Tesis de inversión: [Ventajas]
+- País: [País]
+- Sector / Subsector: [Sector], [Subsector]
+- Clasificación del activo: [Acciones USA / Acciones Internacionales /  ETF Globales / Small Cap / Dividendos Internacionales /]
+- Estilo de trading: [Swing / Largo Plazo / mediano Plazo]
+- Estilo fundamental: [Value / Growth / Dividend Investing / CAN SLIM]
+- ¿Invertiría hoy?: [Sí / No]
+- Justificación: [Motivo principal — 2–4 líneas]
+- Calificación total: [x/10]
+
+Capital asignado: USD $${inversion}
+
+II. Análisis Fundamental
+| Ratio | Valor | Fuente | Fecha |
+|-------|-------:|--------|-------|
+| PER | [valor] | [fuente] | [fecha] |
+| P/B | [valor] | [fuente] | [fecha] |
+| ROE | [valor] | [fuente] | [fecha] |
+| Margen operativo | [valor] | [fuente] | [fecha] |
+| Crec. ingresos (3 años) | [valor] | [fuente] | [fecha] |
+| Endeudamiento | [valor] | [fuente] | [fecha] |
+| FCF | [valor] | [fuente] | [fecha] |
+
+Catalizadores futuros:
+- [Lista con fechas cuando aplique]
+
+III. Contexto de Mercado (Top-down)
+- VIX actual: [nivel] — interpretación (fuente — fecha)
+- Fear & Greed Index: [nivel] — interpretación (fuente — fecha)
+- Tendencia general del mercado: [Descripción] (fuente — fecha)
+- Eventos macro cercanos: [Listado con fechas relevantes]
+
+IV. Configuración Técnica
+- Setup Técnico: [Ruptura / Pullback / Patrón / Soporte dinámico]
+- Volumen acompaña: [Sí / No] (compara con promedio 20 días — fuente — fecha)
+- Nivel de entrada sugerido: USD [valor] (explicar por qué)
+- Stop Loss (SL): USD [valor]
+- Take Profit (TP): USD [valor]
+- RRR calculado: RRR = (TP - Entrada) / (Entrada - SL) → [valor con 2 decimales]
+- Volumen de acciones (fórmula):
+  Volumen = (Inversión total disponible / Precio actual) = acciones
+- VWAP(Volume Weighted Average Price)
+
+V. Gestión de Riesgo
+- Riesgo unitario máximo: USD 200–400 (1–2 % del capital total)
+- Tamaño de posición sugerido: [USD y % del portafolio]
+- Compatibilidad con la cartera: [Comentario sobre diversificación y exposición sectorial]
+
+VI. Comparativa Sectorial (si aplica)
+- Comparables: [Ticker A], [Ticker B], [ETF de referencia]
+- Tabla resumen: PER, ROE, YTD Return, Market Cap (fuentes y fechas)
+- Conclusión breve: [Posicionamiento relativo]
+
+VII. Catalizadores y Estrategia Global
+Factores o eventos que pueden modificar la valoración o momentum del activo (earnings, lanzamientos, fusiones, políticas, tasas, ciclo).
+Integración con la cartera: cómo encaja este activo dentro de la estrategia global (temática, horizonte, diversificación).
+
+Resumen Ejecutivo Final (tabla)
+- Ticker: ${ticker}
+- Recomendación: [Comprar / Mantener / Vender]
+- Horizonte recomendado: [Corto / Mediano / Largo plazo]
+- Puntuación total: [x/10]
+- Comentario del analista: [3–4 líneas]
+
+ANEXOS Y FUENTES:
+- Lista de URLs, nombre de la fuente y fecha de consulta para cada fuente citada.
+- Incluir nota sobre metodología y cualquier supuesto usado en cálculos.
+
+NOTAS FINALES:
+- Usa tono analítico, objetivo y profesional (sin emojis) apropiado para clientes institucionales.
+- Si algún cálculo no puede hacerse por falta de datos, marca “N/D” y explica brevemente por qué.
+`;
+    const salida = document.getElementById("informeSalida");
+    salida.style.display = "block";
+    salida.textContent = plantilla;
+
+    document.getElementById("copyBtn").style.display = "inline-block";
+};
+
+// Copiar informe
+document.getElementById("copyBtn").onclick = function() {
+    const texto = document.getElementById("informeSalida").textContent;
+    navigator.clipboard.writeText(texto).then(() => {
+        alert("Informe copiado al portapapeles");
+    });
+};
+</script>
+</body>
+</html>
+
