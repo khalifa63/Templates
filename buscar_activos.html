@@ -79,10 +79,19 @@
 <div class="container">
     <h1>Sistema de Análisis Financiero</h1>
     <form id="analisisForm">
+        <label for="horizonte">Horizonte temporal:</label>
+        <select id="horizonte" required>
+            <option value="Swing">Swing</option>
+            <option value="Mediano plazo">Mediano plazo</option>
+            <option value="Largo plazo">Largo plazo</option>
+        </select>
+
         <label for="estrategia">Estrategia:</label>
         <select id="estrategia" required>
-            <option value="Swing">Swing</option>
-            <option value="Largo plazo">Largo plazo</option>
+            <option value="Value">Value</option>
+            <option value="Growth">Growth</option>
+            <option value="Dividend Investing">Dividend Investing</option>
+            <option value="CAN SLIM">CAN SLIM</option>
         </select>
 
         <label for="instrumento">Tipo de instrumento:</label>
@@ -92,25 +101,10 @@
             <option value="ETFs Globales">ETFs Globales</option>
             <option value="Small Caps">Small Caps</option>
             <option value="Dividendos internacionales">Dividendos internacionales</option>
-            <option value="CAN SLIM">CAN SLIM</option>
         </select>
 
-        <label for="sector1">Sector 1:</label>
+        <label for="sector1">Sector:</label>
         <select id="sector1" required>
-            <option value="Salud y Biotecnología">Salud y Biotecnología</option>
-            <option value="Tecnología e Inteligencia Artificial">Tecnología e Inteligencia Artificial</option>
-            <option value="Energía limpia y renovables">Energía limpia y renovables</option>
-            <option value="Consumo básico y retail">Consumo básico y retail</option>
-            <option value="Finanzas y seguros">Finanzas y seguros</option>
-            <option value="Infraestructura y construcción">Infraestructura y construcción</option>
-            <option value="Agroindustria y alimentos">Agroindustria y alimentos</option>
-            <option value="Turismo y entretenimiento">Turismo y entretenimiento</option>
-            <option value="Industriales y logística">Industriales y logística</option>
-            <option value="Cash / Liquidez">Cash / Liquidez</option>
-        </select>
-
-        <label for="sector2">Sector 2:</label>
-        <select id="sector2" required>
             <option value="Salud y Biotecnología">Salud y Biotecnología</option>
             <option value="Tecnología e Inteligencia Artificial">Tecnología e Inteligencia Artificial</option>
             <option value="Energía limpia y renovables">Energía limpia y renovables</option>
@@ -126,13 +120,6 @@
         <label for="ratios">Ratios fundamentales mínimos (máx 200 caracteres):</label>
         <textarea id="ratios" maxlength="200" required></textarea>
 
-        <label for="horizonte">Horizonte temporal:</label>
-        <select id="horizonte" required>
-            <option value="Swing">Swing</option>
-            <option value="Mediano plazo">Mediano plazo</option>
-            <option value="Largo plazo">Largo plazo</option>
-        </select>
-
         <label>Perfil de riesgo:</label>
         <div class="radio-group">
             <label><input type="radio" name="riesgo" value="Moderado" checked> Moderado</label>
@@ -147,20 +134,19 @@
 <script>
 document.getElementById("analisisForm").addEventListener("submit", function(e){
     e.preventDefault();
+    const horizonte = document.getElementById("horizonte").value;
     const estrategia = document.getElementById("estrategia").value;
     const instrumento = document.getElementById("instrumento").value;
     const sector1 = document.getElementById("sector1").value;
-    const sector2 = document.getElementById("sector2").value;
     const ratios = document.getElementById("ratios").value;
-    const horizonte = document.getElementById("horizonte").value;
     const riesgo = document.querySelector('input[name="riesgo"]:checked').value;
 
     const plantilla = 
-`Rol: Eres un Analista Financiero Senior con doctorado en Mercados de Capitales, especializado en estrategias [Value, Growth, Dividend Investing].
+`Rol: Eres un Analista Financiero Senior con doctorado en Mercados de Capitales, especializado en estrategias [${estrategia}].
 Objetivo: Identificar [${instrumento}] con alta probabilidad de éxito en el contexto actual del mercado.
 
 Criterios de selección:
-Deben pertenecer a los sectores [${sector1}] y [${sector2}], o sectores complementarios que fortalezcan la diversificación de la cartera.
+Deben pertenecer al sector [${sector1}], o sectores complementarios que fortalezcan la diversificación de la cartera.
 
 Cumplir los siguientes Ratios fundamentales mínimos:
 ${ratios}
@@ -183,4 +169,3 @@ Perfil de riesgo: [${riesgo}].`;
 </script>
 </body>
 </html>
-
