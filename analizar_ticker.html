@@ -66,7 +66,7 @@
 <div class="container">
     <h1>Informe Profesional del Ticker</h1>
     <label for="ticker">Ticker del activo:</label>
-    <input type="text" id="ticker" maxlength="10" placeholder="Ejemplo: MSFT" required>
+    <input type="text" id="ticker" maxlength="10" placeholder="Ejemplo: MSFT" required autocomplete="off">
 
     <label for="inversion">Inversión total disponible (USD):</label>
     <input type="number" id="inversion" step="1" min="1" max="999999"
@@ -79,14 +79,25 @@
 </div>
 
 <script>
+// Convierte ticker a mayúsculas en tiempo real
+document.getElementById("ticker").addEventListener("input", function() {
+    this.value = this.value.toUpperCase();
+});
+
 function fechaActualStr() {
     const hoy = new Date();
     return hoy.toISOString().split('T')[0];
 }
 
 document.getElementById("generarBtn").onclick = function() {
-    const ticker = document.getElementById("ticker").value.trim() || "N/D";
-    const inversion = document.getElementById("inversion").value.trim() || "N/D";
+    const ticker = document.getElementById("ticker").value.trim();
+    const inversion = document.getElementById("inversion").value.trim();
+
+    // Validación obligatoria
+    if (!ticker || !inversion) {
+        alert("Por favor, ingresa el Ticker y la Inversión total disponible. Ambos son obligatorios.");
+        return;
+    }
     const fecha = fechaActualStr();
 
     const plantilla = 
@@ -188,10 +199,10 @@ NOTAS FINALES:
 - Usa tono analítico, objetivo y profesional (sin emojis) apropiado para clientes institucionales.
 - Si algún cálculo no puede hacerse por falta de datos, marca “N/D” y explica brevemente por qué.
 `;
+
     const salida = document.getElementById("informeSalida");
     salida.style.display = "block";
     salida.textContent = plantilla;
-
     document.getElementById("copyBtn").style.display = "inline-block";
 };
 
@@ -205,4 +216,3 @@ document.getElementById("copyBtn").onclick = function() {
 </script>
 </body>
 </html>
-
