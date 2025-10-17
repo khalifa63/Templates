@@ -1,1 +1,186 @@
-<p>p</p>
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sistema de Análisis Financiero</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background-color: #f5f5f7;
+            color: #1d1d1f;
+        }
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            background-color: white;
+            border-radius: 18px;
+            padding: 30px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+        h1 {
+            font-size: 32px;
+            font-weight: 600;
+            margin-bottom: 30px;
+            color: #1d1d1f;
+        }
+        label {
+            display: block;
+            margin-top: 18px;
+            margin-bottom: 6px;
+            font-weight: 500;
+        }
+        select, textarea, input[type="radio"] {
+            width: 100%;
+            max-width: 400px;
+            padding: 10px;
+            margin-bottom: 8px;
+            border-radius: 8px;
+            border: 1px solid #d2d2d7;
+            font-size: 16px;
+        }
+        textarea {
+            min-height: 60px;
+            max-width: 100%;
+        }
+        .radio-group {
+            display: flex;
+            gap: 18px;
+            margin-bottom: 8px;
+        }
+        button {
+            margin-top: 18px;
+            padding: 12px 24px;
+            background: #2e77ff;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+        button:hover {
+            background: #1247aa;
+        }
+        .plantilla {
+            white-space: pre-wrap;
+            background: #eef3fa;
+            padding: 20px;
+            border-radius: 12px;
+            margin-top: 32px;
+            font-size: 15px;
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <h1>Sistema de Análisis Financiero</h1>
+    <form id="analisisForm">
+        <label for="estrategia">Estrategia:</label>
+        <select id="estrategia" required>
+            <option value="Swing">Swing</option>
+            <option value="Largo plazo">Largo plazo</option>
+        </select>
+
+        <label for="instrumento">Tipo de instrumento:</label>
+        <select id="instrumento" required>
+            <option value="Acciones de USA">Acciones de USA</option>
+            <option value="Acciones Internacionales">Acciones Internacionales</option>
+            <option value="ETFs Globales">ETFs Globales</option>
+            <option value="Small Caps">Small Caps</option>
+            <option value="Dividendos internacionales">Dividendos internacionales</option>
+            <option value="CAN SLIM">CAN SLIM</option>
+        </select>
+
+        <label for="sector1">Sector 1:</label>
+        <select id="sector1" required>
+            <option value="Salud y Biotecnología">Salud y Biotecnología</option>
+            <option value="Tecnología e Inteligencia Artificial">Tecnología e Inteligencia Artificial</option>
+            <option value="Energía limpia y renovables">Energía limpia y renovables</option>
+            <option value="Consumo básico y retail">Consumo básico y retail</option>
+            <option value="Finanzas y seguros">Finanzas y seguros</option>
+            <option value="Infraestructura y construcción">Infraestructura y construcción</option>
+            <option value="Agroindustria y alimentos">Agroindustria y alimentos</option>
+            <option value="Turismo y entretenimiento">Turismo y entretenimiento</option>
+            <option value="Industriales y logística">Industriales y logística</option>
+            <option value="Cash / Liquidez">Cash / Liquidez</option>
+        </select>
+
+        <label for="sector2">Sector 2:</label>
+        <select id="sector2" required>
+            <option value="Salud y Biotecnología">Salud y Biotecnología</option>
+            <option value="Tecnología e Inteligencia Artificial">Tecnología e Inteligencia Artificial</option>
+            <option value="Energía limpia y renovables">Energía limpia y renovables</option>
+            <option value="Consumo básico y retail">Consumo básico y retail</option>
+            <option value="Finanzas y seguros">Finanzas y seguros</option>
+            <option value="Infraestructura y construcción">Infraestructura y construcción</option>
+            <option value="Agroindustria y alimentos">Agroindustria y alimentos</option>
+            <option value="Turismo y entretenimiento">Turismo y entretenimiento</option>
+            <option value="Industriales y logística">Industriales y logística</option>
+            <option value="Cash / Liquidez">Cash / Liquidez</option>
+        </select>
+
+        <label for="ratios">Ratios fundamentales mínimos (máx 200 caracteres):</label>
+        <textarea id="ratios" maxlength="200" required></textarea>
+
+        <label for="horizonte">Horizonte temporal:</label>
+        <select id="horizonte" required>
+            <option value="Swing">Swing</option>
+            <option value="Mediano plazo">Mediano plazo</option>
+            <option value="Largo plazo">Largo plazo</option>
+        </select>
+
+        <label>Perfil de riesgo:</label>
+        <div class="radio-group">
+            <label><input type="radio" name="riesgo" value="Moderado" checked> Moderado</label>
+            <label><input type="radio" name="riesgo" value="Conservador"> Conservador</label>
+            <label><input type="radio" name="riesgo" value="Agresivo"> Agresivo</label>
+        </div>
+
+        <button type="submit">Enviar</button>
+    </form>
+    <div id="plantillaResultado" class="plantilla" style="display: none;"></div>
+</div>
+<script>
+document.getElementById("analisisForm").addEventListener("submit", function(e){
+    e.preventDefault();
+    const estrategia = document.getElementById("estrategia").value;
+    const instrumento = document.getElementById("instrumento").value;
+    const sector1 = document.getElementById("sector1").value;
+    const sector2 = document.getElementById("sector2").value;
+    const ratios = document.getElementById("ratios").value;
+    const horizonte = document.getElementById("horizonte").value;
+    const riesgo = document.querySelector('input[name="riesgo"]:checked').value;
+
+    const plantilla = 
+`Rol: Eres un Analista Financiero Senior con doctorado en Mercados de Capitales, especializado en estrategias [Value, Growth, Dividend Investing].
+Objetivo: Identificar [${instrumento}] con alta probabilidad de éxito en el contexto actual del mercado.
+
+Criterios de selección:
+Deben pertenecer a los sectores [${sector1}] y [${sector2}], o sectores complementarios que fortalezcan la diversificación de la cartera.
+
+Cumplir los siguientes Ratios fundamentales mínimos:
+${ratios}
+
+Considerar además: rentabilidad por dividendo (si aplica), capitalización bursátil, liquidez y volatilidad histórica.
+
+Salida esperada:
+Lista de los 5–10 instrumentos más atractivos según criterios actuales.
+
+Para cada uno, incluir: ticker, sector, país, ratios clave, recomendación (compra/mantener/observar) y breve justificación técnica/fundamental.
+
+Contexto adicional:
+Horizonte temporal: [${horizonte}].
+
+Perfil de riesgo: [${riesgo}].`;
+
+    document.getElementById("plantillaResultado").style.display = "block";
+    document.getElementById("plantillaResultado").textContent = plantilla;
+});
+</script>
+</body>
+</html>
+
