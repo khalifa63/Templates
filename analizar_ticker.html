@@ -1,33 +1,37 @@
 <!DOCTYPE html>
-<html lang="es">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Analizar Ticker</title>
-</head>
-<body>
-    <h1>Analizar Ticker</h1>
-    <form>
-        <label for="ticker">Ticker:</label>
-        <input type="text" id="ticker" name="ticker" required>
-        
-        <label for="capitalTotal">Capital total:</label>
-        <input type="number" id="capitalTotal" name="capitalTotal" required>
-        
-        <label for="inversion">Inversión para este activo:</label>
-        <input type="number" id="inversion" name="inversion" required>
-        
-        <button type="button" id="generarBtn">Generar</button>
-    </form>
-    
-    <div id="resultado"></div>
+
+
+    <meta charset="utf-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    Generar Informe de Ticker
+    <style>
+        body {            font-family: -apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Oxygen,Ubuntu,Cantarell,sans-serif;            background: #f5f5f7;            color: #1d1d1f;            margin: 0;            padding: 24px;        }
+        .container {            max-width: 800px;            background: #fff;            padding: 36px;            border-radius: 16px;            box-shadow: 0 2px 10px rgba(0,0,0,0.09);            margin: 0 auto;        }
+        h1 {            font-size: 2.2rem;            font-weight: 670;            margin-bottom: 18px;        }
+        label {            display: block;            margin-top: 18px;            margin-bottom: 5px;            font-weight: 500;        }
+        input[type="text"], input[type="number"] {            padding: 10px; font-size: 16px; border:1px solid #d2d2d7; border-radius:8px;            width: 100%; max-width: 350px; margin-bottom: 10px;        }
+        button {            margin-top: 16px; background:#1760e8; color:#fff;            padding: 12px 22px; font-weight:bold; font-size: 15px;            border: none; border-radius: 8px; cursor: pointer;            transition: background 0.3s;        }
+        button:hover {            background: #1247aa;        }
+        .informe {            padding: 22px;            margin-top: 36px;            background: #eef3fa;            border-radius: 12px;            font-size: 15px;            white-space: pre-wrap;        }
+        .copy-btn {            margin: 20px 0 0 0;            border: none; background: #34d058;            color: #fff; font-size: 15px; font-weight: bold;            padding: 10px 22px; border-radius: 8px;            cursor: pointer; transition: background 0.3s;        }
+        .copy-btn:hover { background: #22863a; }
+    </style>
+    <div class="container">
+    <h1>Informe Profesional del Ticker</h1>
+    <label for="ticker">Ticker del activo:</label>
+    <input id="ticker" type="text" maxlength="10" autocomplete="off" placeholder="Ejemplo: MSFT" required/>
+    <label for="inversion">Inversión total disponible (USD):</label>
+    <input id="inversion" type="number" min="1" max="999999" step="1" placeholder="Ejemplo: 400" value="400" required>
+    <button id="generarBtn">Generar informe</button>
+    <div id="informeSalida" class="informe" style="display:none;"></div>
+    <button id="copyBtn" class="copy-btn" style="display:none;">Copiar informe</button>
+    </div>
 
 <script>
 // Convierte ticker a mayúsculas en tiempo real
 document.getElementById("ticker").addEventListener("input", function() {
     this.value = this.value.toUpperCase();
 });
-
 function fechaActualStr() {
     const hoy = new Date();
     return hoy.toISOString().split('T')[0];
@@ -35,93 +39,184 @@ function fechaActualStr() {
 
 document.getElementById("generarBtn").onclick = function() {
     const ticker = document.getElementById("ticker").value.trim();
-    const capitalTotal = document.getElementById("capitalTotal").value.trim();
     const inversion = document.getElementById("inversion").value.trim();
-    
     // Validación obligatoria
-    if (!ticker || !capitalTotal || !inversion) {
-        alert("Por favor, ingresa el Ticker, Capital total y la Inversión para este activo. Todos son obligatorios.");
+    if (!ticker || !inversion) {
+        alert("Por favor, ingresa el Ticker y la Inversión total disponible. Ambos son obligatorios.");
         return;
     }
-    
     const fecha = fechaActualStr();
-    
-    const plantilla = `Perfecto ✅ Aquí tienes tu texto completamente convertido a formato **Markdown profesional**, listo para usar en documentación o plantillas.
-
+    const plantilla = 
+`Perfecto ✅ Aquí tienes tu texto completamente convertido a formato **Markdown profesional**, listo para usar en documentación o plantillas.
 ---
-
 # 📘 ROL
-
 **Eres un Analista Financiero Senior** con doctorado en Mercados de Capitales, especializado en **análisis fundamental, técnico y macroeconómico** de acciones, ETFs y activos globales.
-
 Aplica un enfoque **bottom-up (empresa)** y **top-down (mercado)**.
-
 Investiga en los medios financieros más recientes y confiables: *Investor Relations, Bloomberg, Reuters, Yahoo Finance, MarketScreener, Seeking Alpha.*
-
 ---
-
 # 🧭 INSTRUCCIONES
-
 Completa de forma profesional, clara y precisa la siguiente plantilla para **${ticker}**:
-
 * **Ticker:** \`${ticker}\`
-* **Capital total:** \`USD ${capitalTotal}\`
 * **Inversión para este activo:** \`USD ${inversion}\`
-
 Determina si conviene **entrar hoy o esperar** según:
-
 ### Factores de decisión
-
 * **Contexto de volatilidad:** VIX, Fear & Greed Index, tendencia de mercado.
 * **Eventos próximos:** resultados, decisiones regulatorias o anuncios esperados en los próximos 15 días.
 * **Actividad de insiders:** presencia de ventas o compras relevantes (Form 4 / 10b5-1).
 * **ATR(20):** si el Stop Loss propuesto es menor a \`1×ATR(20)\`, considera alto riesgo de ruido → sugiere esperar.
 * **Riesgo efectivo:** si supera 2 % del capital total, no entrar hasta recalibrar tamaño o volatilidad.
 * **Tendencia técnica:** confirma si el soporte clave se mantiene (MA50/MA200, VWAP, volumen).
-
 Indica explícitamente una **línea final de decisión operativa**:
-
 > 📈 **Entrar hoy**
 > ⏸️ **Esperar confirmación**
-
 según el cruce de condiciones anteriores.
-
-Si algún dato no está disponible, indica "N/D".
-
+Si algún dato no está disponible, indica “N/D”.
 ---
-
 # 🧩 FORMATO DE SALIDA
-
 Genera un **texto estructurado con tablas profesional** con:
-
 * Títulos jerarquizados (**H1, H2, H3**)
 * Tabla de contenidos (opcional)
 * Tablas para ratios y cálculos
 * Párrafos de justificación claros y concisos
-* Sección final **"Anexos y Fuentes"** con links y fechas exactas
-
-**No incluyas citas ("cite") ni JSON al final.**
-
+* Sección final **“Anexos y Fuentes”** con links y fechas exactas
+**No incluyas citas (“cite”) ni JSON al final.**
 ---
-
 # 🧠 REQUISITOS ADICIONALES DE CALIDAD
-
 * Usa datos, precios, ratios y eventos **actualizados en la última semana** (indica fecha de consulta junto a cada dato).
 * Cita **fuente y fecha exacta** para cada dato (ej.: *Yahoo Finance — ${fecha}*).
 * Si calculas métricas (PER, RRR, Volumen), muestra **fórmula**, pasos intermedios y redondeo (2 decimales).
 * Si \`RRR < 1.5\` o el **riesgo excede 2 %** del capital total, marca con **alerta destacada**.
-`;
-    
-    document.getElementById("resultado").innerText = plantilla;
-    
-    // Copiar al portapapeles
-    navigator.clipboard.writeText(plantilla).then(() => {
-        alert("Plantilla generada y copiada al portapapeles.");
-    }).catch(err => {
-        console.error("Error al copiar:", err);
-    });
-};
-</script>
-
-</body>
-</html>
+* Incluye **mini-comparativa sectorial** o **ETF de referencia** si aplica.
+---
+# 📊 CRITERIOS DE PUNTUACIÓN (0–10)
+| Factor                | Peso |
+| --------------------- | ---- |
+| Fundamentales         | 40 % |
+| Contexto y Macro      | 25 % |
+| Técnica / Timing      | 25 % |
+| Catalizadores Futuros | 10 % |
+### Interpretación del Score
+| Rango | Icono | Nivel              | Acción Recomendada                          |
+| ----- | ----- | ------------------ | ------------------------------------------- |
+| 8–10  | 🟩    | OPORTUNIDAD FUERTE | Comprar / Mantener con convicción           |
+| 6–7   | 🟨    | PRECAUCIÓN         | Comprar con precaución / posición contenida |
+| 0–5   | ⛔     | NO RECOMENDABLE    | Esperar señales o evitar                    |
+---
+# ⚠️ EJEMPLOS DE ALERTAS DE RIESGO
+| Tipo de Alerta       | Condición                | Formato Visual                                 |
+| -------------------- | ------------------------ | ---------------------------------------------- |
+| **RRR Bajo**         | RRR < 1.5                | ⛔ ALERTA ROJA: Riesgo excede recompensa        |
+| **Riesgo Alto**      | Riesgo > 2 % del capital | ⛔ ALERTA ROJA: Exposición excesiva             |
+| **RRR Moderado**     | 1.5 ≤ RRR < 2.0          | 🟨 PRECAUCIÓN: RRR aceptable pero ajustado     |
+| **Volatilidad Alta** | ATR > promedio histórico | 🟨 PRECAUCIÓN: Volatilidad elevada             |
+| **RRR Óptimo**       | RRR ≥ 2.0                | 🟩 FAVORABLE: Buena relación riesgo/recompensa |
+---
+# 📄 PLANTILLA DEL INFORME
+📅 **Fecha:** \`[YYYY-MM-DD]\` (fecha de consulta)
+---
+## I. Datos Generales del Activo
+* **Ticker:** \`[Abreviatura] – [Nombre completo]\`
+* **Precio actual:** \`[Precio en USD]\` *(Fuente: [sitio] — [fecha])* \`[barata / cara / justamente valorada]\`
+* **Descripción:** \`[Breve resumen del negocio o ETF]\`
+* **Insider ownership:** \`[≥ 20 %]\`
+* **Tesis de inversión:** \`[Ventajas competitivas / exposición temática]\`
+* **País:** \`[País]\`
+* **Sector / Subsector:** \`[Sector], [Subsector]\`
+* **Clasificación del activo:** \`[Acciones USA / Internacionales / ETF / Small Cap / Dividendos]\`
+* **Estilo de trading:** \`[Swing / Largo Plazo / Mediano Plazo]\`
+* **Estilo fundamental:** \`[Value / Growth / Dividend / CAN SLIM]\`
+* **Decisión operativa del día:** \`[Entrar hoy / Esperar / Evitar]\`
+* **Justificación táctica:** \`[2–3 líneas explicando setup o riesgo]\`
+* **Justificación:** \`[Motivo principal — 2–4 líneas]\`
+* **Calificación total:** \`[x/10]\`
+* **Capital total disponible:** \`[USD …]\`
+---
+## II. Análisis Fundamental
+| Ratio                   |   Valor | Fuente   | Fecha   |
+| ----------------------- | ------: | -------- | ------- |
+| PER                     | [valor] | [fuente] | [fecha] |
+| P/B                     | [valor] | [fuente] | [fecha] |
+| ROE                     | [valor] | [fuente] | [fecha] |
+| Margen operativo        | [valor] | [fuente] | [fecha] |
+| Crec. ingresos (3 años) | [valor] | [fuente] | [fecha] |
+| Endeudamiento           | [valor] | [fuente] | [fecha] |
+| FCF                     | [valor] | [fuente] | [fecha] |
+**Catalizadores futuros:**
+* [Lista con fechas cuando aplique]
+---
+## III. Contexto de Mercado (Top-down)
+* **VIX actual:** \`[nivel]\` — interpretación *(fuente — fecha)*
+* **Fear & Greed Index:** \`[nivel]\` — interpretación *(fuente — fecha)*
+* **Tendencia general del mercado:** \`[Descripción]\` *(fuente — fecha)*
+* **Eventos macro cercanos:** \`[Listado con fechas relevantes]\`
+---
+## IV. Configuración Técnica
+* **Precio actual:** \`[USD …]\` *(fuente — fecha)*
+* **Setup Técnico:** \`[Ruptura / Pullback / Soporte dinámico / Patrón]\`
+* **Volumen acompaña:** \`[Sí / No]\` *(comparado con promedio 20 días)*
+* **Nivel de entrada sugerido:** \`USD [valor]\` *(explicación)*
+* **Stop Loss (SL):** \`USD [valor]\` *(método ATR o técnico)*
+* **Take Profit (TP):** \`USD [valor]\`
+**RRR calculado:**
+\`RRR = (TP - Entrada) / (Entrada - SL)\` → \`[valor con 2 decimales]\`
+**Volumen de acciones:**
+\`Volumen = (Inversión total / Precio actual) = [acciones]\`
+---
+## V. Gestión de Riesgo
+**Riesgo unitario máximo:** 1–2 % del capital total.
+**Metodología de control de riesgo:**
+* **Stop Loss inicial (SL):**
+  Máximo entre:
+  * Nivel técnico clave (soporte o estructura)
+  * \`(Entrada − 1.2 × ATR(14))\` → volatilidad promedio 14 días
+**Riesgo efectivo:**
+\`(Entrada − SL) × N° acciones\`
+> ⚠️ Si el Riesgo efectivo > 2 % del capital total → recalcular posición o punto de entrada.
+---
+### 📋 Ejemplo de Presentación de Riesgo y RRR
+| Métrica                     | Valor  | Estado             | Alerta Visual |
+| --------------------------- | ------ | ------------------ | ------------- |
+| **RRR (Risk/Reward Ratio)** | 2.5    | Óptimo             | 🟩 FAVORABLE  |
+| **Riesgo por operación**    | 1.5 %  | Dentro del límite  | 🟩 OK         |
+| **Score Total**             | 8.5/10 | Fuerte oportunidad | 🟩 COMPRAR    |
+---
+### ⚠️ Ejemplo con Alertas Activadas
+| Métrica | Valor  | Estado          | Alerta Visual  |
+| ------- | ------ | --------------- | -------------- |
+| RRR     | 1.2    | Bajo umbral     | ⛔ RRR < 1.5    |
+| Riesgo  | 2.8 %  | Excede límite   | ⛔ Riesgo > 2 % |
+| Score   | 4.5/10 | No recomendable | ⛔ NO ENTRAR    |
+---
+### 🟨 Ejemplo con Precaución
+| Métrica | Valor  | Estado               | Alerta Visual             |
+| ------- | ------ | -------------------- | ------------------------- |
+| RRR     | 1.8    | Ajustado             | 🟨 PRECAUCIÓN             |
+| Riesgo  | 1.9 %  | Cerca del límite     | 🟨 PRECAUCIÓN             |
+| Score   | 6.5/10 | Oportunidad moderada | 🟨 COMPRAR CON PRECAUCIÓN |
+> 💡 El riesgo permitido (1–2 %) se calcula sobre el **capital total**,
+> pero el **Stop Loss** se aplica sobre la **posición individual**.
+---
+## VI. Comparativa Sectorial (si aplica)
+* **Comparables:** \`[Ticker A], [Ticker B], [ETF de referencia]\`
+* **Tabla resumen:** PER, ROE, YTD Return, Market Cap *(fuentes y fechas)*
+* **Conclusión:** \`[Posicionamiento relativo]\`
+---
+## VII. Catalizadores y Estrategia Global
+Describe los factores o eventos que pueden modificar la valoración o momentum del activo (earnings, fusiones, tasas, políticas, ciclo).
+Explica cómo encaja el activo dentro de la **estrategia global de cartera** (temática, horizonte, diversificación).
+---
+## 📈 Resumen Ejecutivo Final
+| Ticker   | Decisión operativa             | Horizonte recomendado     | Puntuación total | Comentario del analista |
+| -------- | ------------------------------ | ------------------------- | ---------------- | ----------------------- |
+| [ticker] | [Entrar / Esperar / No entrar] | [Corto / Mediano / Largo] | [x/10]           | [3–4 líneas]            |
+---
+## 📚 ANEXOS Y FUENTES
+* Lista de URLs, nombre de la fuente y fecha exacta.
+* Nota sobre metodología y supuestos utilizados.
+---
+## 🧾 NOTAS FINALES
+* Usa **tono analítico, objetivo y profesional** (sin emojis).
+* Si algún cálculo no puede realizarse por falta de datos, marca “N/D” y explica brevemente por qué.
+---
+¿Quieres que te lo formatee para copiar directamente en un archivo `.md` (por ejemplo con código Markdown en bloque)? Puedo darte la versión lista para pegar en VS Code o Notion.`;
+    const salida = document.getElementById("informeSalida");
