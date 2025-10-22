@@ -74,7 +74,7 @@
         <!-- FORMULARIO -->
         <form id="formulario">
             <label for="ticker">Ticker:</label>
-            <input type="text" id="ticker" name="ticker" placeholder="Ej: AAPL" required>
+            <input type="text" id="ticker" name="ticker" maxlength="6" pattern="[A-Z]{6}" style="text-transform: uppercase; placeholder="Ej: AAPL" required>
 
             <label for="capital">Capital total (USD):</label>
             <input type="number" id="capital" name="capital" placeholder="Ej: 20000" required>
