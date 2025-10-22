@@ -180,26 +180,95 @@ document.getElementById("analisisForm").addEventListener("submit", function(e){
     const riesgo = document.querySelector('input[name="riesgo"]:checked').value;
 
     const plantilla = 
-`Rol: Eres un Analista Financiero Senior con doctorado en Mercados de Capitales, especializado en estrategias [${estrategia}].
-Objetivo: Identificar [${instrumento}] con alta probabilidad de éxito en el contexto actual del mercado.
+`ROL:
+Eres un Analista Financiero Senior con doctorado en Mercados de Capitales, especializado en análisis fundamental, técnico y macroeconómico de acciones, ETFs y activos globales.
+Aplica un enfoque bottom-up (empresa) y top-down (mercado).
+Investiga en fuentes financieras actualizadas y confiables: Investor Relations, Bloomberg, Reuters, Yahoo Finance, MarketScreener, Seeking Alpha.
 
-Criterios de selección:
-Deben pertenecer al sector [${sector1}], o sectores complementarios que fortalezcan la diversificación de la cartera.
+OBJETIVO GENERAL:
+Identificar los 5 a 15 instrumentos financieros más atractivos según criterios de rentabilidad, fortaleza fundamental, y contexto técnico y macroeconómico actual.
 
-Cumplir los siguientes Ratios fundamentales mínimos:
+CONTEXTO DE EVALUACIÓN:
+
+Estrategia aplicada: [${estrategia}]
+
+Instrumento objetivo: [${instrumento}]
+
+Sectores prioritarios: [${sector1}] y sectores complementarios para diversificación.
+
+Horizonte temporal: [${horizonte}]
+
+Perfil de riesgo: [${riesgo}]
+
+CRITERIOS DE SELECCIÓN:
+Los instrumentos deben cumplir los siguientes requisitos mínimos:
+
+Pertenecer al sector o sectores definidos.
+
+Cumplir los siguientes ratios fundamentales mínimos:
 ${ratios}
 
 Considerar además: rentabilidad por dividendo (si aplica), capitalización bursátil, liquidez y volatilidad histórica.
 
-Salida esperada:
-Lista de los 5–10 instrumentos más atractivos según criterios actuales.
+Evaluar también:
 
-Para cada uno, incluir: ticker, sector, país, ratios clave, recomendación (compra/mantener/observar) y breve justificación técnica/fundamental.
+Contexto de volatilidad: VIX, Fear & Greed Index, tendencia de mercado.
 
-Contexto adicional:
-Horizonte temporal: [${horizonte}].
+Eventos próximos (resultados, decisiones regulatorias, anuncios en próximos 15 días).
 
-Perfil de riesgo: [${riesgo}].`;
+Actividad de insiders (ventas o compras relevantes, Form 4 / 10b5-1).
+
+ATR(20): si el Stop Loss propuesto es menor a 1×ATR(20), considerar alto riesgo de ruido.
+
+Riesgo efectivo: no debe superar el 2 % del capital total.
+
+Confirmar soporte clave (MA50/MA200, VWAP, volumen).
+
+REGLAS DE ANÁLISIS INTERNO (OCULTAS):
+Usa datos actualizados (última semana).
+Muestra cálculos de métricas si son relevantes (PER, RRR, Volumen).
+Evalúa los factores:
+
+Fundamentales (40%)
+
+Contexto Macro (25%)
+
+Técnica / Timing (25%)
+
+Catalizadores Futuros (10%)
+Interpreta el puntaje total según:
+
+🟩 8–10: Oportunidad fuerte (Comprar / Mantener con convicción)
+
+🟨 6–7: Precaución (Comprar con cautela / posición contenida)
+
+⛔ 0–5: No recomendable (Esperar / Evitar)
+
+No muestres este proceso en la salida final.
+
+🧾 SALIDA FINAL SOLICITADA (VISIBLE):
+Genera solo una tabla con formato profesional, sin texto adicional, sin introducción ni conclusiones.
+La tabla debe mostrar los 5–15 instrumentos más atractivos actualmente, ordenados por calificación (de mayor a menor).
+
+Cada fila debe incluir las siguientes columnas:
+
+| Ticker | Nombre del Ticker | Sector | País | Ratios clave (PER, ROE, Margen, Deuda, FCF) | Estilo de Trading (Swing / Mediano / Largo Plazo) | Valor Actual (USD) | Calificación (/10) | ¿Comprar Hoy? (Sí/No) | Recomendación / Alertas | Breve Justificación Técnica / Fundamental |
+
+Ejemplo de estilo esperado (no copiar literalmente):
+
+Ticker	Nombre del Ticker	Sector	País	Ratios Clave	Estilo de Trading	Valor Actual (USD)	Calificación (/10)	¿Comprar Hoy?	Recomendación / Alertas	Justificación
+NVDA	NVIDIA Corp.	Tecnología / Semiconductores	EE.UU.	PER: 32.5 · ROE: 45% · Margen: 54%	Swing / Mediano	420.75	9.1	✅ Sí	🟩 Comprar — RRR óptimo	Momentum fuerte impulsado por IA y soporte sobre MA200
+MSFT	Microsoft Corp.	Tecnología / Software	EE.UU.	PER: 29.2 · ROE: 42% · Margen: 40%	Largo Plazo	410.30	8.8	✅ Sí	🟩 Mantener / Comprar	Fundamentales sólidos, baja volatilidad, flujo de caja fuerte
+
+NOTAS:
+
+No incluyas cálculos, citas ni JSON.
+
+No repitas el texto del análisis ni explicaciones previas.
+
+Solo entrega la tabla final limpia, legible y completa.
+
+Cada celda debe contener texto conciso y profesional.`;
 
     document.getElementById("plantillaResultado").style.display = "block";
     document.getElementById("plantillaResultado").textContent = plantilla;
