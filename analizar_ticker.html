@@ -1,166 +1,514 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Sistema de Análisis Financiero</title>
-  <style>
-    body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif; margin: 0; padding: 20px; background-color: #f5f5f7; color: #1d1d1f; }
-    .container { max-width: 800px; margin: 0 auto; background-color: white; border-radius: 18px; padding: 30px; box-shadow: 0 2px 10px rgba(0,0,0,0.1); }
-    h1 { font-size: 32px; font-weight: 600; margin-bottom: 30px; color: #1d1d1f; }
-    label { display: block; margin-top: 18px; margin-bottom: 6px; font-weight: 500; }
-    select, textarea { width: 100%; max-width: 400px; padding: 10px; margin-bottom: 8px; border-radius: 8px; border: 1px solid #d2d2d7; font-size: 16px; }
-    textarea { min-height: 130px; max-width: 100%; }
-    .radio-group { display: flex; gap: 18px; margin-bottom: 8px; }
-    button, .copy-btn { margin-top: 18px; padding: 12px 24px; background: #2e77ff; color: white; border: none; border-radius: 8px; font-size: 16px; font-weight: bold; cursor: pointer; }
-    .plantilla { display: none; white-space: pre-wrap; }
-  </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Analizar Portafolio</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background-color: #f5f5f7;
+            color: #1d1d1f;
+        }
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            background-color: white;
+            border-radius: 18px;
+            padding: 30px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+        h1 {
+            font-size: 32px;
+            font-weight: 600;
+            margin-bottom: 30px;
+            color: #1d1d1f;
+        }
+        p {
+            font-size: 16px;
+            line-height: 1.6;
+            color: #1d1d1f;
+            margin-bottom: 20px;
+            white-space: pre-wrap; /* permite conservar saltos de línea */
+        }
+
+        /* Botón de copiar */
+        .controls {
+            display: flex;
+            gap: 12px;
+            align-items: center;
+        }
+        .btn-copy {
+            background-color: #0a84ff;
+            color: white;
+            border: none;
+            padding: 10px 16px;
+            border-radius: 10px;
+            font-size: 15px;
+            cursor: pointer;
+            transition: background-color 0.15s ease;
+        }
+        .btn-copy:active { transform: translateY(1px); }
+        .btn-copy:disabled {
+            background-color: #7fb6ff;
+            cursor: default;
+        }
+        .sr-only {
+            position: absolute;
+            width: 1px;
+            height: 1px;
+            padding: 0;
+            margin: -1px;
+            overflow: hidden;
+            clip: rect(0,0,0,0);
+            white-space: nowrap;
+            border: 0;
+        }
+    </style>
 </head>
 <body>
-  <div class="container">
-    <h1>Analizador de Ticker</h1>
+    <div class="container">
+        <h1>Análisis de Portafolio</h1>
+        <p id="descripcion">
+📘 ROL
+Eres un Analista Financiero Senior con doctorado en Mercados de Capitales, especializado en análisis fundamental, técnico y macroeconómico de acciones, ETFs y activos globales.
+ Aplica un enfoque bottom-up (empresa) y top-down (mercado).
+ Investiga en los medios financieros más recientes y confiables: Investor Relations, Bloomberg, Reuters, Yahoo Finance, MarketScreener, Seeking Alpha.
 
-    <form id="analisisForm">
-      <!-- 1) Horizonte BEFORE estrategia -->
-      <label for="horizonte">Horizonte temporal:</label>
-      <select id="horizonte" required>
-        <option value="" selected disabled>Selecciona una opción</option>
-        <option value="Swing">Swing</option>
-        <option value="Mediano plazo">Mediano plazo</option>
-        <option value="Largo plazo">Largo plazo</option>
-      </select>
+🧭 INSTRUCCIONES
+Completa de forma profesional, clara y precisa la siguiente plantilla para n:
+Ticker: [TICKER]
 
-      <!-- 2) Estrategia depends on horizonte for ratios mapping -->
-      <label for="estrategia">Estrategia:</label>
-      <select id="estrategia" required>
-        <option value="" selected disabled>Selecciona una opción</option>
-        <option value="Value">Value</option>
-        <option value="Growth">Growth</option>
-        <option value="Dividend Investing">Dividend Investing</option>
-        <option value="CAN SLIM">CAN SLIM</option>
-      </select>
 
-      <!-- 3) Instrumento third key parameter -->
-      <label for="instrumento">Tipo de instrumento:</label>
-      <select id="instrumento" required>
-        <option value="" selected disabled>Selecciona una opción</option>
-        <option value="Acciones de USA">Acciones de USA</option>
-        <option value="Acciones Internacionales">Acciones Internacionales</option>
-        <option value="ETFs Globales">ETFs Globales</option>
-        <option value="Small Caps">Small Caps</option>
-        <option value="Dividendos internacionales">Dividendos internacionales</option>
-      </select>
+Capital total: USD [Capital total]
 
-      <label for="sector1">Sector:</label>
-      <select id="sector1" required>
-        <option value="Salud y Biotecnología">Salud y Biotecnología</option>
-        <option value="Tecnología e Inteligencia Artificial">Tecnología e Inteligencia Artificial</option>
-        <option value="Energía limpia y renovables">Energía limpia y renovables</option>
-        <option value="Consumo básico y retail">Consumo básico y retail</option>
-        <option value="Finanzas y seguros">Finanzas y seguros</option>
-        <option value="Infraestructura y construcción">Infraestructura y construcción</option>
-        <option value="Agroindustria y alimentos">Agroindustria y alimentos</option>
-        <option value="Turismo y entretenimiento">Turismo y entretenimiento</option>
-        <option value="Industriales y logística">Industriales y logística</option>
-        <option value="Cash / Liquidez">Cash / Liquidez</option>
-      </select>
 
-      <label for="ratios">Ratios fundamentales mínimos:</label>
-      <textarea id="ratios" required></textarea>
+Inversión para este activo: USD [Inversión]
 
-      <label>Perfil de riesgo:</label>
-      <div class="radio-group">
-        <label><input type="radio" name="riesgo" value="Moderado" checked /> Moderado</label>
-        <label><input type="radio" name="riesgo" value="Conservador" /> Conservador</label>
-        <label><input type="radio" name="riesgo" value="Agresivo" /> Agresivo</label>
-      </div>
 
-      <button type="submit">Enviar</button>
-    </form>
+Determina si conviene entrar hoy o esperar según:
+Factores de decisión
+Contexto de volatilidad: VIX, Fear & Greed Index, tendencia de mercado.
 
-    <div id="plantillaResultado" class="plantilla"></div>
-    <button id="copyBtn" class="copy-btn" style="display:none;">Copiar respuesta</button>
-  </div>
 
-  <script>
-  // Ratios por defecto por (Horizonte -> Estrategia)
-  const ratiosPorDefecto = {
-    "Swing": {
-      "Value": "• P/E < 20 • P/B < 2 • ROE > 12% • Margen operativo > 10% • Debt/Equity < 0.8 • EPS YoY > 0% • FCF positivo • RSI 45–60 (acumulación) • MACD cruce alcista • Volumen > 1.2× promedio 20d • Precio cerca de soporte o MA50 • ATR(20) para stop dinámico • Reversión técnica o rebote tras sobreventa • VIX 15–25 (moderado) • Fear & Greed 30–50",
-      "Growth": "• Ingresos YoY > 15% • EPS YoY > 20% • Margen operativo > 15% • ROE > 15% • ROIC > 10% • PER < 30 (ajustado al crecimiento) • FCF creciente • RSI 50–65 (pre-breakout) • MACD cruzando al alza • Volumen > 1.5× promedio 20d • Precio ≤10% del máximo 52s • Base técnica activa (cup with handle, flat base) • Mercado alcista confirmado (MA50 > MA200) • Fear & Greed 40–70 • VIX < 22",
-      "Dividend Investing": "• Dividend Yield > 3% • Payout < 70% • ROE > 10% • Debt/Equity < 0.6 • PER < 20 • FCF estable • Historial ≥ 5 años de dividendos crecientes • RSI 45–60 (zona neutral estable) • Volatilidad baja (ATR reducido o Beta < 1) • MA50 estable o ascendente • Volumen estable sin picos • Mercados laterales o de consolidación • VIX < 20 • Fear & Greed 35–55 • Sectores defensivos (utilities, consumo, salud)",
-      "CAN SLIM": "C: EPS trimestral > 25–50% A: EPS CAGR 3Y > 15–20% N: Novedad (producto, sector, máximos 52s) S: Volumen actual > 1.5× promedio L: RS > 80 I: Fondos institucionales crecientes M: Mercado alcista • Breakout confirmado con volumen • RSI 55–70 • MACD positivo • Patrón técnico activo (cup with handle, double bottom, flat base) • Momentum sectorial fuerte • Fear & Greed 40–70 • VIX < 20 • Rotación de capital hacia Growth"
-    },
-    "Largo plazo": {
-      "Value": "• P/E < 15 • P/B < 1.5 • EV/EBITDA < 10 • PEG < 1.5 • ROE > 15% • Margen neto > 10% • Debt/Equity < 0.6 • FCF Yield > 5% • Crecimiento EPS 5Y positivo • Margen bruto estable o creciente • Cash Flow operativo > inversión • MA200 ascendente (tendencia estructural) • Fases de recuperación o consolidación de mercado • Fear & Greed < 40 (miedo = oportunidad) • VIX 18–25",
-      "Growth": "• Crecimiento de ingresos CAGR 5Y > 15% • EPS CAGR 5Y > 20% • ROE > 15% • ROIC > 10% • Margen operativo > 15% • PER < 40 (ajustado al crecimiento) • Debt/Equity < 0.8 • FCF creciente y reinvertido • Alta inversión en I+D • Margen bruto > 50% (indicador de moat tecnológico) • Crecimiento sostenido de usuarios/clientes • Fase de expansión macro o bull market estructural • Fear & Greed 50–75 • Sectores con innovación estructural (IA, salud, energía limpia)",
-      "Dividend Investing": "• Dividend Yield > 3% • Payout Ratio < 70% • PER < 20 • ROE > 10% • Debt/Equity < 0.6 • FCF positivo y constante • Historial ≥ 5–10 años de dividendos crecientes • Beta < 1 • Margen operativo estable • Rating crediticio investment grade (BBB o superior) • Mercados maduros o laterales • VIX < 20 • Sectores defensivos: utilities, consumo, salud",
-      "CAN SLIM": "C: EPS trimestral > 25% A: EPS anual CAGR 3–5Y > 15–20% N: Innovación o disrupción estructural S: Float controlado / volumen creciente L: RS > 80 sostenido I: Alta participación institucional M: Mercado global en expansión • Margen bruto alto y estable • ROIC > 12% • Crecimiento constante en ventas, usuarios o cuota de mercado • FCF reinvertido (expansión orgánica) • Ciclos expansivos de mercado (macro bullish) • Fear & Greed 50–70 • Tendencia MA200 y MA50 ascendentes • Sectores con apoyo institucional fuerte"
-    },
-    "Mediano plazo": {
-      "Value": "P/E < 20, P/B < 2, EV/EBITDA < 12, PEG < 2, ROE > 12%, Margen neto > 8%, Debt/Equity < 0.8, FCF Yield > 4%, Cash Flow operativo ≥ inversión, Crecimiento EPS 3Y positivo, Margen bruto estable o con leve mejora, ROIC > 10%, MA50 y MA200 en cruce alcista o MA50 ascendente, Volumen creciente en consolidación, Fear & Greed entre 30 y 50, VIX entre 15 y 22.",
-      "Growth": "Crecimiento EPS 3Y > 15% anual, Crecimiento ingresos 3Y > 10–15% anual, Crecimiento FCF > 10% anual, ROIC > 10%, Margen bruto > 40%, Margen operativo > 15%, P/E > 25 aceptable, PEG < 2, EV/Sales < 10, Debt/Equity < 1.0, Cash ratio > 1, MA50 y MA200 ascendentes, Volumen creciente en rupturas, VIX < 20.",
-      "Dividend Investing": "Dividend Yield > 3–4%, Dividend Payout Ratio < 70%, Free Cash Flow Payout Ratio < 60%, Cobertura de dividendos (Earnings/Dividend) > 1.5x, Crecimiento anual de dividendos > 5% (últimos 5 años), Historial de dividendos crecientes o estables, Debt/Equity < 1.0, Interest Coverage > 3x, ROE > 10%, Margen operativo > 15%, EV/EBITDA < 12.",
-      "CAN SLIM": "EPS trimestral > 25%, EPS anual > 25% durante al menos 3 años, ROE > 17%, Margen neto > 10%, Ventas anuales > 20–25%, Debt/Equity < 1.0, ROA > 10%."
-    }
-  };
+Eventos próximos: resultados, decisiones regulatorias o anuncios esperados en los próximos 15 días.
 
-  function setRatiosPorDefecto() {
-    const horizonte = document.getElementById("horizonte").value;
-    const estrategia = document.getElementById("estrategia").value;
-    const instrumento = document.getElementById("instrumento").value;
 
-    // Solo autocompletar si los TRES parámetros están definidos (no vacíos)
-    const allDefined = horizonte && estrategia && instrumento;
-    const ratiosText = allDefined && ratiosPorDefecto[horizonte] && ratiosPorDefecto[horizonte][estrategia]
-      ? ratiosPorDefecto[horizonte][estrategia]
-      : "";
-    document.getElementById("ratios").value = ratiosText;
-  }
+Actividad de insiders: presencia de ventas o compras relevantes (Form 4 / 10b5-1).
 
-  // Inicialización y reactividad: cualquier cambio en los 3 select actualiza ratios
-  ["horizonte", "estrategia", "instrumento"].forEach(id => {
-    document.getElementById(id).addEventListener("change", setRatiosPorDefecto);
-  });
-  window.addEventListener("DOMContentLoaded", setRatiosPorDefecto);
 
-  // Envío y generación de la plantilla (conserva estilo existente)
-  document.getElementById("analisisForm").addEventListener("submit", function(e) {
-    e.preventDefault();
-    const horizonte = document.getElementById("horizonte").value;
-    const estrategia = document.getElementById("estrategia").value;
-    const instrumento = document.getElementById("instrumento").value;
-    const sector1 = document.getElementById("sector1").value;
-    const ratios = document.getElementById("ratios").value;
-    const riesgo = document.querySelector('input[name="riesgo"]:checked').value;
+ATR(20): si el Stop Loss propuesto es menor a 1×ATR(20), considera alto riesgo de ruido → sugiere esperar.
 
-    const plantilla = `Rol: Eres un Analista Financiero Senior con doctorado en Mercados de Capitales, especializado en estrategias [${estrategia}].
-Objetivo: Identificar [${instrumento}] con alta probabilidad de éxito en el contexto actual del mercado.
-Criterios de selección:
-Deben pertenecer al sector [${sector1}], o sectores complementarios que fortalezcan la diversificación de la cartera.
-Cumplir los siguientes Ratios fundamentales mínimos:
-${ratios}
-Considerar además: rentabilidad por dividendo (si aplica), capitalización bursátil, liquidez y volatilidad histórica.
-Salida esperada:
-Lista de los 5–10 instrumentos más atractivos según criterios actuales.
-Para cada uno, incluir: ticker, sector, país, ratios clave, recomendación (compra/mantener/observar) y breve justificación técnica/fundamental.
-Contexto adicional:
-Horizonte temporal: [${horizonte}].
-Perfil de riesgo: [${riesgo}].`;
 
-    const out = document.getElementById("plantillaResultado");
-    out.style.display = "block";
-    out.textContent = plantilla;
-    const copyBtn = document.getElementById("copyBtn");
-    copyBtn.style.display = "block";
-  });
+Riesgo efectivo: si supera 2 % del capital total, no entrar hasta recalibrar tamaño o volatilidad.
 
-  document.getElementById("copyBtn").addEventListener("click", function() {
-    const text = document.getElementById("plantillaResultado").textContent;
-    navigator.clipboard.writeText(text).then(() => {
-      alert("Respuesta copiada al portapapeles");
-    });
-  });
-  </script>
+
+Tendencia técnica: confirma si el soporte clave se mantiene (MA50/MA200, VWAP, volumen).
+
+
+Indica explícitamente una línea final de decisión operativa:
+📈 Entrar hoy
+ ⏸️ Esperar confirmación
+según el cruce de condiciones anteriores.
+ Si algún dato no está disponible, indica “N/D”.
+
+🧩 FORMATO DE SALIDA
+Genera un texto estructurado con tablas profesional con:
+Títulos jerarquizados (H1, H2, H3)
+
+
+Tabla de contenidos (opcional)
+
+
+Tablas para ratios y cálculos
+
+
+Párrafos de justificación claros y concisos
+
+
+Sección final “Anexos y Fuentes” con links y fechas exactas
+
+
+No incluyas citas (“cite”) ni JSON al final.
+
+🧠 REQUISITOS ADICIONALES DE CALIDAD
+Usa datos, precios, ratios y eventos actualizados en la última semana (indica fecha de consulta junto a cada dato).
+
+
+Cita fuente y fecha exacta para cada dato (ej.: Yahoo Finance — 2025-10-07).
+
+
+Si calculas métricas (PER, RRR, Volumen), muestra fórmula, pasos intermedios y redondeo (2 decimales).
+
+
+Si RRR < 1.5 o el riesgo excede 2 % del capital total, marca con alerta destacada.
+
+
+Incluye mini-comparativa sectorial o ETF de referencia si aplica.
+
+
+📊 CRITERIOS DE PUNTUACIÓN (0–10)
+Factor
+Peso
+Fundamentales
+40 %
+Contexto y Macro
+25 %
+Técnica / Timing
+25 %
+Catalizadores Futuros
+10 %
+
+Interpretación del Score
+Rango
+Icono
+Nivel
+Acción Recomendada
+8–10
+🟩
+OPORTUNIDAD FUERTE
+Comprar / Mantener con convicción
+6–7
+🟨
+PRECAUCIÓN
+Comprar con precaución / posición contenida
+0–5
+⛔
+NO RECOMENDABLE
+Esperar señales o evitar
+
+
+⚠️ EJEMPLOS DE ALERTAS DE RIESGO
+Tipo de Alerta
+Condición
+Formato Visual
+RRR Bajo
+RRR < 1.5
+⛔ ALERTA ROJA: Riesgo excede recompensa
+Riesgo Alto
+Riesgo > 2 % del capital
+⛔ ALERTA ROJA: Exposición excesiva
+RRR Moderado
+1.5 ≤ RRR < 2.0
+🟨 PRECAUCIÓN: RRR aceptable pero ajustado
+Volatilidad Alta
+ATR > promedio histórico
+🟨 PRECAUCIÓN: Volatilidad elevada
+RRR Óptimo
+RRR ≥ 2.0
+🟩 FAVORABLE: Buena relación riesgo/recompensa
+
+
+📄 PLANTILLA DEL INFORME
+📅 Fecha: [YYYY-MM-DD] (fecha de consulta)
+
+I. Datos Generales del Activo
+Ticker: [Abreviatura] – [Nombre completo]
+
+
+Precio actual: [Precio en USD] (Fuente: [sitio] — [fecha]) [barata / cara / justamente valorada]
+
+
+Descripción: [Breve resumen del negocio o ETF]
+
+
+Insider ownership: [≥ 20 %]
+
+
+Tesis de inversión: [Ventajas competitivas / exposición temática]
+
+
+País: [País]
+
+
+Sector / Subsector: [Sector], [Subsector]
+
+
+Clasificación del activo: [Acciones USA / Internacionales / ETF / Small Cap / Dividendos]
+
+
+Estilo de trading: [Swing / Largo Plazo / Mediano Plazo]
+
+
+Estilo fundamental: [Value / Growth / Dividend / CAN SLIM]
+
+
+Decisión operativa del día: [Entrar hoy / Esperar / Evitar]
+
+
+Justificación táctica: [2–3 líneas explicando setup o riesgo]
+
+
+Justificación: [Motivo principal — 2–4 líneas]
+
+
+Calificación total: [x/10]
+
+
+Capital total disponible: [USD …]
+
+
+
+II. Análisis Fundamental
+Ratio
+Valor
+Fuente
+Fecha
+PER
+[valor]
+[fuente]
+[fecha]
+P/B
+[valor]
+[fuente]
+[fecha]
+ROE
+[valor]
+[fuente]
+[fecha]
+Margen operativo
+[valor]
+[fuente]
+[fecha]
+Crec. ingresos (3 años)
+[valor]
+[fuente]
+[fecha]
+Endeudamiento
+[valor]
+[fuente]
+[fecha]
+FCF
+[valor]
+[fuente]
+[fecha]
+
+Catalizadores futuros:
+[Lista con fechas cuando aplique]
+
+
+
+III. Contexto de Mercado (Top-down)
+VIX actual: [nivel] — interpretación (fuente — fecha)
+
+
+Fear & Greed Index: [nivel] — interpretación (fuente — fecha)
+
+
+Tendencia general del mercado: [Descripción] (fuente — fecha)
+
+
+Eventos macro cercanos: [Listado con fechas relevantes]
+
+
+
+IV. Configuración Técnica
+Precio actual: [USD …] (fuente — fecha)
+
+
+Setup Técnico: [Ruptura / Pullback / Soporte dinámico / Patrón]
+
+
+Volumen acompaña: [Sí / No] (comparado con promedio 20 días)
+
+
+Nivel de entrada sugerido: USD [valor] (explicación)
+
+
+Stop Loss (SL): USD [valor] (método ATR o técnico)
+
+
+Take Profit (TP): USD [valor]
+
+
+RRR calculado:
+ RRR = (TP - Entrada) / (Entrada - SL) → [valor con 2 decimales]
+Volumen de acciones:
+ Volumen = (Inversión total / Precio actual) = [acciones]
+
+V. Gestión de Riesgo
+Riesgo unitario máximo: 1–2 % del capital total.
+Metodología de control de riesgo:
+Stop Loss inicial (SL):
+ Máximo entre:
+
+
+Nivel técnico clave (soporte o estructura)
+
+
+(Entrada − 1.2 × ATR(14)) → volatilidad promedio 14 días
+
+
+Riesgo efectivo:
+ (Entrada − SL) × N° acciones
+⚠️ Si el Riesgo efectivo > 2 % del capital total → recalcular posición o punto de entrada.
+
+📋 Ejemplo de Presentación de Riesgo y RRR
+Métrica
+Valor
+Estado
+Alerta Visual
+RRR (Risk/Reward Ratio)
+2.5
+Óptimo
+🟩 FAVORABLE
+Riesgo por operación
+1.5 %
+Dentro del límite
+🟩 OK
+Score Total
+8.5/10
+Fuerte oportunidad
+🟩 COMPRAR
+
+
+⚠️ Ejemplo con Alertas Activadas
+Métrica
+Valor
+Estado
+Alerta Visual
+RRR
+1.2
+Bajo umbral
+⛔ RRR < 1.5
+Riesgo
+2.8 %
+Excede límite
+⛔ Riesgo > 2 %
+Score
+4.5/10
+No recomendable
+⛔ NO ENTRAR
+
+
+🟨 Ejemplo con Precaución
+Métrica
+Valor
+Estado
+Alerta Visual
+RRR
+1.8
+Ajustado
+🟨 PRECAUCIÓN
+Riesgo
+1.9 %
+Cerca del límite
+🟨 PRECAUCIÓN
+Score
+6.5/10
+Oportunidad moderada
+🟨 COMPRAR CON PRECAUCIÓN
+
+💡 El riesgo permitido (1–2 %) se calcula sobre el capital total,
+ pero el Stop Loss se aplica sobre la posición individual.
+
+VI. Comparativa Sectorial (si aplica)
+Comparables: [Ticker A], [Ticker B], [ETF de referencia]
+
+
+Tabla resumen: PER, ROE, YTD Return, Market Cap (fuentes y fechas)
+
+
+Conclusión: [Posicionamiento relativo]
+
+
+
+VII. Catalizadores y Estrategia Global
+Describe los factores o eventos que pueden modificar la valoración o momentum del activo (earnings, fusiones, tasas, políticas, ciclo).
+ Explica cómo encaja el activo dentro de la estrategia global de cartera (temática, horizonte, diversificación).
+
+📈 Resumen Ejecutivo Final
+Ticker
+Decisión operativa
+Horizonte recomendado
+Puntuación total
+Comentario del analista
+[ticker]
+[Entrar / Esperar / No entrar]
+[Corto / Mediano / Largo]
+[x/10]
+[3–4 líneas]
+
+
+📚 ANEXOS Y FUENTES
+Lista de URLs, nombre de la fuente y fecha exacta.
+
+
+Nota sobre metodología y supuestos utilizados.
+
+
+
+🧾 NOTAS FINALES
+Usa tono analítico, objetivo y profesional (sin emojis).
+
+
+Si algún cálculo no puede realizarse por falta de datos, marca “N/D” y explica brevemente por qué.
+
+FORMULARIO (PARÁMETROS) — INCLUIDOS:
+Ticker: [TICKER]
+
+Capital total: USD [Capital total]
+
+Inversión para este activo: USD [Inversión]
+        </p>
+
+        <div class="controls" aria-live="polite">
+            <button id="copyBtn" class="btn-copy" type="button" aria-describedby="copyDesc">Copiar texto</button>
+            <span id="copyDesc" class="sr-only">Copia el texto del párrafo anterior al portapapeles</span>
+        </div>
+    </div>
+
+    <script>
+        (function() {
+            const p = document.getElementById('descripcion');
+            const btn = document.getElementById('copyBtn');
+
+            async function fallbackCopyTextToClipboard(text) {
+                const textarea = document.createElement('textarea');
+                textarea.value = text;
+                // Evita que la textarea sea visible en el diseño
+                textarea.style.position = 'fixed';
+                textarea.style.top = '-9999px';
+                document.body.appendChild(textarea);
+                textarea.focus();
+                textarea.select();
+                try {
+                    document.execCommand('copy');
+                } catch (err) {
+                    console.error('Fallo el copy fallback', err);
+                }
+                document.body.removeChild(textarea);
+            }
+
+            async function copyText(text) {
+                if (navigator.clipboard && navigator.clipboard.writeText) {
+                    return navigator.clipboard.writeText(text);
+                } else {
+                    return fallbackCopyTextToClipboard(text);
+                }
+            }
+
+            btn.addEventListener('click', async () => {
+                const text = p.innerText || p.textContent;
+                btn.disabled = true;
+                const originalText = btn.textContent;
+                try {
+                    await copyText(text);
+                    btn.textContent = '¡Copiado!';
+                } catch (err) {
+                    console.error('No se pudo copiar:', err);
+                    btn.textContent = 'Error al copiar';
+                } finally {
+                    // Restaurar el texto del botón después de 1.5s
+                    setTimeout(() => {
+                        btn.textContent = originalText;
+                        btn.disabled = false;
+                    }, 1500);
+                }
+            });
+        })();
+    </script>
 </body>
 </html>
