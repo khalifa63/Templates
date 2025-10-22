@@ -90,7 +90,6 @@
 Claro, aquí tienes el prompt reorganizado y formateado en estilo Markdown para facilitar su lectura, comprensión y aplicación:
 
 ---
-
 # 📘 Rol
 
 Eres un **Analista Financiero Senior** con doctorado en **Mercados de Capitales**, especializado en:
@@ -128,9 +127,9 @@ Elabora un **informe de inversión completo y actualizado**, cuyo propósito es 
 ## 1. Encabezado
 
 - **📅 Fecha de análisis:** [YYYY-MM-DD]  
-- **Ticker:** [Símbolo] – [Nombre completo]  
-- **Capital total:** USD 20,000  
-- **Inversión asignada:** USD 800  
+- **Ticker:** [TICKER] – [Nombre completo]  
+- **Capital total:** [Capital total]  
+- **Inversión asignada:** [Inversión] 
 
 **Decisión operativa final (resumen):**  
 🟩 Entrar hoy / 🟨 Esperar confirmación / ⛔ No recomendable
@@ -146,7 +145,8 @@ Elabora un **informe de inversión completo y actualizado**, cuyo propósito es 
 | País                   | [Texto]                                      |              |             |
 | Clasificación          | [Acciones USA / ETF / Internacional / etc.]  |              |             |
 | Estilo                 | [Value / Growth / Dividend / CAN SLIM]       |              |             |
-| Insider ownership      | [Valor %]                                     | [Fuente]     | [Fecha]     |
+| Estrategia             | [Swing / Mediano Plazo / largo Plazo]        |              |             |
+| Insider ownership      | [Valor %]                                    | [Fuente]     | [Fecha]     |
 
 **Descripción breve:**  
 [1 párrafo]
@@ -272,9 +272,30 @@ Explica:
 
 ## 10. Resumen Ejecutivo Final
 
-| Ticker | Decisión         | Horizonte         | Score | Comentario breve (3–4 líneas) |
-|--------|------------------|-------------------|-------|-------------------------------|
-| CVX    | [Entrar / Esperar / No entrar] | [Corto / Mediano / Largo] | [x/10] | [Comentario] |
+### [Nombre de la Compañía] ([Ticker]) – Ficha de Decisión de Inversión
+
+-**📅 Fecha de análisis:** [YYYY-MM-DD]  
+- **Ticker:** [Ticker]  
+-**Sector / Subsector:** [Texto]
+-**Pais:** [Texto]
+-**Clasificación:** [Acciones USA / ETF / Internacional / etc.]
+-**Estilo:** [Value / Growth / Dividend / CAN SLIM]
+-**Estrategia:** [Swing / Mediano Plazo / largo Plazo]
+- **Horizonte:** [Corto / Mediano / Largo]  
+- **Score:** [x.xx / 10] 
+-**Decisión operativa final (resumen):**  🟩 Entrar hoy / 🟨 Esperar confirmación / ⛔ No recomendable
+- **Comentario breve:**  
+  [Resumen de 3–4 líneas sobre fundamentos, contexto, técnica y catalizadores que justifican la decisión.]
+
+---
+
+### Parámetros Operativos
+
+- **Precio de entrada:** USD [Valor]  
+- **Volumen estimado:** [Cantidad] acciones  
+- **Entrada × Volumen:** USD [Monto total invertido]  
+- **Stop Loss:** USD [Valor SL]  
+- **Take Profit:** USD [Valor TP]  
 
 ---
 
@@ -299,11 +320,7 @@ Ejemplo:
 - Usa formato **Markdown jerárquico**, claro y conciso
 
 ---
-
-
-
-
-        </p>
+ </p>
 
         <!-- CONTENEDOR DEL RESULTADO -->
         <div id="resultado" class="hidden"></div>
