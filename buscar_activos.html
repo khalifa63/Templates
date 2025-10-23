@@ -101,10 +101,10 @@
         <label for="instrumento">Tipo de instrumento:</label>
         <select id="instrumento" required>
             <option value="Acciones de USA">Acciones de USA</option>
-            <option value="Acciones Internacionales">Acciones Internacionales — excluir EE.UU.</option>
+            <option value="Acciones Internacionales  — excluir EE.UU.">Acciones Internacionales — excluir EE.UU.</option>
             <option value="ETFs Globales">ETFs Globales</option>
             <option value="Small Caps">Small Caps</option>
-            <option value="Dividendos internacionales">Dividendos internacionales</option>
+            <option value="Dividendos internacionales  — excluir EE.UU.">Dividendos internacionales  — excluir EE.UU.</option>
         </select>
 
         <label for="sector1">Sector:</label>
@@ -153,7 +153,7 @@ const ratiosPorDefecto = {
     "Mediano plazo": {
         "Value": "P/E < 20, P/B < 2, EV/EBITDA < 12, PEG < 2, ROE > 12%, Margen neto > 8%, Debt/Equity < 0.8, FCF Yield > 4%, Cash Flow operativo ≥ inversión, Crecimiento EPS 3Y positivo, Margen bruto estable o con leve mejora, ROIC > 10%, MA50 y MA200 en cruce alcista o MA50 ascendente, Volumen creciente en consolidación, Fear & Greed entre 30 y 50, VIX entre 15 y 22.",
         "Growth": "Crecimiento EPS 3Y > 15% anual, Crecimiento ingresos 3Y > 10–15% anual, Crecimiento FCF > 10% anual, ROIC > 10%, Margen bruto > 40%, Margen operativo > 15%, P/E > 25 aceptable, PEG < 2, EV/Sales < 10, Debt/Equity < 1.0, Cash ratio > 1, MA50 y MA200 ascendentes, Volumen creciente en rupturas, VIX < 20.",
-        "Dividend Investing": "Dividend Yield > 3–4%, Dividend Payout Ratio < 70%, Free Cash Flow Payout Ratio < 60%, Cobertura de dividendos (Earnings/Dividend) > 1.5x, Crecimiento anual de dividendos > 5% (últimos 5 años), Historial de dividendos crecientes o estables, Debt/Equity < 1.0, Interest Coverage > 3x, ROE > 10%, Margen operativo > 15%, EV/EBITDA < 12.",
+        "Dividend Investing": "Dividend Yield > 3–4%, Dividend Payout Ratio < 70%, Free Cash Flow Payout Ratio < 60%, Cobertura de dividendos (Earnings/Dividend) > 1.5x, Crecimiento anual de dividendos > 5% (últimos 5 años), Historial de dividendos crecientes o estables, Debt/Equity < 1.0, est Coverage > 3x, ROE > 10%, Margen operativo > 15%, EV/EBITDA < 12.",
         "CAN SLIM": "EPS trimestral > 25%, EPS anual > 25% durante al menos 3 años, ROE > 17%, Margen neto > 10%, Ventas anuales > 20–25%, Debt/Equity < 1.0, ROA > 10%."
     }
 };
@@ -224,7 +224,7 @@ Riesgo efectivo: no debe superar el 2 % del capital total.
 
 Confirmar soporte clave (MA50/MA200, VWAP, volumen).
 
-REGLAS DE ANÁLISIS INTERNO (OCULTAS):
+REGLAS DE ANÁLISIS NO (OCULTAS):
 Usa datos actualizados (usa los datos más actualizados.).
 Muestra cálculos de métricas si son relevantes (PER, RRR, Volumen).
 Evalúa los factores:
@@ -236,7 +236,7 @@ Contexto Macro (25%)
 Técnica / Timing (25%)
 
 Catalizadores Futuros (10%)
-Interpreta el puntaje total según:
+preta el puntaje total según:
 
 🟩 8–10: Oportunidad fuerte (Comprar / Mantener con convicción)
 
