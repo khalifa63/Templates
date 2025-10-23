@@ -121,6 +121,15 @@
             <option value="Cash / Liquidez">Cash / Liquidez</option>
         </select>
 
+        <label for="capitalizacion">Capitalización:</label>
+        <select  id="capitalizacion" required>
+          <option value="mega">Mega Caps</option>
+          <option value="large">Large Caps</option>
+          <option value="mid">Mid Caps</option>
+          <option value="small">Small Caps</option>
+        </select>
+
+
         <label for="ratios">Ratios fundamentales mínimos:</label>
         <textarea id="ratios" required></textarea>
 
@@ -178,6 +187,7 @@ document.getElementById("analisisForm").addEventListener("submit", function(e){
     const sector1 = document.getElementById("sector1").value;
     const ratios = document.getElementById("ratios").value;
     const riesgo = document.querySelector('input[name="riesgo"]:checked').value;
+    const capitalizacion = document.getElementById("capitalizacion").value;
 
     const plantilla = 
 `ROL:
@@ -199,6 +209,8 @@ Sectores prioritarios: [${sector1}] y sectores complementarios para diversificac
 Horizonte temporal: [${horizonte}]
 
 Perfil de riesgo: [${riesgo}]
+
+Capitalización: [${capitalizacion}]
 
 CRITERIOS DE SELECCIÓN:
 Los instrumentos deben cumplir los siguientes requisitos mínimos:
