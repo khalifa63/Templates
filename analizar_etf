@@ -73,7 +73,7 @@ F<!DOCTYPE html>
 
         <!-- FORMULARIO -->
         <form id="formulario">
-            <label for="ticker">Ticker:</label>
+            <label for="ticker">ETF:</label>
             <input type="text" id="ticker" name="ticker"
        placeholder=""
        style="text-transform: uppercase; width: 100px;"
