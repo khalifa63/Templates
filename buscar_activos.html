@@ -238,7 +238,27 @@ GESTIÓN DE RIESGO (obligatorio):
 • Evita instrumentos con liquidez insuficiente para el perfil ${riesgo}.
 
 PONDERACIÓN DEL SCORE (no expongas el cálculo paso a paso):
-• Fundamentales 40% • Macro 25% • Técnica/Timing 25% • Catalizadores 10%.
+> **Escala unificada**: **Puntuación (0–100)**.
+> Subtotal = Puntuación × Peso.
+
+| Factor           | Peso  | Puntuación (0–100) | Subtotal         |
+| ---------------- | ----- | ------------------ | ---------------- |
+| Fundamentales    | 40 %  | [x]                | [x×0.40]         |
+| Contexto & Macro | 25 %  | [x]                | [x×0.25]         |
+| Técnica / Timing | 25 %  | [x]                | [x×0.25]         |
+| Catalizadores    | 10 %  | [x]                | [x×0.10]         |
+| **TOTAL**        | 100 % |                    | **[Score /100]** |
+
+**Interpretación (solo aquí se permiten emojis):**
+
+| Score total | Clasificación general     | Interpretación                                                 |
+| ----------- | ------------------------- | -------------------------------------------------------------- |
+| **80–100**  | 🟢 Alta calidad           | Fundamentos/contexto sólidos; cumple mayoría de criterios.     |
+| **65–79**   | 🟡 Moderada / Atractiva   | Buenos indicadores con riesgos puntuales o valuación exigente. |
+| **50–64**   | ⚪ Neutral / Promedio      | Alineado al mercado; sin ventajas claras.                      |
+| **35–49**   | 🟠 Débil / Riesgo Elevado | Fundamentos débiles o entorno adverso.                         |
+| **<35**     | 🔴 Deficiente / Basura    | Estructura deteriorada o sin perspectivas claras.              |
+
 • Pondera según ${horizonte} y ${estrategia} (explica SOLO en 1 línea dentro de la justificación cuando sea útil).
 
 **IMPORTANTE — Política de salida**: No reveles tu razonamiento paso a paso ni cadenas de pensamiento. Realiza los cálculos y evaluaciones internamente. Solo presenta la tabla pedida. Si necesitas mencionar un dato clave (p. ej., TER, AUM, Yield), inclúyelo de forma breve en la columna de justificación.
@@ -247,7 +267,7 @@ PONDERACIÓN DEL SCORE (no expongas el cálculo paso a paso):
 Genera **solo una tabla** profesional, sin texto adicional. Muestra entre 5 y 15 instrumentos, **ordenados por calificación (mayor→menor)**. Convierte el precio a **USD** si corresponde.
 
 Columnas obligatorias:
-| Ticker | Nombre del Ticker | Sector | País | Estilo de Trading (Swing / Mediano / Largo Plazo) | Valor Actual (USD) | Calificación (/10) | ¿Comprar Hoy? (Sí/No) | Recomendación / Alertas | Breve Justificación Técnica / Fundamental |
+| Ticker | Nombre del Ticker | Sector | País | Estilo de Trading (Swing / Mediano / Largo Plazo) | Valor Actual (USD) | Score (/100) | ¿Entrar Hoy? (Sí/No) - No advice | Conf. Operativa / Alertas - No Advice | Breve Justificación Técnica / Fundamental |
 
 Notas de formato:
 • "Nombre del Ticker" = nombre de la empresa o del ETF.
