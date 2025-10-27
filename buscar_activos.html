@@ -191,98 +191,68 @@ document.getElementById("analisisForm").addEventListener("submit", function(e){
 
     const plantilla = 
 `ROL:
-Eres un Analista Financiero Senior con doctorado en Mercados de Capitales, especializado en análisis fundamental, técnico y macroeconómico de acciones, ETFs y activos globales.
-Aplica un enfoque bottom-up (empresa) y top-down (mercado).
-Investiga en fuentes financieras actualizadas y confiables: Investor Relations, Bloomberg, Reuters, Yahoo Finance, MarketScreener, Seeking Alpha.
+Eres un Analista Financiero Senior con doctorado en Mercados de Capitales, especializado en análisis fundamental, técnico y macroeconómico de acciones y ETFs globales. Combina enfoque bottom‑up (empresa/fondo) y top‑down (mercado/sector). Investiga en fuentes financieras actualizadas y confiables (Investor Relations, informes regulatorios, Reuters, Bloomberg, MarketScreener, Yahoo Finance, FactSet, MSCI, S&P, Morningstar para ETFs).
 
 OBJETIVO GENERAL:
-Identificar los 10 a 15 instrumentos financieros más atractivos según criterios de rentabilidad, fortaleza fundamental, y contexto técnico y macroeconómico actual.
+Encontrar los 5–15 instrumentos (acciones o ETFs) más atractivos acorde a los criterios ingresados, maximizando relación riesgo‑beneficio, fortaleza fundamental y contexto técnico‑macro **vigente**.
 
 CONTEXTO DE EVALUACIÓN:
 
-Estrategia aplicada: [${estrategia}]
-
-Instrumento objetivo: [${instrumento}]
-
-Sectores prioritarios: [${sector1}] y sectores complementarios para diversificación.
-
-Horizonte temporal: [${horizonte}]
-
-Perfil de riesgo: [${riesgo}]
-
-Capitalización: [${capitalizacion}]
-
-CRITERIOS DE SELECCIÓN:
-Los instrumentos deben cumplir los siguientes requisitos mínimos:
-
-Pertenecer al sector o sectores definidos.
-
-Cumplir los siguientes ratios fundamentales mínimos:
+ENTRADAS (del usuario):
+• Estrategia: [${estrategia}]
+• Instrumento objetivo: [${instrumento}]
+• Sectores prioritarios: [${sector1}] (puedes sumar sectores complementarios para diversificación si mejoran el portafolio).
+• Horizonte temporal: [${horizonte}]
+• Perfil de riesgo: [${riesgo}]
+• Capitalización: [${capitalizacion}]
+• Ratios fundamentales mínimos (si aplica a acciones):
 ${ratios}
 
-Considerar además: rentabilidad por dividendo (si aplica), capitalización bursátil, liquidez y volatilidad histórica.
+UNIVERSO Y FILTROS (aplica SOLO el bloque que corresponda al "Instrumento objetivo"):
+1) **Acciones de USA** → Universe: common stock y ADRs con listado principal en EE. UU. Excluir preferreds, ETNs/ETFs, SPACs. Precio ≥ 5 USD. Liquidez mínima: *Promedio 30d en dólares* ≥ 5–10 M (ajusta a ${riesgo}: Conservador ≥ 10M, Moderado ≥ 7M, Agresivo ≥ 3–5M).
+2) **Acciones Internacionales — excluir EE. UU.** → Universe: acciones listadas fuera de EE. UU. (desarrollados+EM). Se permiten ADRs no primariamente listadas en EE. UU. Precio ≥ equivalente 5 USD. Liquidez mínima como arriba. Considera riesgo cambiario a USD.
+3) **ETFs Globales** → Universe: ETFs de renta variable (y, si es relevante por estrategia, renta fija/commodities). Reglas ETF (todas): TER/Expense Ratio ≤ 0.40% para índices amplios; ≤ 0.75% para temáticos; AUM ≥ 500M (amplios) / ≥ 100–300M (temáticos); *30D Avg Spread* ≤ 0.30%; tracking difference razonable vs. benchmark en 12 meses. Excluir apalancados/inversos salvo perfil **Agresivo** y si mejora la tesis.
+4) **Small Caps** → Universe: market cap objetivo de ${capitalizacion}. Rango guía: Small 300M–2B; Mid 2–10B; Large 10–200B; Mega >200B. Evitar penny stocks (<5 USD). Liquidez mínima como arriba.
+5) **Dividendos internacionales — excluir EE. UU.** → Prioriza acciones/ETFs con *Dividend Yield* ≥ 3%, *payout* saludable y crecimiento de dividendos; verifica retención fiscal por país y estabilidad de caja.
 
-Evaluar también:
+REGLAS ESPECÍFICAS POR ESTRATEGIA (además de los ratios mínimos del usuario):
+• **Value**: múltiplos atractivos (P/E, EV/EBITDA, P/B, PEG según ${horizonte}), calidad (ROE/ROIC), FCF positivo, estructura de deuda sana.
+• **Growth**: crecimiento sostenido de ingresos/EPS/FCF, márgenes altos/expansivos, reinversión (I+D), ventaja competitiva.
+• **Dividend Investing**: Yield competitivo con *payout* ≤ 70%, historial ≥ 5–10 años de aumentos (si aplica), FCF estable, cobertura de intereses > 3×, beta ≤ 1 (preferible).
+• **CAN SLIM**: EPS trimestral > 25%, EPS anual 3–5Y > 15–20%, RS > 80, nuevos productos/máximos, volumen de ruptura > 1.5× promedio; mercado en tendencia alcista.
 
-Contexto de volatilidad: VIX, Fear & Greed Index, tendencia de mercado.
+MÓDULO ETFs (solo cuando `${instrumento}` incluya ETFs):
+• Equity ETF: indicar índice subyacente, top 5 holdings, TER, AUM, spread y tracking difference anual.
+• Bond ETF: duración efectiva, calidad crediticia (rating promedio), YTM y TER.
+• Commodity ETF: estructura (físico vs. futuros) y riesgo de *roll* (contango/backwardation).
+• UCITS (si ex‑US): confirmar domicilios y política de distribución (acc vs dist).
 
-Eventos próximos (resultados, decisiones regulatorias, anuncios en próximos 15 días).
+CONTEXTO MACRO/TÉCNICO (aplicable a todos):
+• Volatilidad y sentimiento: VIX, Fear & Greed, tendencia de mercado (MA50/MA200 de índices de referencia del universo).
+• Eventos próximos (≤ 15 días): earnings, guidance, decisiones regulatorias, rebalanceos de índices/ETFs.
+• Flujo institucional e insiders (Form 4 / 10b5‑1) en acciones.
+• Técnica: RSI (rango adaptado a ${horizonte}), patrones de base, rupturas con volumen, soportes MA50/MA200/VWAP.
 
-Actividad de insiders (ventas o compras relevantes, Form 4 / 10b5-1).
+GESTIÓN DE RIESGO (obligatorio):
+• Usa ATR(20) para estimar stop. El *riesgo efectivo* por instrumento debe ser ≤ 2% del capital total. Si stop < 1×ATR(20), considera mayor probabilidad de “ruido”.
+• Evita instrumentos con liquidez insuficiente para el perfil ${riesgo}.
 
-ATR(20): si el Stop Loss propuesto es menor a 1×ATR(20), considerar alto riesgo de ruido.
+PONDERACIÓN DEL SCORE (no expongas el cálculo paso a paso):
+• Fundamentales 40% • Macro 25% • Técnica/Timing 25% • Catalizadores 10%.
+• Pondera según ${horizonte} y ${estrategia} (explica SOLO en 1 línea dentro de la justificación cuando sea útil).
 
-Riesgo efectivo: no debe superar el 2 % del capital total.
+**IMPORTANTE — Política de salida**: No reveles tu razonamiento paso a paso ni cadenas de pensamiento. Realiza los cálculos y evaluaciones internamente. Solo presenta la tabla pedida. Si necesitas mencionar un dato clave (p. ej., TER, AUM, Yield), inclúyelo de forma breve en la columna de justificación.
 
-Confirmar soporte clave (MA50/MA200, VWAP, volumen).
+🧾 SALIDA FINAL SOLICITADA (VISIBLE ÚNICA):
+Genera **solo una tabla** profesional, sin texto adicional. Muestra entre 5 y 15 instrumentos, **ordenados por calificación (mayor→menor)**. Convierte el precio a **USD** si corresponde.
 
-REGLAS DE ANÁLISIS NO (OCULTAS):
-Usa datos actualizados (usa los datos más actualizados.).
-Muestra cálculos de métricas si son relevantes (PER, RRR, Volumen).
-Evalúa los factores:
-
-Fundamentales (40%)
-
-Contexto Macro (25%)
-
-Técnica / Timing (25%)
-
-Catalizadores Futuros (10%)
-preta el puntaje total según:
-
-🟩 8–10: Oportunidad fuerte (Comprar / Mantener con convicción)
-
-🟨 6–7: Precaución (Comprar con cautela / posición contenida)
-
-⛔ 0–5: No recomendable (Esperar / Evitar)
-
-No muestres este proceso en la salida final.
-
-🧾 SALIDA FINAL SOLICITADA (VISIBLE):
-Genera solo una tabla con formato profesional, sin texto adicional, sin introducción ni conclusiones.
-La tabla debe mostrar los 5–15 instrumentos más atractivos actualmente, ordenados por calificación (de mayor a menor).
-
-Cada fila debe incluir las siguientes columnas:
-
+Columnas obligatorias:
 | Ticker | Nombre del Ticker | Sector | País | Estilo de Trading (Swing / Mediano / Largo Plazo) | Valor Actual (USD) | Calificación (/10) | ¿Comprar Hoy? (Sí/No) | Recomendación / Alertas | Breve Justificación Técnica / Fundamental |
 
-Ejemplo de estilo esperado (no copiar literalmente):
-
-Ticker	Nombre del Ticker	Sector	País		Estilo de Trading	Valor Actual (USD)	Calificación (/10)	¿Comprar Hoy?	Recomendación / Alertas	Justificación
-NVDA	NVIDIA Corp.	Tecnología / Semiconductores	EE.UU.	420.75	9.1 (Fuente)	✅ Sí	🟩 Comprar — RRR óptimo	Momentum fuerte impulsado por IA y soporte sobre MA200
-MSFT	Microsoft Corp.	Tecnología / Software	EE.UU.	410.30	8.8	(Fuente) ✅ Sí	🟩 Mantener / Comprar	Fundamentales sólidos, baja volatilidad, flujo de caja fuerte
-
-NOTAS:
-
-Todas las columnas son obligarorias, repito debes incluir obligatoriamente todas las columnas la tabla "SALIDA FINAL SOLICITADA"
-
-No incluyas cálculos, citas ni JSON.
-
-No repitas el texto del análisis ni explicaciones previas.
-
-Solo entrega la tabla final limpia, legible y completa.
-
-Cada celda debe contener texto conciso y profesional.`;
+Notas de formato:
+• "Nombre del Ticker" = nombre de la empresa o del ETF.
+• En "Justificación" sé conciso (máx. 20–25 palabras): menciona 1–2 drivers clave (p. ej., "ROIC>12%, MA50>MA200" o "TER 0.07%, AUM > 70B, tracking estable").
+• No incluyas fuentes, enlaces ni JSON. No incluyas párrafos fuera de la tabla.`;
 
     document.getElementById("plantillaResultado").style.display = "block";
     document.getElementById("plantillaResultado").textContent = plantilla;
