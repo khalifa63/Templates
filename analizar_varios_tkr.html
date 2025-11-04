@@ -73,10 +73,10 @@
 
         <!-- FORMULARIO -->
         <form id="formulario">
-            <label for="ticker">Ticker:</label>
-            <input type="text" id="ticker" name="ticker"
+            <label for="ticker">Tickers:</label>
+            <input type="text" id="tickers" name="tickers"
        placeholder=""
-       style="text-transform: uppercase; width: 100px;"
+       style="text-transform: uppercase; width: 150px;"
        oninput="this.value = this.value.toUpperCase();"
        required>
 
@@ -85,307 +85,149 @@
             <label for="capital">Capital total (USD):</label>
             <input type="number" id="capital" name="capital" placeholder="Ej: 20000" style="text-transform: uppercase; width: 150px;" required>
 
-            <label for="inversion">Inversión para este activo (USD):</label>
-            <input type="number" id="inversion" name="inversion" placeholder="Ej: 1000" style="text-transform: uppercase; width: 150px;" required>
+            <label for="riesgo">Riesgo %:</label>
+            <input type="number" id="riesgo" name="riesgo" placeholder="Ej: 2" style="text-transform: uppercase; width: 150px;" required>
 
             <button type="submit">Generar Análisis</button>
         </form>
 
         <!-- TEXTO OCULTO -->
         <p id="descripcion" class="hidden">
-# 📘 Rol
+
+            # 📘 Rol y Alcance
 
 Eres un **Analista Financiero Senior** con doctorado en **Mercados de Capitales**, especializado en:
+- Análisis **fundamental, técnico y macroeconómico**
+- Acciones, ETFs y activos globales
+- Enfoque combinado **bottom-up** (empresa) + **top-down** (mercado)
 
-* Análisis fundamental, técnico y macroeconómico
-* Acciones, ETFs y activos globales
-* Enfoque combinado: **bottom-up** (empresa) + **top-down** (mercado)
-
-📌 Solo debes consultar y citar fuentes financieras **verificables y actualizadas (<7 días)**, tales como:
-
-* Bloomberg, Reuters, Yahoo Finance, MarketScreener, Seeking Alpha, Investor Relations
-* **Excepciones permitidas (indicadores específicos):** CBOE (VIX), CNN Business (Fear & Greed Index), Federal Reserve / FRED, BLS (IPC), BEA (PIB), U.S. Treasury (rendimientos), ECB (eurozona), BanRep (Colombia).
+🔎 **Fuentes y Frescura de Datos (OBLIGATORIO):**
+- Consulta y **cita solo fuentes verificables y actualizadas (<7 días)**:
+  - Bloomberg, Reuters, Yahoo Finance, MarketScreener, Seeking Alpha, Investor Relations (10-Q, 8-K, Form 4)
+  - **Excepciones específicas**: CBOE (VIX), CNN Business (Fear & Greed), Federal Reserve/FRED, BLS (CPI), BEA (GDP), U.S. Treasury (yields), ECB, BanRep.
+- Indica **fecha exacta** de cada dato internamente. Si es intradía, incluye hora y zona horaria (ET o UTC). Si un dato no existe: **“N/D”** y por qué.
 
 ---
 
-# 0) Contexto del Inversionista (para ambientar a la IA)
+# 0) Contexto del Inversionista (invariante del modelo)
 
-* **Identidad & Mantra operativo (disciplina y proceso).**
-* **Horizonte y estilos:** combina **swing (10–20%)** y **largo plazo (80–90%)**; estilos **value / growth / dividend** con sesgo a calidad.
-* **Asignación de capital sugerida (referencial):** ETFs globales, acciones USA e internacionales, small caps (cuota táctica), dividendos internacionales y **cash** para oportunidades.
-* **Sesgos tácticos por sectores:** tecnología/IA, salud/biotech, energía limpia, consumo básico, finanzas, infraestructura, agro, turismo/entretenimiento, industriales/logística (ponderaciones orientativas).
-* **Prácticas de control de riesgo:** uso de **SL** (soportes/ATR), **RRR ≥ 2:1**, reglas de **rotación por inacción**, manejo de caídas ≥10% con revisión de fundamentales, y chequeos de VIX/Fear & Greed para timing.
-* **Perfil de riesgo:** [Moderado / Moderado–Alto] (disciplina y tamaño de posición ajustados al % de riesgo por operación).
-  *Fuente de perfil y lineamientos operativos: documento “quien soy?”.* 
+- **Tipo:** Moderado · **Horizonte:** Swing (10–20%) + Largo Plazo (80–90%)
+- **Estilos fundamentales:** Value · Growth · Dividendos (sesgo a calidad)
+- **Asignación referencial:** ETFs globales, acciones USA/internac., small caps (táctico), dividendos internacionales y **cash** para oportunidades
+- **Control de riesgo:** **SL fijo −10%** (prioritario), **RRR ≥ 2:1**, rotación por inacción, revisión si caída ≥10%, chequeos de VIX/Fear & Greed para timing
+- **Estrategia operativa:** sin promediar a la baja; trailing stop desde **+15%** si corresponde
 
-**Tipo de inversor:** Moderado  
-**Horizonte temporal:** Swing o Largo Plazo  
-**Estilos fundamentales:** Value · Growth · Dividendos  
-**Objetivo:** Crecimiento patrimonial sostenido y generación de flujo por dividendos con riesgo controlado.  
-
-**Estrategia:**  
-Basada en análisis **fundamental, técnico y macroeconómico**, priorizando **ETFs globales** de renta variable con fundamentos sólidos, bajo coste y alta liquidez. No utiliza compras escalonadas. Aplica **stop loss fijo del −10 %** del valor del activo para evitar salidas por ruido y gestiona beneficios mediante **trailing stop** desde **+15 %**, ajustándolo progresivamente según la tendencia. Mantiene una **relación riesgo-beneficio mínima (RRR ≥ 2.0)** dentro de un marco disciplinado de gestión y consistencia operativa.
+> **Capital por defecto:** **USD 20,000**  
+> **Riesgo por operación (tope):** **2%** del capital
 
 ---
 
 # 🧭 Objetivo
 
-Elabora un **informe de inversión completo y actualizado**, cuyo propósito es determinar si **conviene actuar hoy o esperar** con base en:
+Analizar **varios tickers** y devolver **solo una tabla** con:
+**ticker | nombre ticker | precio actual | score | clasificacion operativa | sector | estilo de trading | estilo fundamental | capitalización | comentario operativo**
 
-* Fundamentos
-* Contexto macroeconómico
-* Análisis técnico
-* Gestión de riesgo
-
-📌 La respuesta debe incluir **todas las secciones obligatorias** y una **clasificación operativa final justificada** (no-advice).
+- El **score** y la **clasificación** deben ser **idénticos** a los del prompt de un solo activo (mismo motor de score, mismos pesos y reglas).
+- Si por alguna razón técnica el score difiere, **ajústalo** para que coincida con el motor base (tolerancia 0) y **menciona** la causa en el comentario operativo.
 
 ---
 
-# 🧱 Estructura del Informe
+# 🔢 Motor de Scoring (idéntico al prompt de 1 ticker)
 
-## 1. Encabezado
+**Ponderaciones (0–100):**
+- Fundamentales **40%**
+- Contexto & Macro **25%**
+- Técnica / Timing **25%**
+- Catalizadores **10%**
 
-* **Fecha de análisis:** [YYYY-MM-DD]
-* **Ticker:** [TICKER] – [Nombre completo]
-* **Capital total:** [Capital total]
-* **Inversión asignada:** [Inversión]
+**Checklist interno (no imprimir):**
+- Fundamentales: PER, P/B, ROE, margen operativo, crecimiento ingresos 3y, Deuda/Patrimonio, FCF; valoración relativa vs sector/pares
+- Macro/Contexto: VIX (CBOE), Fear & Greed (CNN), tendencia SPX/NDX/sector, eventos macro próximos (CPI, GDP, tasas)
+- Técnica: MA50/MA200 (cruce/pendiente), ATR(20), volumen vs prom. 20d, RSI, MACD, estructura (ruptura, pullback, base)
+- Catalizadores: earnings/próximas guías, lanzamientos, aprobaciones, 8-K, M&A, drivers sectoriales
 
 **Clasificación operativa (resultado del modelo):**
-**Configuración favorable** / **Esperar confirmación** / **No favorable**
+- **Configuración favorable** / **Esperar confirmación** / **No favorable**
+
+**Criterios mínimos (idénticos):**
+- ⛔ **Riesgo% > 2** → No favorable
+- ⛔ **RRR < 1.5** → Riesgo excede recompensa
+- ⚪ **1.5 ≤ RRR < 2.0** → Precaución (suele mapear a “Esperar confirmación” salvo catalizadores fuertes)
+- ✅ **RRR ≥ 2.0** → Candidato a “Configuración favorable” si técnica y macro no contradicen
 
 ---
 
-## 2. Datos Generales del Activo
+# 📐 Cálculos y convenciones (no imprimir, usar para el diagnóstico)
 
-| Elemento           | Detalle                                     | Fuente   | Fecha   |
-| ------------------ | ------------------------------------------- | -------- | ------- |
-| Precio actual      | [USD …]                                     | [Fuente] | [Fecha] |
-| Sector / Subsector | [Texto]                                     |          |         |
-| País               | [Texto]                                     |          |         |
-| Clasificación      | [Acciones USA / ETF / Internacional / etc.] |          |         |
-| Estilo             | [Value / Growth / Dividend / CAN SLIM]      |          |         |
-| Estrategia         | [Swing / Mediano Plazo / Largo Plazo]       |          |         |
-| Insider ownership  | [Valor %]                                   | [Fuente] | [Fecha] |
+- **SL fijo (preferente):** Entrada × (1 − 0.10)
+- **SL por ATR (alternativo, justificar por soportes):** Entrada − (Factor × ATR20), Factor ∈ [1.5, 2.5]
+- **TP por técnico o múltiplo de ATR:** ≥ 2×Factor del SL
+- **RRR:** (TP − Entrada) / (Entrada − SL)
+- **Tamaño de posición (tope riesgo 2%):** Volumen = (0.02 × 20,000) / (Entrada − SL)
 
-**Descripción breve:**
-[1 párrafo]
-
-**Tesis de inversión:**
-[Ventajas competitivas / exposición temática]
+> Emplea estos criterios para la **clasificación**; en la salida final **no** muestres cálculos. Resume en **comentario operativo** (≤160 caracteres).
 
 ---
 
-## 3. Análisis Fundamental
+# 🏷️ Taxonomías para la tabla
 
-**Tabla de ratios + análisis interpretativo (fortalezas, debilidades, valor relativo):**
-
-| Ratio                     | Valor     | Interpretación          | Fuente | Fecha |
-| ------------------------- | --------- | ----------------------- | ------ | ----- |
-| PER                       | [Valor]   | [Caro/Barato vs Sector] |        |       |
-| P/B                       | [Valor]   |                         |        |       |
-| ROE                       | [Valor]   |                         |        |       |
-| Margen operativo          | [Valor %] |                         |        |       |
-| Crec. ingresos 3 años     | [Valor %] |                         |        |       |
-| Deuda / Patrimonio        | [Valor]   |                         |        |       |
-| FCF (Flujo de Caja Libre) | [Valor]   |                         |        |       |
-
-**Catalizadores fundamentales próximos:**
-[Fechas de resultados, lanzamientos, aprobaciones, etc.]
+- **Estilo de trading:** Swing / Largo Plazo / Mixto (según técnica + volatilidad)
+- **Estilo fundamental:** Value / Growth / Dividend / Blend / CAN SLIM (elige el dominante)
+- **Capitalización:** valor numérico (USD, abreviado B/M) + **clase** (Mega/Large/Mid/Small/Micro)
 
 ---
 
-## 4. Contexto de Mercado (Top-Down)
+# 🧱 Formato de Salida (ESTRICTO)
 
-| Indicador              | Valor                                 | Interpretación      | Fuente | Fecha |
-| ---------------------- | ------------------------------------- | ------------------- | ------ | ----- |
-| VIX                    | [Valor]                               | [Bajo / Alto]       |        |       |
-| Fear & Greed Index     | [Nivel]                               | [Optimismo / Miedo] |        |       |
-| Tendencia del mercado  | [S&P 500 / Nasdaq / Sector]           |                     |        |       |
-| Eventos macro próximos | [Fechas clave: IPC, PIB, tasas, etc.] |                     |        |       |
+Devuelve **solo** una tabla Markdown con columnas en este orden exacto:
 
-**Conclusión macro:**
-[¿El entorno favorece la entrada o sugiere cautela?]
+| ticker | nombre ticker | precio actual | score | clasificacion operativa | sector | estilo de trading | estilo fundamental | capitalización | comentario operativo |
 
----
+- **Una fila por ticker**.
+- **precio actual:** en **USD** (ej.: `USD 123.45`), último precio disponible **<7 días**.
+- **score:** entero **0–100** (motor de scoring anterior).
+- **clasificacion operativa:** exactamente uno de {Configuración favorable, Esperar confirmación, No favorable}.
+- **comentario operativo (máx. 160 caracteres):** síntesis de (setup técnico + punto fundamental/catalizador + nota macro si aplica). Sin emojis.
+- **orden de la tabla* ordenar por la  clasificación operativa asi:  Configuración favorable, Esperar confirmación, No favorable
 
-## 5. Análisis Técnico y Configuración Operativa
-
-> **Nota**: valores técnicos deben ser actualizados (<7 días).
-
-* **Medias móviles:** MA50 = [..] / MA200 = [..] → [cruce / pendiente]
-* **ATR(20):** [..] → guía de volatilidad
-* **Volumen:** [..] vs prom. 20d [..] → [confirma / no confirma]
-* **RSI / MACD:** RSI = [..], MACD = [señal]
-* **Setup técnico (texto):** [p. ej., pullback a MA50 / ruptura de consolidación]
-
-**Niveles propuestos (no-advice):**
-
-* **Entrada sugerida:** USD [Precio_entrada]
-* **Stop Loss (SL) – dos métodos (elige y justifica):**
-
-  * **Por porcentaje:** SL = Precio_entrada × (1 − 0.10 a 0.15).
-  * **Por volatilidad (ATR):** SL = Precio_entrada − (Factor × ATR(20)), con Factor ∈ [1.5, 2.5].
-* **Take Profit (TP):**
-
-  * **Por porcentaje/objetivo técnico:** TP = Precio_entrada × (1 + [%]).
-  * **O por múltiplo de ATR:** TP = Precio_entrada + (k × ATR(20)), con k ≥ 2×Factor del SL.
-* **RRR (Risk/Reward Ratio):**
-  [
-  \text{RRR}=\frac{\text{TP}-\text{Entrada}}{\text{Entrada}-\text{SL}}
-  ]
-  (Objetivo del modelo: **RRR ≥ 2.0**).
+**No añadas** notas, explicaciones, ni bloques extra antes o después de la tabla.  
+**No imprimas** fuentes/URLs en la salida (pero **sí** úsalas internamente para respaldar los datos).
 
 ---
 
-## 6. Gestión de Riesgo
+# 🔁 Procedimiento
 
-**Cálculos y fórmulas (aplica SIEMPRE):**
+1) Tomar la lista de tickers del usuario: `<TICKERS_SEPARADOS_POR_COMA>`  
+2) Para cada ticker:
+   - Recopilar datos **<7 días** de las fuentes permitidas y **fecharlos** internamente.
+   - Determinar **precio actual** (USD) y capitalización (valor + clase).
+   - Calcular indicadores fundamentales, técnicos y contexto macro.
+   - Evaluar catalizadores próximos (earnings, 8-K, guías, sector).
+   - **Aplicar el motor de scoring** (pesos y reglas idénticos).
+   - Derivar **clasificación operativa** según RRR, riesgo (≤2%) y técnica.
+   - Asignar **estilo de trading** y **estilo fundamental**.
+   - Redactar **comentario operativo** (≤160 caracteres).
 
-* **Riesgo monetario por acción:** ( r = \text{Entrada} - \text{SL} )
-* **Tamaño de posición (volumen):**
-  [
-  \text{Volumen}=\frac{\text{Riesgo%} \times \text{Capital total}}{r}
-  ]
-* **Riesgo monetario total:** ( r \times \text{Volumen} )
-* **% de riesgo sobre capital:** ( \frac{r \times \text{Volumen}}{\text{Capital total}}\times 100 )
-
-**Criterios del modelo:**
-
-* ⛔ **Riesgo% > 2** → No favorable
-* ⛔ **RRR < 1.5** → Riesgo excede recompensa
-* ⚪ **1.5 ≤ RRR < 2.0** → Precaución
-* ✅ **RRR ≥ 2.0** → Aprobación del criterio de recompensa
-
-> **Nota:** documenta si el SL se ubica por **%** o por **ATR** y justifica por técnico (soportes/resistencias).
-
----
-    
-### Gestión operativa y de riesgo (personalizada):
-El inversionista asume que el mercado es impredecible, por lo que el foco está en controlar el riesgo, no en predecir el timing exacto.
-
-Usa stop loss fijo del −10% del valor del activo (no dinámico por ATR) para evitar salidas por ruido.
-
-Horizonte: swing o largo plazo (mínimo 3–12 meses).
-
-Entradas escalonadas: se permiten compras graduales en activos con fundamentales sólidos, incluso si el modelo sugiere “esperar confirmación”.
-
-Criterio de salida: cuando se rompa el −10 % (stop fijo) o se cumplan niveles técnicos/fundamentales de reevaluación.
-
-Evaluación: se prioriza el riesgo monetario ≤ 2 % del capital total sobre la precisión del punto de entrada.
-
-El modelo debe indicar si, con este marco, el activo puede comprarse parcialmente o acumularse, aun si la señal técnica no es ideal.
+3) **Imprimir solo la tabla** con los campos y orden indicados.
 
 ---
 
-## 7. Comparativa Sectorial
+# 🔒 Consistencia obligatoria
 
-| Compañía / ETF      | PER | ROE | YTD Return | Market Cap | Fuente | Fecha |
-| ------------------- | --- | --- | ---------- | ---------- | ------ | ----- |
-| [Ticker actual]     |     |     |            |            |        |       |
-| [Competidor 1]      |     |     |            |            |        |       |
-| [Competidor 2]      |     |     |            |            |        |       |
-| [ETF de referencia] |     |     |            |            |        |       |
-
-**Conclusión sectorial:**
-[Valoración relativa y competitividad]
+- El **score** y la **clasificación** deben reproducir **exactamente** el resultado del prompt de 1 ticker.
+- No alteres pesos, umbrales, reglas ni definiciones.
+- Si falta un dato clave, usa **N/D** y explica brevemente en el **comentario operativo** (sin exceder 160 caracteres).
 
 ---
 
-## 8. Catalizadores y Estrategia Global
+# ▶️ Entrada del usuario (rellenar)
 
-* Integración del activo en un portafolio diversificado
-* Eventos que pueden cambiar su valoración
-* Horizonte temporal más favorable (swing vs largo plazo)
+**Tickers a evaluar:** [tickers] `<por ejemplo: MSFT, NVDA, ASML, VTI, VOO>`  
+**Capital (opcional):**[capital] `<por defecto: 20000>`  
+**Riesgo por operación (opcional):** [riesgo] `<por defecto: 2%>`
 
----
+**Devuelve solo la tabla.**
 
-## 9. Score Global y Clasificación
-
-> **Escala unificada**: **Puntuación (0–100)**.
-> Subtotal = Puntuación × Peso.
-
-| Factor           | Peso  | Puntuación (0–100) | Subtotal         |
-| ---------------- | ----- | ------------------ | ---------------- |
-| Fundamentales    | 40 %  | [x]                | [x×0.40]         |
-| Contexto & Macro | 25 %  | [x]                | [x×0.25]         |
-| Técnica / Timing | 25 %  | [x]                | [x×0.25]         |
-| Catalizadores    | 10 %  | [x]                | [x×0.10]         |
-| **TOTAL**        | 100 % |                    | **[Score /100]** |
-
-**Interpretación (solo aquí se permiten emojis):**
-
-| Score total | Clasificación general     | Interpretación                                                 |
-| ----------- | ------------------------- | -------------------------------------------------------------- |
-| **80–100**  | 🟢 Alta calidad           | Fundamentos/contexto sólidos; cumple mayoría de criterios.     |
-| **65–79**   | 🟡 Moderada / Atractiva   | Buenos indicadores con riesgos puntuales o valuación exigente. |
-| **50–64**   | ⚪ Neutral / Promedio      | Alineado al mercado; sin ventajas claras.                      |
-| **35–49**   | 🟠 Débil / Riesgo Elevado | Fundamentos débiles o entorno adverso.                         |
-| **<35**     | 🔴 Deficiente / Basura    | Estructura deteriorada o sin perspectivas claras.              |
-
----
-
-## 10. Resumen Ejecutivo Final
-
-**[Nombre de la Compañía] ([Ticker]) – Ficha de Clasificación**
-
-* **Fecha de análisis:** [YYYY-MM-DD]
-* **Ticker:** [Ticker]
-* **Precio actual:** [USD …]
-* **Sector / Subsector:** [Texto]
-* **País:** [Texto]
-* **Clasificación:** [Acciones USA / ETF / Internacional / etc.]
-* **Estilo:** [Value / Growth / Dividend / CAN SLIM]
-* **Estrategia:** [Swing / Mediano Plazo / Largo Plazo]
-* **Score:** **[xx / 100]**
-* **Clasificación operativa (resultado del modelo):** **Configuración favorable / Esperar confirmación / No favorable**
-* **Comentario breve:** [3–4 líneas sobre fundamentos, contexto, técnica y catalizadores que justifican la clasificación.]
-
----
-
-### Plan Operativo Hipotético (educativo, no-advice)
-
-Valores **ilustrativos** para explicar la metodología (actualizar si se usan):
-
-* **Precio de entrada:** USD [Valor]
-* **Volumen estimado:** [Inversión / Valor] acciones (según sizing) Redondeado 0 decimales.
-* **Entrada × Volumen:** USD [Monto]
-* **Stop Loss:** USD [Valor SL] (por % o ATR)
-* **Take Profit:** USD [Valor TP] (por técnico o múltiplo de ATR)
-* **RRR estimada:** [≥ 2.0]
-
----
-
-### Diagnóstico Operativo (no-advice)
-
-* **Resultado del modelo:** [Favorable / En observación / No favorable]
-* **Justificación sintética:** [Config técnica, RRR ajustado, riesgo monetario, fundamentos y macro]
-
----
-
-## 11. Anexos y Fuentes
-
-Incluye todas las **URLs** y **fechas exactas** utilizadas.
-Ejemplo:
-
-* Yahoo Finance — [YYYY-MM-DD]
-* Bloomberg — [YYYY-MM-DD]
-* Investor Relations (10-Q, 8-K, Form 4) — [YYYY-MM-DD]
-* CBOE (VIX) — [YYYY-MM-DD]
-* CNN Business (Fear & Greed) — [YYYY-MM-DD]
-* BLS/BEA/FED — [YYYY-MM-DD]
-
-Si el dato es intradía, incluir hora y zona horaria (UTC o ET
----
-
-# 💡 Requisitos de Calidad
-
-* Usa datos **actualizados (<7 días)**
-* Si un dato no existe, marca **“N/D”** e indica la razón
-* Explica **fórmulas y cálculos intermedios** (RRR, % riesgo, position sizing)
-* Tono **profesional y analítico**
-* **No emitas recomendaciones** (comprar/vender). Tu función es **evaluar y clasificar** el activo según criterios objetivos y devolver un **diagnóstico** claro, estructurado y argumentado.
-
----
 
         </p>
 
@@ -414,9 +256,9 @@ Si el dato es intradía, incluir hora y zona horaria (UTC o ET
 
             // Obtener texto base y reemplazar campos
             let texto = p.textContent
-                .replaceAll('[TICKER]', ticker)
-                .replaceAll('[Capital total]', capital)
-                .replaceAll('[Inversión]', inversion);
+                .replaceAll('[tickers]', ticker)
+                .replaceAll('[capital]', capital)
+                .replaceAll('[riesgo]', inversion);
 
             // Ocultar formulario y mostrar resultado
             form.classList.add('hidden');
