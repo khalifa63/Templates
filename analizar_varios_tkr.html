@@ -251,15 +251,15 @@ Devuelve **solo** una tabla Markdown con columnas en este orden exacto:
         form.addEventListener('submit', (e) => {
             e.preventDefault();
 
-            const ticker = document.getElementById('tickers').value.toUpperCase();
+            const tickers = document.getElementById('tickers').value.toUpperCase();
             const capital = document.getElementById('capital').value;
-            const inversion = document.getElementById('inversion').value;
+            const riesgo = document.getElementById('inversion').value;
 
             // Obtener texto base y reemplazar campos
             let texto = p.textContent
                 .replaceAll('[tickers]', tickers)
                 .replaceAll('[capital]', capital)
-                .replaceAll('[riesgo]', inversion);
+                .replaceAll('[riesgo]', riesgo);
 
             // Ocultar formulario y mostrar resultado
             form.classList.add('hidden');
