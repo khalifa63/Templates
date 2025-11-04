@@ -76,17 +76,18 @@
             <label for="tickers">Tickers:</label>
             <input type="text" id="tickers" name="tickers"
        placeholder=""
-       style="text-transform: uppercase; width: 250px;"
+       style="text-transform: uppercase; width: 550px;"
        oninput="this.value = this.value.toUpperCase();"
        required>
 
 
 
             <label for="capital">Capital total (USD):</label>
-            <input type="number" id="capital" name="capital" placeholder="Ej: 20000" style="text-transform: uppercase; width: 150px; value=20000" required>
+            <input type="number" id="capital" name="capital" placeholder="Ej: 20000" value="20.000" style="text-transform: uppercase; width: 150px; " required>
 
             <label for="riesgo">Riesgo %:</label>
-            <input type="number" id="riesgo" name="riesgo" placeholder="Ej: 2" style="text-transform: uppercase; width: 150px; value = 2" required>
+            <input type="number" id="riesgo" name="riesgo" placeholder="Ej: 2" value="2" style="text-transform: uppercase; width: 50px;" required>
+
 
             <button type="submit">Generar Análisis</button>
         </form>
