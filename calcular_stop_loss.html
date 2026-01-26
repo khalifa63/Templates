@@ -1,0 +1,438 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Calcular el stop Loss</title>
+  <style>
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+      margin: 0;
+      padding: 20px;
+      background-color: #f5f5f7;
+      color: #1d1d1f;
+    }
+    .container {
+      max-width: 900px;
+      margin: 0 auto;
+      background-color: white;
+      border-radius: 18px;
+      padding: 30px;
+      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    }
+    h1 {
+      font-size: 32px;
+      font-weight: 600;
+      margin-bottom: 18px;
+      color: #1d1d1f;
+    }
+    p, pre {
+      font-size: 15px;
+      line-height: 1.6;
+      color: #1d1d1f;
+      margin-bottom: 18px;
+      white-space: pre-wrap;
+      word-wrap: break-word;
+    }
+
+    .controls {
+      display: flex;
+      gap: 12px;
+      align-items: center;
+      flex-wrap: wrap;
+      margin-top: 10px;
+    }
+
+    .btn {
+      border: none;
+      padding: 10px 16px;
+      border-radius: 10px;
+      font-size: 15px;
+      cursor: pointer;
+      transition: background-color 0.15s ease, transform 0.05s ease;
+    }
+    .btn:active { transform: translateY(1px); }
+
+    .btn-primary {
+      background-color: #0a84ff;
+      color: white;
+    }
+    .btn-primary:disabled {
+      background-color: #7fb6ff;
+      cursor: default;
+    }
+
+    .btn-secondary {
+      background-color: #1d1d1f;
+      color: white;
+    }
+    .btn-secondary:disabled {
+      background-color: #8b8b90;
+      cursor: default;
+    }
+
+    .form {
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      gap: 12px;
+      margin: 14px 0 18px;
+    }
+    @media (max-width: 820px) {
+      .form { grid-template-columns: 1fr; }
+    }
+    label {
+      font-size: 13px;
+      color: #3a3a3c;
+      display: block;
+      margin-bottom: 6px;
+    }
+    input, select {
+      width: 100%;
+      padding: 10px 12px;
+      border-radius: 10px;
+      border: 1px solid #d2d2d7;
+      background: #fff;
+      font-size: 15px;
+      outline: none;
+    }
+    input:focus, select:focus {
+      border-color: #0a84ff;
+      box-shadow: 0 0 0 3px rgba(10,132,255,0.15);
+    }
+
+    .hint {
+      font-size: 13px;
+      color: #6e6e73;
+      margin-top: -6px;
+      margin-bottom: 10px;
+    }
+    .error {
+      background: #fff2f2;
+      border: 1px solid #ffd0d0;
+      color: #b42318;
+      padding: 10px 12px;
+      border-radius: 12px;
+      margin-bottom: 12px;
+      display: none;
+    }
+
+    .sr-only {
+      position: absolute;
+      width: 1px;
+      height: 1px;
+      padding: 0;
+      margin: -1px;
+      overflow: hidden;
+      clip: rect(0,0,0,0);
+      white-space: nowrap;
+      border: 0;
+    }
+
+    .output {
+      background: #f5f5f7;
+      border-radius: 16px;
+      padding: 16px;
+      border: 1px solid #e5e5ea;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>Calcular el stop Loss</h1>
+
+    <div class="form" role="group" aria-label="Inputs obligatorios">
+      <div>
+        <label for="ticker">Ticker (OBLIGATORIO)</label>
+        <input id="ticker" type="text" placeholder="Ej: AAPL, SPY, CSPX.L" autocomplete="off" />
+      </div>
+
+      <div>
+        <label for="estrategia">Estrategia (OBLIGATORIO)</label>
+        <select id="estrategia">
+          <option value="">Selecciona…</option>
+          <option value="INTRADIA">INTRADIA</option>
+          <option value="SWING">SWING</option>
+          <option value="LARGO_PLAZO">LARGO_PLAZO</option>
+        </select>
+      </div>
+
+      <div>
+        <label for="riesgo">Perfil de riesgo (OBLIGATORIO)</label>
+        <select id="riesgo">
+          <option value="">Selecciona…</option>
+          <option value="BAJO">BAJO</option>
+          <option value="MEDIO">MEDIO</option>
+          <option value="ALTO">ALTO</option>
+        </select>
+      </div>
+    </div>
+
+    <div class="hint">
+      Se reemplazan automáticamente: <b>{TICKER}</b>, <b>{ESTRATEGIA}</b>, <b>{RIESGO}</b>.
+    </div>
+
+    <div id="errorBox" class="error" aria-live="polite"></div>
+
+    <div class="controls" aria-live="polite">
+      <button id="genBtn" class="btn btn-secondary" type="button">Generar prompt</button>
+
+      <button id="copyBtn" class="btn btn-primary" type="button" aria-describedby="copyDesc" disabled>
+        Copiar prompt
+      </button>
+      <span id="copyDesc" class="sr-only">Copia el prompt generado al portapapeles</span>
+    </div>
+
+    <div class="output" style="margin-top: 14px;">
+      <pre id="descripcion">Completa los 3 campos y pulsa “Generar prompt”.</pre>
+    </div>
+  </div>
+
+  <script>
+    (function () {
+      const out = document.getElementById("descripcion");
+      const btnCopy = document.getElementById("copyBtn");
+      const btnGen = document.getElementById("genBtn");
+      const err = document.getElementById("errorBox");
+
+      const tickerEl = document.getElementById("ticker");
+      const estrategiaEl = document.getElementById("estrategia");
+      const riesgoEl = document.getElementById("riesgo");
+
+      const template = `PROMPT PROFESIONAL
+Análisis técnico + Stop Loss y Trailing Stop automático – Acciones & ETFs
+
+Rol
+Actúa como un Analista Técnico Senior Institucional, especializado en acciones y ETFs, con enfoque en estructura de mercado, price action, volatilidad (ATR) y gestión de riesgo profesional.
+Tu prioridad es preservar capital, evitar salidas por ruido y optimizar la relación riesgo/retorno.
+
+🔧 Parámetros de entrada (OBLIGATORIOS)
+Ticker: {TICKER}
+Estrategia: {ESTRATEGIA}
+Perfil de riesgo: {RIESGO}
+
+⚠️ El precio debe tomarse SIEMPRE del precio actual de mercado.
+No solicitar ni usar precio de entrada proporcionado por el usuario.
+
+🧠 Decisiones internas del analista (NO preguntar al usuario)
+Identificar si el activo es:
+- Acción o ETF
+- Mega / Large / Mid Cap (si aplica)
+
+Seleccionar automáticamente:
+- Timeframe principal
+- Timeframe de confirmación
+
+Determinar si el stop propuesto es:
+- Stop técnico actual
+- Trailing stop dinámico, según la estructura vigente
+
+Elegir el método de trailing stop más adecuado (1R, 2R, EMA o ATR) según:
+- estrategia
+- volatilidad
+- fase del mercado
+
+🎯 Contexto operativo (FIJO)
+Swing: horizonte 1–3 semanas
+Riesgo medio: balance entre protección y upside
+
+El stop debe:
+- invalidar la tesis técnica
+- respetar volatilidad y estructura
+- no colocarse dentro del ruido normal
+
+📊 Objetivo del análisis
+Realizar un análisis técnico completo y accionable para:
+- Evaluar la estructura real del precio
+- Medir volatilidad y rango normal
+- Proponer un Stop Loss óptimo, que pueda evolucionar a un Trailing Stop automático, protegiendo ganancias sin cortar la tendencia.
+
+🧩 Instrucciones de análisis (OBLIGATORIAS)
+1️⃣ Selección automática de timeframes
+- Intradía → 5m / 15m (confirmación 1h)
+- Swing → Diario (confirmación 4h)
+- Largo plazo → Semanal (confirmación Diario)
+
+2️⃣ Clasificación del activo
+- Acción o ETF
+- Tamaño, liquidez y comportamiento típico
+- Volatilidad diaria normal (%)
+
+3️⃣ Contexto de mercado
+- Tendencia primaria y secundaria
+- Fase del mercado: impulso / pullback / consolidación / distribución
+
+4️⃣ Estructura técnica
+- Máximos y mínimos relevantes
+- Soportes y resistencias clave
+- Nivel donde la tesis técnica queda invalidada
+
+5️⃣ Indicadores (uso profesional)
+- EMA 20 / 50 / 200 (según estrategia)
+- ATR (14) como base del stop
+- RSI solo como contexto, no como señal
+
+6️⃣ Volatilidad y ruido
+- Movimiento normal esperado
+- Diferenciar:
+  - ruido
+  - retroceso sano
+  - quiebre estructural
+
+🛑 Stop Loss y Trailing Stop – Reglas estrictas
+Stop inicial
+- Calcular el stop desde el precio actual de mercado
+- Basarlo en:
+  - soporte técnico real
+  - múltiplos de ATR
+  - perfil de riesgo
+- El stop debe quedar fuera del rango de ruido normal
+
+Trailing Stop automático (OBLIGATORIO proponerlo)
+Definir cuándo y cómo debe ajustarse el stop si el precio avanza a favor, usando uno o varios de los siguientes métodos:
+
+🔹 Trailing por R (Risk Units)
+- 1R: mover el stop a break-even solo si la estructura lo confirma
+- 2R: asegurar ganancias parciales o subir el stop bajo el último soporte válido
+- Evitar mover el stop únicamente por precio; siempre validar estructura
+
+🔹 Trailing por EMA
+- Swing → EMA 20 o 50 diaria
+- Largo plazo → EMA 50 o 200
+- El stop debe colocarse ligeramente por debajo de la EMA, nunca encima
+
+🔹 Trailing por ATR
+- Ajustar el stop a 2–3x ATR desde el máximo/mínimo relevante
+- Especialmente útil en activos con alta volatilidad
+- No reducir el múltiplo de ATR si la tendencia sigue intacta
+
+Reglas universales de trailing
+❌ Nunca acercar el stop dentro del ruido normal
+❌ Nunca mover el stop en contra del trade
+✅ Ajustar el stop solo si:
+- la estructura mejora
+- el precio confirma continuación
+El trailing stop protege estructura, no emociones
+
+📤 Formato de salida (OBLIGATORIO)
+1️⃣ Resumen técnico (≤5 líneas)
+2️⃣ Tipo de activo y timeframes utilizados
+3️⃣ Tendencia y estructura actual
+4️⃣ Volatilidad y ruido normal
+5️⃣ Stop recomendado
+- Tipo: stop técnico / trailing stop
+- Precio exacto:
+- % respecto al precio actual:
+- Justificación técnica clara
+6️⃣ Plan de trailing stop
+- Método elegido (1R / 2R / EMA / ATR):
+- Condición exacta de ajuste:
+7️⃣ Riesgo / Recompensa estimada (R:R)
+8️⃣ Condición explícita de invalidación de la tesis
+
+🧠 Filosofía final
+El stop se coloca para proteger la estructura.
+El trailing se activa para dejar correr la tendencia.
+Ninguno se mueve por miedo.
+
+✅ Resultado
+Ahora este prompt:
+- gestiona entrada, protección y seguimiento
+- evita salidas prematuras
+- escala a acciones y ETFs
+- replica un sistema institucional real`;
+
+      function showError(msg) {
+        err.style.display = "block";
+        err.textContent = msg;
+      }
+      function clearError() {
+        err.style.display = "none";
+        err.textContent = "";
+      }
+
+      function normalizeTicker(t) {
+        return (t || "").trim().toUpperCase();
+      }
+
+      function buildPrompt() {
+        const ticker = normalizeTicker(tickerEl.value);
+        const estrategia = (estrategiaEl.value || "").trim();
+        const riesgo = (riesgoEl.value || "").trim();
+
+        const missing = [];
+        if (!ticker) missing.push("Ticker");
+        if (!estrategia) missing.push("Estrategia");
+        if (!riesgo) missing.push("Perfil de riesgo");
+
+        if (missing.length) {
+          showError("Faltan campos obligatorios: " + missing.join(", ") + ".");
+          btnCopy.disabled = true;
+          return null;
+        }
+
+        clearError();
+
+        const finalPrompt = template
+          .replaceAll("{TICKER}", ticker)
+          .replaceAll("{ESTRATEGIA}", estrategia)
+          .replaceAll("{RIESGO}", riesgo);
+
+        return finalPrompt;
+      }
+
+      async function fallbackCopyTextToClipboard(text) {
+        const textarea = document.createElement("textarea");
+        textarea.value = text;
+        textarea.style.position = "fixed";
+        textarea.style.top = "-9999px";
+        document.body.appendChild(textarea);
+        textarea.focus();
+        textarea.select();
+        try {
+          document.execCommand("copy");
+        } catch (e) {
+          console.error("Fallo el copy fallback", e);
+          throw e;
+        } finally {
+          document.body.removeChild(textarea);
+        }
+      }
+
+      async function copyText(text) {
+        if (navigator.clipboard && navigator.clipboard.writeText) {
+          return navigator.clipboard.writeText(text);
+        }
+        return fallbackCopyTextToClipboard(text);
+      }
+
+      btnGen.addEventListener("click", () => {
+        const finalPrompt = buildPrompt();
+        if (!finalPrompt) return;
+        out.textContent = finalPrompt;
+        btnCopy.disabled = false;
+      });
+
+      btnCopy.addEventListener("click", async () => {
+        const text = out.innerText || out.textContent;
+        if (!text || text.includes("Completa los 3 campos")) return;
+
+        btnCopy.disabled = true;
+        const originalText = btnCopy.textContent;
+
+        try {
+          await copyText(text);
+          btnCopy.textContent = "¡Copiado!";
+        } catch (err) {
+          console.error("No se pudo copiar:", err);
+          btnCopy.textContent = "Error al copiar";
+        } finally {
+          setTimeout(() => {
+            btnCopy.textContent = originalText;
+            btnCopy.disabled = false;
+          }, 1500);
+        }
+      });
+    })();
+  </script>
+</body>
+</html>
