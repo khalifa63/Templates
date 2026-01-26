@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Reporte Express Trader</title>
+
+  <style>
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen,
+        Ubuntu, Cantarell, sans-serif;
+      margin: 0;
+      padding: 20px;
+      background-color: #f5f5f7;
+      color: #1d1d1f;
+    }
+
+    .container {
+      max-width: 900px;
+      margin: 0 auto;
+      background-color: #ffffff;
+      border-radius: 18px;
+      padding: 30px;
+      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    }
+
+    h1 {
+      font-size: 32px;
+      font-weight: 600;
+      margin-bottom: 18px;
+    }
+
+    .controls {
+      display: flex;
+      gap: 12px;
+      margin-bottom: 16px;
+      flex-wrap: wrap;
+    }
+
+    .btn {
+      border: none;
+      padding: 10px 16px;
+      border-radius: 10px;
+      font-size: 15px;
+      cursor: pointer;
+      transition: background-color 0.15s ease, transform 0.05s ease;
+    }
+
+    .btn:active {
+      transform: translateY(1px);
+    }
+
+    .btn-secondary {
+      background-color: #1d1d1f;
+      color: white;
+    }
+
+    .btn-primary {
+      background-color: #0a84ff;
+      color: white;
+    }
+
+    .btn-primary:disabled {
+      background-color: #7fb6ff;
+      cursor: default;
+    }
+
+    .output {
+      background: #f5f5f7;
+      border-radius: 16px;
+      padding: 16px;
+      border: 1px solid #e5e5ea;
+    }
+
+    pre {
+      font-size: 14px;
+      line-height: 1.6;
+      white-space: pre-wrap;
+      word-wrap: break-word;
+      margin: 0;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="container">
+    <h1>Reporte Express – Trader Institucional</h1>
+
+    <div class="controls">
+      <button id="genBtn" class="btn btn-secondary" type="button">
+        Generar prompt
+      </button>
+
+      <button id="copyBtn" class="btn btn-primary" type="button" disabled>
+        Copiar prompt
+      </button>
+    </div>
+
+    <div class="output">
+      <pre id="descripcion">Pulsa “Generar prompt”.</pre>
+    </div>
+  </div>
+
+  <script>
+    (function () {
+      const out = document.getElementById("descripcion");
+      const btnCopy = document.getElementById("copyBtn");
+      const btnGen = document.getElementById("genBtn");
+
+      const prompt = `Prueba la IA directamente en tus aplicaciones favoritas …
+Usa Gemini para generar borradores y pulir contenido, y disfruta de Gemini Pro con acceso a la IA de nueva generación de Google por 79.000 COP 0 COP durante 1 mes
+
+**ROL:** Eres un Trader profesional + Gestor de portafolio institucional.
+
+Tu prioridad es: **proteger capital, controlar riesgo, y tomar decisiones simples y rentables**.
+
+📌 **DATOS DE HOY (pego captura o tabla):**
+[PEGA AQUÍ]
+
+---
+
+# REPORTE EXPRESS (60s)
+
+## 1) TOTAL
+- Valor total portafolio: ___
+- P/L total neto ($): ___
+- P/L % total aprox: ___
+
+## 2) GANADORES / PERDEDORES
+✅ Top 3 ganadores (%, $):
+1) ___
+2) ___
+3) ___
+
+🔻 Top 3 perdedores (%, $):
+1) ___
+2) ___
+3) ___
+
+## 3) POSICIONES QUE MÁS MANDAN (peso)
+Top 3 por valor mercado (% del portafolio):
+1) ___
+2) ___
+3) ___
+⚠️ Alerta si alguna >15%
+
+## 4) EXPOSICIÓN POR SECTOR (solo resumen)
+- Tech: __%
+- Energía: __%
+- Financieros: __%
+- Industriales/Materiales: __%
+- Salud: __%
+- Consumo: __%
+- Defensivo (oro/bonos): __%
+⚠️ Sector >30% = rebalancear
+
+## 5) ACCIÓN HOY (máximo 5 bullets)
+✅ Mantener: ___
+✂️ Recortar por sobrepeso: ___
+💰 Tomar ganancias parcial: ___ (si supera +__%)
+🛡️ Proteger riesgo: ___ (si cae a -__%)
+🚫 No tocar hoy: ___
+
+## 6) REGLAS AUTOMÁTICAS (sin emociones)
+- Posición >15% → bajar a 10–12%
+- +10% → tomar 30% parcial
+- -6% → revisar / ajustar
+- Defensivo mínimo 10–12% (oro/bonos)
+
+## 7) RECORDATORIO DE DISCIPLINA (3 líneas)
+- No sobreoperar por ansiedad.
+- Ejecutar plan, no emociones.
+- Si dudas: NO tocar.`;
+
+      btnGen.addEventListener("click", () => {
+        out.textContent = prompt;
+        btnCopy.disabled = false;
+      });
+
+      btnCopy.addEventListener("click", async () => {
+        await navigator.clipboard.writeText(prompt);
+        btnCopy.textContent = "¡Copiado!";
+        setTimeout(() => {
+          btnCopy.textContent = "Copiar prompt";
+        }, 1500);
+      });
+    })();
+  </script>
+</body>
+</html>
