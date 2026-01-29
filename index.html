@@ -1,80 +1,145 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Sistema de Análisis Financiero</title>
-    <style>
-        body {
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
-            margin: 0;
-            padding: 20px;
-            background-color: #f5f5f7;
-            color: #1d1d1f;
-        }
-        .container {
-            max-width: 800px;
-            margin: 0 auto;
-            background-color: white;
-            border-radius: 18px;
-            padding: 30px;
-            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-        }
-        h1 {
-            font-size: 32px;
-            font-weight: 600;
-            margin-bottom: 30px;
-            color: #1d1d1f;
-        }
-        .menu {
-            list-style: none;
-            padding: 0;
-        }
-        .menu li {
-            margin-bottom: 12px;
-        }
-        .menu-item {
-            display: block;
-            padding: 16px 20px;
-            background-color: #ffffff;
-            border: 1px solid #d2d2d7;
-            border-radius: 12px;
-            color: #1d1d1f;
-            text-decoration: none;
-            transition: all 0.3s ease;
-        }
-        .menu-item:hover {
-            background-color: #f5f5f7;
-            transform: translateY(-2px);
-        }
-        .divider {
-            height: 1px;
-            background-color: #d2d2d7;
-            margin: 20px 0;
-        }
-        .menu-item span {
-            font-size: 16px;
-            font-weight: 500;
-        }
-    </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Sistema de Análisis Financiero</title>
+
+<style>
+body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    margin: 0;
+    padding: 20px;
+    background-color: #f5f5f7;
+    color: #1d1d1f;
+}
+
+.container {
+    max-width: 800px;
+    margin: auto;
+    background: white;
+    border-radius: 18px;
+    padding: 30px;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+}
+
+h1 {
+    font-size: 32px;
+    margin-bottom: 25px;
+}
+
+/* Accordion */
+.accordion {
+    border: 1px solid #d2d2d7;
+    border-radius: 14px;
+    margin-bottom: 20px;
+    overflow: hidden;
+}
+
+.accordion summary {
+    list-style: none;
+    cursor: pointer;
+    padding: 18px 20px;
+    font-size: 18px;
+    font-weight: 600;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: #fafafa;
+}
+
+.accordion summary::-webkit-details-marker {
+    display: none;
+}
+
+.accordion-icon {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.arrow {
+    transition: transform 0.3s ease;
+}
+
+details[open] .arrow {
+    transform: rotate(180deg);
+}
+
+/* Menu items */
+.menu {
+    list-style: none;
+    padding: 15px;
+    margin: 0;
+}
+
+.menu li {
+    margin-bottom: 12px;
+}
+
+.menu-item {
+    display: block;
+    padding: 14px 18px;
+    border: 1px solid #d2d2d7;
+    border-radius: 12px;
+    text-decoration: none;
+    color: #1d1d1f;
+    transition: all 0.3s ease;
+    background: white;
+}
+
+.menu-item:hover {
+    background-color: #f5f5f7;
+    transform: translateY(-2px);
+}
+</style>
 </head>
+
 <body>
-    <div class="container">
-        <h1>Sistema de Análisis Financiero</h1>
-        <ul class="menu">
-            <li><a href="analizar_portafolio.html" class="menu-item"><span>1. Analizar Portafolio (portafolio)</span></a></li>
-            <li><a href="buscar_activos.html" class="menu-item"><span>2. Buscar Activos (acciones)</span></a></li>
-            <li><a href="analizar_etf.html" class="menu-item"><span>3. Analizar ETF</span></a></li>
-            <li><a href="analizar_ticker.html" class="menu-item"><span>3. Analizar Ticker (acciones)</span></a></li>
-            <li><a href="analizar_varios_tkr.html" class="menu-item"><span>4. Analizar Varios Tickers (acciones) </span></a></li>
-            <li><a href="calcular_stop_loss.html" class="menu-item"><span>5. Calcular Stop Loss (acciones) </span></a></li>
-            <li><a href="analisis_corto.html" class="menu-item"><span>6. Análisis del portafolio (portafolio). </span></a></li>
-            <li><a href="analisis_21dias.html" class="menu-item"><span>7. Revisar Diariamente > 21 días (portafolio)</span></a></li>
-            <li><a href="analisis_diario.html" class="menu-item"><span>8. Revisar Entorno Diariamente (portafolio)</span></a></li>
-            <li><a href="recomendaciones_portafolio.html" class="menu-item"><span>9. Revisar Diario (portafolio)</span></a></li>
-            <div class="divider"></div>
-            <li><a href="portafolio_sectores.html" class="menu-item"><span>7. Clasificar Cartera por Sectores (portafolio)</span></a></li>
-        </ul>
-    </div>
+<div class="container">
+<h1>Sistema de Análisis Financiero</h1>
+
+<!-- PORTAFOLIO -->
+<details class="accordion" open>
+    <summary>
+        <div class="accordion-icon">📊 Portafolio</div>
+        <span class="arrow">⌄</span>
+    </summary>
+    <ul class="menu">
+        <li><a href="analizar_portafolio.html" class="menu-item">Analizar Portafolio</a></li>
+        <li><a href="analisis_corto.html" class="menu-item">Análisis del Portafolio</a></li>
+        <li><a href="analisis_21dias.html" class="menu-item">Revisión &gt; 21 días</a></li>
+        <li><a href="analisis_diario.html" class="menu-item">Revisión Diaria del Entorno</a></li>
+        <li><a href="recomendaciones_portafolio.html" class="menu-item">Recomendaciones Diarias</a></li>
+        <li><a href="portafolio_sectores.html" class="menu-item">Clasificar por Sectores</a></li>
+    </ul>
+</details>
+
+<!-- ACCIONES -->
+<details class="accordion">
+    <summary>
+        <div class="accordion-icon">📈 Acciones</div>
+        <span class="arrow">⌄</span>
+    </summary>
+    <ul class="menu">
+        <li><a href="buscar_activos.html" class="menu-item">Buscar Activos</a></li>
+        <li><a href="analizar_ticker.html" class="menu-item">Analizar Ticker</a></li>
+        <li><a href="analizar_varios_tkr.html" class="menu-item">Analizar Varios Tickers</a></li>
+        <li><a href="calcular_stop_loss.html" class="menu-item">Calcular Stop Loss</a></li>
+    </ul>
+</details>
+
+<!-- ETF -->
+<details class="accordion">
+    <summary>
+        <div class="accordion-icon">🧺 ETF</div>
+        <span class="arrow">⌄</span>
+    </summary>
+    <ul class="menu">
+        <li><a href="analizar_etf.html" class="menu-item">Analizar ETF</a></li>
+    </ul>
+</details>
+
+</div>
 </body>
 </html>
