@@ -1,1 +1,529 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Generador Prompt CAN SLIM</title>
+  <style>
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+      margin: 0;
+      padding: 20px;
+      background-color: #f5f5f7;
+      color: #1d1d1f;
+    }
+    .container {
+      max-width: 980px;
+      margin: 0 auto;
+      background-color: white;
+      border-radius: 18px;
+      padding: 30px;
+      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    }
+    h1 {
+      font-size: 32px;
+      font-weight: 600;
+      margin-bottom: 12px;
+      color: #1d1d1f;
+    }
+    p, pre {
+      font-size: 15px;
+      line-height: 1.6;
+      color: #1d1d1f;
+      margin-bottom: 18px;
+      white-space: pre-wrap;
+      word-wrap: break-word;
+    }
+
+    /* Inputs uno debajo de otro */
+    .form {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 12px;
+      margin: 14px 0 18px;
+      max-width: 640px;
+    }
+
+    label {
+      font-size: 13px;
+      color: #3a3a3c;
+      display: block;
+      margin-bottom: 6px;
+    }
+    input, select, textarea {
+      width: 100%;
+      padding: 10px 12px;
+      border-radius: 10px;
+      border: 1px solid #d2d2d7;
+      background: #fff;
+      font-size: 15px;
+      outline: none;
+      box-sizing: border-box;
+    }
+    input:focus, select:focus, textarea:focus {
+      border-color: #0a84ff;
+      box-shadow: 0 0 0 3px rgba(10,132,255,0.15);
+    }
+
+    .hint {
+      font-size: 13px;
+      color: #6e6e73;
+      margin-top: -6px;
+      margin-bottom: 10px;
+    }
+    .error {
+      background: #fff2f2;
+      border: 1px solid #ffd0d0;
+      color: #b42318;
+      padding: 10px 12px;
+      border-radius: 12px;
+      margin-bottom: 12px;
+      display: none;
+    }
+
+    .controls {
+      display: flex;
+      gap: 12px;
+      align-items: center;
+      flex-wrap: wrap;
+      margin-top: 10px;
+    }
+
+    .btn {
+      border: none;
+      padding: 10px 16px;
+      border-radius: 10px;
+      font-size: 15px;
+      cursor: pointer;
+      transition: background-color 0.15s ease, transform 0.05s ease;
+    }
+    .btn:active { transform: translateY(1px); }
+
+    .btn-primary {
+      background-color: #0a84ff;
+      color: white;
+    }
+    .btn-primary:disabled {
+      background-color: #7fb6ff;
+      cursor: default;
+    }
+
+    .btn-secondary {
+      background-color: #1d1d1f;
+      color: white;
+    }
+    .btn-secondary:disabled {
+      background-color: #8b8b90;
+      cursor: default;
+    }
+
+    .sr-only {
+      position: absolute;
+      width: 1px;
+      height: 1px;
+      padding: 0;
+      margin: -1px;
+      overflow: hidden;
+      clip: rect(0,0,0,0);
+      white-space: nowrap;
+      border: 0;
+    }
+
+    .output {
+      background: #f5f5f7;
+      border-radius: 16px;
+      padding: 16px;
+      border: 1px solid #e5e5ea;
+      margin-top: 14px;
+    }
+
+    .row {
+      margin-bottom: 2px;
+    }
+
+    .small {
+      font-size: 12px;
+      color: #6e6e73;
+      margin-top: 6px;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>Generador de Prompt CAN SLIM</h1>
+    <p>Completa los parámetros y genera el prompt listo para copiar.</p>
+
+    <div class="form" role="group" aria-label="Inputs obligatorios">
+
+      <div class="row">
+        <label for="sector">Sector (OBLIGATORIO)</label>
+        <select id="sector">
+          <option value="">Selecciona…</option>
+          <option>Tecnología</option>
+          <option>Salud</option>
+          <option>Industrial</option>
+          <option>Energía</option>
+          <option>Financiero</option>
+          <option>Consumo Discrecional</option>
+          <option>Consumo Básico</option>
+          <option>Materiales</option>
+          <option>Utilities</option>
+          <option>Real Estate</option>
+          <option>Comunicación/Telecom</option>
+          <option>Semiconductores</option>
+          <option>Software</option>
+          <option>IA/Cloud</option>
+          <option>Ciberseguridad</option>
+          <option>Retail</option>
+          <option>Otro</option>
+        </select>
+      </div>
+
+      <div class="row">
+        <label for="activos">Activos (OBLIGATORIO)</label>
+        <select id="activos">
+          <option value="">Selecciona…</option>
+          <option>Acciones</option>
+          <option>ETFs</option>
+          <option>Acciones+ETFs</option>
+          <option>ADRs</option>
+        </select>
+      </div>
+
+      <div class="row">
+        <label for="capital">Capital a invertir por operación (OBLIGATORIO)</label>
+        <input id="capital" type="text" placeholder="Ej: 1.000 USD | 5.000 USD | 2.000.000 COP" autocomplete="off" />
+      </div>
+
+      <div class="row">
+        <label for="horizonte">Horizonte (OBLIGATORIO)</label>
+        <select id="horizonte">
+          <option value="">Selecciona…</option>
+          <option>Intradía</option>
+          <option>Swing</option>
+          <option>Largo Plazo</option>
+        </select>
+      </div>
+
+      <div class="row">
+        <label for="riesgo">Riesgo (OBLIGATORIO)</label>
+        <select id="riesgo">
+          <option value="">Selecciona…</option>
+          <option>Bajo</option>
+          <option>Medio</option>
+          <option>Alto</option>
+        </select>
+      </div>
+
+      <div class="row">
+        <label for="mercado">Mercado (OBLIGATORIO)</label>
+        <select id="mercado">
+          <option value="">Selecciona…</option>
+          <option>USA</option>
+          <option>Global</option>
+          <option>Europa</option>
+          <option>Latam</option>
+          <option>Nasdaq</option>
+          <option>NYSE</option>
+          <option>AMEX</option>
+          <option>Canadá</option>
+          <option>Reino Unido</option>
+          <option>Alemania</option>
+          <option>Francia</option>
+          <option>España</option>
+          <option>Italia</option>
+          <option>Brasil</option>
+          <option>México</option>
+          <option>Colombia</option>
+        </select>
+      </div>
+
+      <div class="row">
+        <label for="nResultados">Cantidad de resultados (OBLIGATORIO)</label>
+        <select id="nResultados">
+          <option value="">Selecciona…</option>
+          <option>5</option>
+          <option>10</option>
+          <option>15</option>
+          <option>20</option>
+          <option>30</option>
+        </select>
+      </div>
+
+      <div class="row">
+        <label for="excluir">Excluir (OBLIGATORIO)</label>
+        <textarea id="excluir" rows="2" placeholder="Ej: Micro cap, Biotech, acciones chinas, penny stocks, OTC, SPACs, baja liquidez..."></textarea>
+        <div class="small">Sugerencia: separa por comas.</div>
+      </div>
+
+    </div>
+
+    <div class="hint">
+      Se reemplazan automáticamente: <b>{Sector}</b>, <b>{Activos}</b>, <b>{Capital}</b>, <b>{Horizonte}</b>, <b>{Riesgo}</b>, <b>{Mercado}</b>, <b>{N_Resultados}</b>, <b>{Excluir}</b>.
+    </div>
+
+    <div id="errorBox" class="error" aria-live="polite"></div>
+
+    <div class="controls" aria-live="polite">
+      <button id="genBtn" class="btn btn-secondary" type="button">Generar prompt</button>
+
+      <button id="copyBtn" class="btn btn-primary" type="button" aria-describedby="copyDesc" disabled>
+        Copiar prompt
+      </button>
+      <span id="copyDesc" class="sr-only">Copia el prompt generado al portapapeles</span>
+    </div>
+
+    <div class="output">
+      <pre id="descripcion">Completa los campos y pulsa “Generar prompt”.</pre>
+    </div>
+  </div>
+
+  <script>
+    (function () {
+      const out = document.getElementById("descripcion");
+      const btnCopy = document.getElementById("copyBtn");
+      const btnGen = document.getElementById("genBtn");
+      const err = document.getElementById("errorBox");
+
+      const sectorEl = document.getElementById("sector");
+      const activosEl = document.getElementById("activos");
+      const capitalEl = document.getElementById("capital");
+      const horizonteEl = document.getElementById("horizonte");
+      const riesgoEl = document.getElementById("riesgo");
+      const mercadoEl = document.getElementById("mercado");
+      const nResultadosEl = document.getElementById("nResultados");
+      const excluirEl = document.getElementById("excluir");
+
+      const template = `🧠 PROMPT MAESTRO – SCREENING CAN SLIM (Acciones / ETFs)
+
+Rol:
+Actúa como un analista profesional de mercados financieros especializado en la metodología CAN SLIM de William O’Neil, combinando análisis fundamental, técnico y de momentum. Tu prioridad es seleccionar líderes del sector con buen timing de mercado y alta probabilidad de continuidad.
+
+✅ PARÁMETROS (obligatorios)
+Sector: {Sector}
+Activos: {Activos}
+Capital a invertir por operación: {Capital}
+Horizonte: {Horizonte}
+Riesgo: {Riesgo}
+Mercado: {Mercado}
+Cantidad de resultados: {N_Resultados}
+Excluir (lista): {Excluir}
+
+🎯 Tarea:
+Realiza un screening estricto de {Activos} dentro del sector {Sector} en el mercado {Mercado}, aplicando la metodología CAN SLIM. Devuelve exactamente {N_Resultados} oportunidades ordenadas por mejor calificación CAN SLIM.
+Regla de oro: prioriza calidad sobre cantidad, y elimina automáticamente todo lo que coincida con {Excluir}.
+
+📌 REGLAS DE UNIVERSO (OBLIGATORIAS)
+1) Excluir: elimina cualquier activo que caiga en {Excluir}.
+2) Mercado:
+   - Si {Mercado} = Nasdaq o NYSE: considera únicamente tickers listados allí (no mezclar).
+   - Si {Mercado} = USA: considera NYSE + Nasdaq + AMEX (si aplica).
+   - Si {Mercado} = Europa/Latam/Global: limita a instrumentos líquidos y reconocidos del universo seleccionado.
+3) Capital {Capital}: si es bajo, prioriza alta liquidez, spreads bajos y facilidad de ejecución (evitar baja negociabilidad).
+4) No inventes datos: si un dato no está disponible, marca “Dato no disponible / requiere verificación”.
+
+════════════════════════════════════
+📌 FILTROS CAN SLIM (OBLIGATORIOS)
+
+C – Current Earnings (Ganancias trimestrales)
+- BPA trimestral creciendo > 20% interanual (YoY)
+- Prioriza aceleración reciente (últimos trimestres)
+
+A – Annual Earnings (Crecimiento anual)
+- BPA anual creciendo > 25% vs año anterior
+- Historial consistente 3–5 años
+
+N – New (Catalizador / Nuevos máximos)
+- Catalizadores recientes (1–6 meses preferible): nuevo producto/tecnología, expansión relevante, mejora de márgenes/guía, cambio positivo en gestión
+- Precio cerca o rompiendo máximo de 52 semanas
+
+S – Supply & Demand (Oferta y demanda)
+- Preferencia por float reducido (idealmente < 50M) si no cae en exclusiones
+- Demanda visible: volumen alto y/o creciente
+- Liquidez mínima según riesgo:
+  * Riesgo Bajo: volumen > 500k/día
+  * Riesgo Medio: volumen > 250k/día
+  * Riesgo Alto: volumen > 100k/día
+
+L – Leader (Líder del sector)
+- Líder del sector por fuerza relativa y desempeño vs pares
+- Criterios técnicos mínimos: Precio > MM50 y MM200; tendencia alcista confirmada
+- RS Rating ≥ 80 si está disponible (o proxy: fuerza relativa vs índice)
+
+I – Institutional Sponsorship
+- Participación institucional > 40%
+- Preferencia por incremento reciente de posiciones institucionales
+
+M – Market Direction (Dirección del mercado)
+- Solo proponer entradas nuevas si el mercado general está alcista/confirmado y no en distribución.
+- Índices de referencia según {Mercado}:
+  * USA/Nasdaq/NYSE: S&P 500 + Nasdaq Composite
+  * Europa: STOXX Europe 600 (y/o DAX/CAC/IBEX según corresponda)
+  * Latam: índice representativo del país (ej: Bovespa, IPC, Colcap)
+  * Global: MSCI World/ACWI (si aplica)
+- Si M NO se cumple: no recomendar entradas largas nuevas; entregar watchlist condicionada.
+
+════════════════════════════════════
+⚖️ AJUSTES SEGÚN PERFIL DE RIESGO (OBLIGATORIOS)
+
+🔵 Riesgo Bajo
+- Beta < 1.0 (si disponible)
+- Preferencia Large/Mega Caps
+- Evitar volatilidad extrema
+
+🟠 Riesgo Medio
+- Beta 1.0–1.3
+- Mid/Large Caps
+- Volatilidad moderada aceptable (Swing)
+
+🔴 Riesgo Alto
+- Beta > 1.3
+- Puede incluir Small Caps SOLO si no están excluidas y cumplen liquidez
+
+════════════════════════════════════
+⏳ PRIORIZACIÓN SEGÚN HORIZONTE (OBLIGATORIO)
+
+Intradía
+- Liquidez extrema, spreads bajos
+- Momentum intradiario + volumen alto en la sesión (si no hay dato, indicarlo)
+
+Swing
+- Patrones alcistas CAN SLIM: Cup & Handle, Flat Base, breakouts de consolidación
+- Preferir setups cerca de pivote/buy point
+
+Largo Plazo
+- Ventaja competitiva + crecimiento estructural
+- Fundamentales sólidos para sostener meses/años
+
+════════════════════════════════════
+📊 FORMATO DE RESULTADOS (OBLIGATORIO)
+
+1) Resumen del mercado (M)
+- Estado del mercado en {Mercado}: Alcista / Neutral / Distribución
+- Índices usados y conclusión (“apto para entradas” o “solo watchlist”)
+
+2) Tabla final (exactamente {N_Resultados} filas)
+| Ticker | Nombre | Tipo (Acción/ETF) | Mercado | Sector | Calificación CAN SLIM (0–10) | Cumplimientos parciales (breve) | Motivo líder (L) | Nota de liquidez (según riesgo) |
+
+🔢 CÁLCULO DE LA CALIFICACIÓN CAN SLIM (0–10)
+- 7 pilares: C, A, N, S, L, I, M (hasta 7 pts)
+- +3 pts extra por alineación a {Horizonte} y {Riesgo}:
+  a) Calidad del patrón/entrada (según horizonte)
+  b) Momentum / fuerza relativa vs índice
+  c) Liquidez/spread adecuados a {Capital} y {Riesgo}
+
+Reglas:
+- 1.0 = cumple completo
+- 0.5 = parcial (justificar en 1 línea)
+- 0.0 = no cumple
+Ordenar de mayor a menor calificación.
+Si no hay suficientes que cumplan, completar con watchlist y explicar por qué.`;
+
+      function showError(msg) {
+        err.style.display = "block";
+        err.textContent = msg;
+      }
+      function clearError() {
+        err.style.display = "none";
+        err.textContent = "";
+      }
+
+      function normalizeText(t) {
+        return (t || "").trim();
+      }
+
+      function buildPrompt() {
+        const sector = normalizeText(sectorEl.value);
+        const activos = normalizeText(activosEl.value);
+        const capital = normalizeText(capitalEl.value);
+        const horizonte = normalizeText(horizonteEl.value);
+        const riesgo = normalizeText(riesgoEl.value);
+        const mercado = normalizeText(mercadoEl.value);
+        const nResultados = normalizeText(nResultadosEl.value);
+        const excluir = normalizeText(excluirEl.value);
+
+        const missing = [];
+        if (!sector) missing.push("Sector");
+        if (!activos) missing.push("Activos");
+        if (!capital) missing.push("Capital");
+        if (!horizonte) missing.push("Horizonte");
+        if (!riesgo) missing.push("Riesgo");
+        if (!mercado) missing.push("Mercado");
+        if (!nResultados) missing.push("Cantidad de resultados");
+        if (!excluir) missing.push("Excluir");
+
+        if (missing.length) {
+          showError("Faltan campos obligatorios: " + missing.join(", ") + ".");
+          btnCopy.disabled = true;
+          return null;
+        }
+
+        clearError();
+
+        const finalPrompt = template
+          .replaceAll("{Sector}", sector)
+          .replaceAll("{Activos}", activos)
+          .replaceAll("{Capital}", capital)
+          .replaceAll("{Horizonte}", horizonte)
+          .replaceAll("{Riesgo}", riesgo)
+          .replaceAll("{Mercado}", mercado)
+          .replaceAll("{N_Resultados}", nResultados)
+          .replaceAll("{Excluir}", excluir);
+
+        return finalPrompt;
+      }
+
+      async function fallbackCopyTextToClipboard(text) {
+        const textarea = document.createElement("textarea");
+        textarea.value = text;
+        textarea.style.position = "fixed";
+        textarea.style.top = "-9999px";
+        document.body.appendChild(textarea);
+        textarea.focus();
+        textarea.select();
+        try {
+          document.execCommand("copy");
+        } finally {
+          document.body.removeChild(textarea);
+        }
+      }
+
+      async function copyText(text) {
+        if (navigator.clipboard && navigator.clipboard.writeText) {
+          return navigator.clipboard.writeText(text);
+        }
+        return fallbackCopyTextToClipboard(text);
+      }
+
+      btnGen.addEventListener("click", () => {
+        const finalPrompt = buildPrompt();
+        if (!finalPrompt) return;
+        out.textContent = finalPrompt;
+        btnCopy.disabled = false;
+      });
+
+      btnCopy.addEventListener("click", async () => {
+        const text = out.innerText || out.textContent;
+        if (!text || text.includes("Completa los campos")) return;
+
+        btnCopy.disabled = true;
+        const originalText = btnCopy.textContent;
+
+        try {
+          await copyText(text);
+          btnCopy.textContent = "¡Copiado!";
+        } catch (e) {
+          console.error("No se pudo copiar:", e);
+          btnCopy.textContent = "Error al copiar";
+        } finally {
+          setTimeout(() => {
+            btnCopy.textContent = originalText;
+            btnCopy.disabled = false;
+          }, 1500);
+        }
+      });
+    })();
+  </script>
+</body>
+</html>
 
