@@ -295,21 +295,21 @@
       const nResultadosEl = document.getElementById("nResultados");
       const excluirEl = document.getElementById("excluir");
 
-      const template = `🧠 PROMPT PROFESIONAL – SCREENING CAN SLIM + “EARLY WINNERS” (Acciones / ETFs)
+      const template = `const template = `🧠 PROMPT PROFESIONAL – SCREENING CAN SLIM + “EARLY WINNERS” (Acciones / ETFs)
 
 Rol:
 Actúa como un analista profesional de mercados financieros especializado en la metodología CAN SLIM de William O’Neil, combinando análisis fundamental, técnico, momentum y contexto macro. Tu prioridad es seleccionar líderes (confirmados o emergentes) con buen timing de mercado y alta probabilidad de continuidad. 
 En paralelo, adapta CAN SLIM para detectar “EARLY WINNERS” (futuros compounders) sin inventar datos. Esto NO es asesoría financiera.
 
 ✅ PARÁMETROS (obligatorios)
-Sector/Temática: [Ej: Utilities / IA / Ciberseguridad / Salud / Energía / Fintech / Semiconductores / Defensa / Infra Cloud / etc.]
-Activos: [Acciones | ETFs | Mixto]
-Capital a invertir por operación: [Ej: 150 | 500 | 2000 | etc.] (USD o moneda del mercado)
-Horizonte: [Intradía | Swing | Mediano (1–3 meses) | Largo Plazo | Buy & Hold]
-Riesgo: [Bajo | Medio | Alto]
-Mercado: [USA | Nasdaq | NYSE | Europa | Latam | Global]
-Cantidad de resultados: [Ej: 10 | 15 | 20]
-Excluir (lista): [Ej: penny stocks, micro caps, OTC, baja liquidez, alto spread, ADRs, China, etc.]
+Sector/Temática: {Sector}
+Activos: {Activos}
+Capital a invertir por operación: {Capital}
+Horizonte: {Horizonte}
+Riesgo: {Riesgo}
+Mercado: {Mercado}
+Cantidad de resultados: {N_Resultados}
+Excluir (lista): {Excluir}
 Benchmark de mercado (auto si no se especifica): [SPX/NDX/EuroStoxx/MSCI/IPC/Colcap, etc.]
 
 🎯 Tarea:
@@ -317,7 +317,7 @@ Realiza un screening estricto del universo definido, combinando:
 1) CAN SLIM clásico (líderes confirmados)
 2) CAN SLIM adaptado para “EARLY WINNERS” (líderes emergentes en etapas tempranas)
 
-Devuelve exactamente [Cantidad de resultados] oportunidades ordenadas por mejor calificación (1–10).
+Devuelve exactamente {N_Resultados} oportunidades ordenadas por mejor calificación (1–10).
 Regla de oro: prioriza calidad sobre cantidad. Si no hay suficientes que cumplan, completa con “watchlist” e indícalo en la columna de cumplimiento.
 
 📌 REGLAS DE UNIVERSO (OBLIGATORIAS)
@@ -439,7 +439,7 @@ Largo Plazo / Buy & Hold
 - Estado del mercado: Alcista / Neutral / Distribución
 - Índices usados y conclusión (“apto para entradas” o “solo watchlist”)
 
-2) Tabla final (exactamente [Cantidad de resultados] filas)
+2) Tabla final (exactamente {N_Resultados} filas)
 | # | Ticker | Nombre | Tipo (Acción/ETF) | Mercado | Sector/Temática | Enfoque (CAN SLIM / Early Winner / Mixto) | Calificación (0–10) | Cumplimientos clave (breve) | Motivo líder / tesis | Nota de liquidez |
 
 🔢 CÁLCULO DE CALIFICACIÓN (0–10) – basado en criterio profesional (no advice)
@@ -466,18 +466,19 @@ Reglas:
 - No des recomendaciones explícitas; solo evaluación y watchlist.
 
 ════════════════════════════════════
-▶️ ENTRADA DEL USUARIO (rellenar)
-Sector/Temática: 
-Activos:
-Capital por operación:
-Horizonte:
-Riesgo:
-Mercado:
-Cantidad de resultados:
-Excluir (lista):
-Benchmark (opcional):
+▶️ ENTRADA DEL USUARIO (auto-rellenada)
+Sector/Temática: {Sector}
+Activos: {Activos}
+Capital por operación: {Capital}
+Horizonte: {Horizonte}
+Riesgo: {Riesgo}
+Mercado: {Mercado}
+Cantidad de resultados: {N_Resultados}
+Excluir (lista): {Excluir}
+Benchmark (opcional): (auto)
 
 Devuelve los resultados con el formato indicado.`;
+
 
       function showError(msg) {
         err.style.display = "block";
