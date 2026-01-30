@@ -295,130 +295,189 @@
       const nResultadosEl = document.getElementById("nResultados");
       const excluirEl = document.getElementById("excluir");
 
-      const template = `🧠 PROMPT MAESTRO – SCREENING CAN SLIM (Acciones / ETFs)
+      const template = `🧠 PROMPT PROFESIONAL – SCREENING CAN SLIM + “EARLY WINNERS” (Acciones / ETFs)
 
 Rol:
-Actúa como un analista profesional de mercados financieros especializado en la metodología CAN SLIM de William O’Neil, combinando análisis fundamental, técnico y de momentum. Tu prioridad es seleccionar líderes del sector con buen timing de mercado y alta probabilidad de continuidad.
+Actúa como un analista profesional de mercados financieros especializado en la metodología CAN SLIM de William O’Neil, combinando análisis fundamental, técnico, momentum y contexto macro. Tu prioridad es seleccionar líderes (confirmados o emergentes) con buen timing de mercado y alta probabilidad de continuidad. 
+En paralelo, adapta CAN SLIM para detectar “EARLY WINNERS” (futuros compounders) sin inventar datos. Esto NO es asesoría financiera.
 
 ✅ PARÁMETROS (obligatorios)
-Sector: {Sector}
-Activos: {Activos}
-Capital a invertir por operación: {Capital}
-Horizonte: {Horizonte}
-Riesgo: {Riesgo}
-Mercado: {Mercado}
-Cantidad de resultados: {N_Resultados}
-Excluir (lista): {Excluir}
+Sector/Temática: [Ej: Utilities / IA / Ciberseguridad / Salud / Energía / Fintech / Semiconductores / Defensa / Infra Cloud / etc.]
+Activos: [Acciones | ETFs | Mixto]
+Capital a invertir por operación: [Ej: 150 | 500 | 2000 | etc.] (USD o moneda del mercado)
+Horizonte: [Intradía | Swing | Mediano (1–3 meses) | Largo Plazo | Buy & Hold]
+Riesgo: [Bajo | Medio | Alto]
+Mercado: [USA | Nasdaq | NYSE | Europa | Latam | Global]
+Cantidad de resultados: [Ej: 10 | 15 | 20]
+Excluir (lista): [Ej: penny stocks, micro caps, OTC, baja liquidez, alto spread, ADRs, China, etc.]
+Benchmark de mercado (auto si no se especifica): [SPX/NDX/EuroStoxx/MSCI/IPC/Colcap, etc.]
 
 🎯 Tarea:
-Realiza un screening estricto de {Activos} dentro del sector {Sector} en el mercado {Mercado}, aplicando la metodología CAN SLIM. Devuelve exactamente {N_Resultados} oportunidades ordenadas por mejor calificación CAN SLIM.
-Regla de oro: prioriza calidad sobre cantidad, y elimina automáticamente todo lo que coincida con {Excluir}.
+Realiza un screening estricto del universo definido, combinando:
+1) CAN SLIM clásico (líderes confirmados)
+2) CAN SLIM adaptado para “EARLY WINNERS” (líderes emergentes en etapas tempranas)
+
+Devuelve exactamente [Cantidad de resultados] oportunidades ordenadas por mejor calificación (1–10).
+Regla de oro: prioriza calidad sobre cantidad. Si no hay suficientes que cumplan, completa con “watchlist” e indícalo en la columna de cumplimiento.
 
 📌 REGLAS DE UNIVERSO (OBLIGATORIAS)
-1) Excluir: elimina cualquier activo que caiga en {Excluir}.
+1) Exclusiones: elimina cualquier activo que coincida con “Excluir (lista)”.
 2) Mercado:
-   - Si {Mercado} = Nasdaq o NYSE: considera únicamente tickers listados allí (no mezclar).
-   - Si {Mercado} = USA: considera NYSE + Nasdaq + AMEX (si aplica).
-   - Si {Mercado} = Europa/Latam/Global: limita a instrumentos líquidos y reconocidos del universo seleccionado.
-3) Capital {Capital}: si es bajo, prioriza alta liquidez, spreads bajos y facilidad de ejecución (evitar baja negociabilidad).
-4) No inventes datos: si un dato no está disponible, marca “Dato no disponible / requiere verificación”.
+   - USA = NYSE + Nasdaq + AMEX (si aplica).
+   - Nasdaq o NYSE = solo tickers listados allí.
+   - Europa/Latam/Global = limitar a instrumentos líquidos y reconocidos.
+3) Capital: si es bajo, prioriza alta liquidez, spreads bajos y facilidad de ejecución.
+4) No inventes datos: si un dato no está disponible o requiere pago, marca “N/D / requiere verificación”.
+5) Fuentes: usa datos verificables (ideal: <7 días si se pide frescura). Si no puedes verificar, “N/D”.
 
 ════════════════════════════════════
-📌 FILTROS CAN SLIM (OBLIGATORIOS)
+📌 CAN SLIM CLÁSICO (para líderes confirmados)
 
-C – Current Earnings (Ganancias trimestrales)
-- BPA trimestral creciendo > 20% interanual (YoY)
-- Prioriza aceleración reciente (últimos trimestres)
+C – Current Earnings
+- EPS trimestral > +20% YoY (si aplica)
+- Aceleración en trimestres recientes (mejor)
 
-A – Annual Earnings (Crecimiento anual)
-- BPA anual creciendo > 25% vs año anterior
-- Historial consistente 3–5 años
+A – Annual Earnings
+- EPS anual > +25% YoY
+- Consistencia 3–5 años (si existe historial)
 
-N – New (Catalizador / Nuevos máximos)
-- Catalizadores recientes (1–6 meses preferible): nuevo producto/tecnología, expansión relevante, mejora de márgenes/guía, cambio positivo en gestión
-- Precio cerca o rompiendo máximo de 52 semanas
+N – New
+- Catalizadores 1–6 meses: nuevo producto/tecnología, expansión, mejora de guías/márgenes, cambios positivos
+- Precio cerca o rompiendo máximo 52 semanas (ideal)
 
-S – Supply & Demand (Oferta y demanda)
-- Preferencia por float reducido (idealmente < 50M) si no cae en exclusiones
-- Demanda visible: volumen alto y/o creciente
-- Liquidez mínima según riesgo:
-  * Riesgo Bajo: volumen > 500k/día
-  * Riesgo Medio: volumen > 250k/día
-  * Riesgo Alto: volumen > 100k/día
+S – Supply & Demand
+- Preferencia por float menor (si es saludable y no cae en exclusiones)
+- Volumen alto o creciente; demanda visible
+- Umbral de liquidez según riesgo:
+  * Bajo: > 500k/día
+  * Medio: > 250k/día
+  * Alto: > 100k/día
 
-L – Leader (Líder del sector)
-- Líder del sector por fuerza relativa y desempeño vs pares
-- Criterios técnicos mínimos: Precio > MM50 y MM200; tendencia alcista confirmada
-- RS Rating ≥ 80 si está disponible (o proxy: fuerza relativa vs índice)
+L – Leader
+- Fuerza relativa superior vs pares/sector/índice
+- Técnica mínima: Precio > MA50 y MA200; tendencia alcista confirmada
 
 I – Institutional Sponsorship
-- Participación institucional > 40%
-- Preferencia por incremento reciente de posiciones institucionales
+- Ownership institucional significativo e idealmente creciente
+- Señales: incremento de holders, filings (si disponible)
 
-M – Market Direction (Dirección del mercado)
-- Solo proponer entradas nuevas si el mercado general está alcista/confirmado y no en distribución.
-- Índices de referencia según {Mercado}:
-  * USA/Nasdaq/NYSE: S&P 500 + Nasdaq Composite
-  * Europa: STOXX Europe 600 (y/o DAX/CAC/IBEX según corresponda)
-  * Latam: índice representativo del país (ej: Bovespa, IPC, Colcap)
-  * Global: MSCI World/ACWI (si aplica)
-- Si M NO se cumple: no recomendar entradas largas nuevas; entregar watchlist condicionada.
+M – Market Direction
+- Solo proponer entradas nuevas si el mercado general está alcista/confirmado.
+- Si M NO se cumple: entregar watchlist condicionada (sin “entrada”).
 
 ════════════════════════════════════
-⚖️ AJUSTES SEGÚN PERFIL DE RIESGO (OBLIGATORIOS)
+📌 CAN SLIM ADAPTADO – “EARLY WINNERS” (para futuros gigantes)
+
+Objetivo: detectar empresas tempranas con potencial de dominancia (plataformas / networks / switching costs).
+Aquí C y A se interpretan como TRACCIÓN y ESCALABILIDAD (no solo EPS).
+
+C* – Current Traction (reemplaza EPS cuando no aplica)
+- Crecimiento de ingresos alto (ej: >30% YoY) o aceleración clara
+- Señales de retención / expansión (si aplica): NRR, churn bajo, etc.
+- Si no hay ingresos (muy temprano), exigir evidencia fuerte de adopción + runway (y marcar “alto riesgo”).
+
+A* – Annual Scalability
+- CAGR ingresos 3y alto (si hay datos) o expansión de márgenes brutos
+- Unidad económica mejorando (FCF rumbo a positivo, o pérdida decreciente con escala)
+
+N* – New Paradigm (la más importante)
+- Cambio tecnológico o de modelo (IA, cloud, data infra, biotech platform, defense tech, etc.)
+- “Plataforma” vs “producto único”; TAM enorme y en expansión
+
+S* – Supply Asymmetry
+- Dilución controlada; estructura accionaria razonable
+- Float/insiders: evitar micro-OTC si está excluido
+
+L* – Early Leadership
+- Liderazgo de nicho (métricas mejores que peers aunque no sea #1 global)
+- RS/Price action mejorando
+
+I* – Smart Institutional
+- Presencia de inversores “smart”: insiders, fondos growth, VC reputado (si público/visible)
+- Cambios recientes en ownership (si disponible)
+
+M – Market Tailwind
+- Mercado y sector favorecen múltiplos de crecimiento (evitar fases de distribución para entradas agresivas)
+
+════════════════════════════════════
+⚖️ AJUSTES SEGÚN PERFIL DE RIESGO (OBLIGATORIO)
 
 🔵 Riesgo Bajo
-- Beta < 1.0 (si disponible)
-- Preferencia Large/Mega Caps
-- Evitar volatilidad extrema
+- Priorizar calidad, baja volatilidad, large caps, ETFs
+- Evitar empresas sin ganancias o sin caja suficiente
 
 🟠 Riesgo Medio
-- Beta 1.0–1.3
-- Mid/Large Caps
-- Volatilidad moderada aceptable (Swing)
+- Acepta growth rentable o camino claro a rentabilidad
+- Mid/Large caps; volatilidad moderada
 
 🔴 Riesgo Alto
-- Beta > 1.3
-- Puede incluir Small Caps SOLO si no están excluidas y cumplen liquidez
+- Puede incluir early winners no rentables si:
+  (1) Tracción fuerte (C*) y N* claro
+  (2) Liquidez mínima cumplida
+  (3) Señales técnicas no contradictorias
 
 ════════════════════════════════════
 ⏳ PRIORIZACIÓN SEGÚN HORIZONTE (OBLIGATORIO)
 
 Intradía
 - Liquidez extrema, spreads bajos
-- Momentum intradiario + volumen alto en la sesión (si no hay dato, indicarlo)
+- Momentum intradiario + catalizador (si no hay dato, indicar)
 
-Swing
-- Patrones alcistas CAN SLIM: Cup & Handle, Flat Base, breakouts de consolidación
-- Preferir setups cerca de pivote/buy point
+Swing / Mediano
+- Patrones CAN SLIM: Cup & Handle, Flat Base, breakouts, consolidaciones
+- Preferir entradas cerca de pivote y con volumen
 
-Largo Plazo
+Largo Plazo / Buy & Hold
 - Ventaja competitiva + crecimiento estructural
-- Fundamentales sólidos para sostener meses/años
+- Priorizar early winners con plataforma + unidad económica mejorando
+- Evitar “story stocks” sin tracción medible (o marcarlos como especulativos)
 
 ════════════════════════════════════
 📊 FORMATO DE RESULTADOS (OBLIGATORIO)
 
 1) Resumen del mercado (M)
-- Estado del mercado en {Mercado}: Alcista / Neutral / Distribución
+- Estado del mercado: Alcista / Neutral / Distribución
 - Índices usados y conclusión (“apto para entradas” o “solo watchlist”)
 
-2) Tabla final (exactamente {N_Resultados} filas)
-| Ticker | Nombre | Tipo (Acción/ETF) | Mercado | Sector | Calificación CAN SLIM (0–10) | Cumplimientos parciales (breve) | Motivo líder (L) | Nota de liquidez (según riesgo) |
+2) Tabla final (exactamente [Cantidad de resultados] filas)
+| # | Ticker | Nombre | Tipo (Acción/ETF) | Mercado | Sector/Temática | Enfoque (CAN SLIM / Early Winner / Mixto) | Calificación (0–10) | Cumplimientos clave (breve) | Motivo líder / tesis | Nota de liquidez |
 
-🔢 CÁLCULO DE LA CALIFICACIÓN CAN SLIM (0–10)
-- 7 pilares: C, A, N, S, L, I, M (hasta 7 pts)
-- +3 pts extra por alineación a {Horizonte} y {Riesgo}:
-  a) Calidad del patrón/entrada (según horizonte)
-  b) Momentum / fuerza relativa vs índice
-  c) Liquidez/spread adecuados a {Capital} y {Riesgo}
+🔢 CÁLCULO DE CALIFICACIÓN (0–10) – basado en criterio profesional (no advice)
+Asigna una nota total 0–10 combinando:
+
+A) Calidad del “caso” (0–4)
+- Moat / plataforma / TAM / ventaja competitiva
+- Tracción (EPS o Revenue) y escalabilidad (márgenes / unit economics)
+
+B) Timing técnico-momentum (0–3)
+- Tendencia (MA50/MA200), estructura, breakout/pullback, RS vs índice
+
+C) Riesgo y ejecución (0–2)
+- Liquidez/spread adecuados al capital
+- Dilución/deuda/riesgos visibles
+
+D) Catalizadores (0–1)
+- Earnings próximos, guías, lanzamientos, contratos, regulatorio, M&A
 
 Reglas:
-- 1.0 = cumple completo
-- 0.5 = parcial (justificar en 1 línea)
-- 0.0 = no cumple
-Ordenar de mayor a menor calificación.
-Si no hay suficientes que cumplan, completar con watchlist y explicar por qué.`;
+- 10 = excelente oportunidad (según el marco), 0 = no invertir (según el marco)
+- Si faltan datos: baja la calificación y marca “N/D / requiere verificación”
+- Ordena de mayor a menor calificación.
+- No des recomendaciones explícitas; solo evaluación y watchlist.
+
+════════════════════════════════════
+▶️ ENTRADA DEL USUARIO (rellenar)
+Sector/Temática: 
+Activos:
+Capital por operación:
+Horizonte:
+Riesgo:
+Mercado:
+Cantidad de resultados:
+Excluir (lista):
+Benchmark (opcional):
+
+Devuelve los resultados con el formato indicado.`;
 
       function showError(msg) {
         err.style.display = "block";
