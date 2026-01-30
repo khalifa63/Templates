@@ -1,98 +1,184 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Analizar Ticker</title>
-    <style>
-        body {
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
-            margin: 0;
-            padding: 20px;
-            background-color: #f5f5f7;
-            color: #1d1d1f;
-        }
-        .container {
-            max-width: 800px;
-            margin: 0 auto;
-            background-color: white;
-            border-radius: 18px;
-            padding: 30px;
-            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-        }
-        h1 {
-            font-size: 32px;
-            font-weight: 600;
-            margin-bottom: 30px;
-            color: #1d1d1f;
-        }
-        p {
-            font-size: 16px;
-            line-height: 1.6;
-            color: #1d1d1f;
-            white-space: pre-wrap;
-        }
-        label {
-            display: block;
-            font-weight: 500;
-            margin-top: 10px;
-        }
-        input {
-            width: 100%;
-            padding: 8px 12px;
-            margin-top: 6px;
-            border-radius: 8px;
-            border: 1px solid #ccc;
-            font-size: 16px;
-        }
-        button {
-            background-color: #0a84ff;
-            color: white;
-            border: none;
-            padding: 10px 18px;
-            border-radius: 10px;
-            font-size: 16px;
-            cursor: pointer;
-            margin-top: 16px;
-            transition: background-color 0.2s;
-        }
-        button:hover {
-            background-color: #0077f6;
-        }
-        .hidden {
-            display: none;
-        }
-        .controls {
-            margin-top: 20px;
-        }
-    </style>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Analizar Ticker</title>
+  <style>
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+      margin: 0;
+      padding: 20px;
+      background-color: #f5f5f7;
+      color: #1d1d1f;
+    }
+    .container {
+      max-width: 900px;
+      margin: 0 auto;
+      background-color: white;
+      border-radius: 18px;
+      padding: 30px;
+      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    }
+    h1 {
+      font-size: 32px;
+      font-weight: 700;
+      margin-bottom: 8px;
+      color: #1d1d1f;
+    }
+    .sub {
+      margin: 0 0 22px 0;
+      color: #6e6e73;
+      line-height: 1.5;
+      font-size: 14px;
+    }
+    p {
+      font-size: 16px;
+      line-height: 1.6;
+      color: #1d1d1f;
+      white-space: pre-wrap;
+      margin-top: 18px;
+    }
+    label {
+      display: block;
+      font-weight: 600;
+      margin-top: 14px;
+      font-size: 14px;
+    }
+    input, select {
+      width: 100%;
+      padding: 10px 12px;
+      margin-top: 6px;
+      border-radius: 10px;
+      border: 1px solid #d2d2d7;
+      font-size: 16px;
+      background: #fff;
+      outline: none;
+    }
+    input:focus, select:focus {
+      border-color: #0a84ff;
+      box-shadow: 0 0 0 3px rgba(10, 132, 255, 0.15);
+    }
+    .row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 14px;
+    }
+    @media (max-width: 720px) {
+      .row { grid-template-columns: 1fr; }
+    }
+    .btns {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+      margin-top: 18px;
+    }
+    button {
+      background-color: #0a84ff;
+      color: white;
+      border: none;
+      padding: 10px 18px;
+      border-radius: 12px;
+      font-size: 16px;
+      cursor: pointer;
+      transition: transform 0.04s ease, background-color 0.2s;
+    }
+    button:hover { background-color: #0077f6; }
+    button:active { transform: scale(0.99); }
+    button.secondary {
+      background-color: #1d1d1f;
+    }
+    button.secondary:hover {
+      background-color: #2c2c2e;
+    }
+    button.ghost {
+      background-color: transparent;
+      color: #1d1d1f;
+      border: 1px solid #d2d2d7;
+    }
+    button.ghost:hover {
+      background-color: #f5f5f7;
+    }
+    .hidden { display: none; }
+    .controls { margin-top: 16px; }
+    .hint {
+      margin-top: 8px;
+      font-size: 13px;
+      color: #6e6e73;
+      line-height: 1.45;
+    }
+    .chip {
+      display: inline-block;
+      font-size: 12px;
+      padding: 6px 10px;
+      border-radius: 999px;
+      background: #f5f5f7;
+      border: 1px solid #e5e5ea;
+      color: #1d1d1f;
+      margin-top: 10px;
+    }
+    .resultBox {
+      background: #fbfbfd;
+      border: 1px solid #e5e5ea;
+      border-radius: 14px;
+      padding: 16px;
+      margin-top: 16px;
+    }
+  </style>
 </head>
 <body>
-    <div class="container">
-        <h1>Análisis Ticker</h1>
+  <div class="container">
+    <h1>Análisis Ticker</h1>
+    <p class="sub">
+      Genera un <strong>prompt profesional</strong> (educativo, no-advice) para analizar un ticker con
+      <strong>horizonte temporal</strong> y <strong>perfil de riesgo</strong>.
+    </p>
 
-        <!-- FORMULARIO -->
-        <form id="formulario">
-            <label for="ticker">Ticker:</label>
-            <input type="text" id="ticker" name="ticker"
-       placeholder=""
-       style="text-transform: uppercase; width: 100px;"
-       oninput="this.value = this.value.toUpperCase();"
-       required>
+    <!-- FORMULARIO -->
+    <form id="formulario">
+      <label for="ticker">Ticker:</label>
+      <input
+        type="text"
+        id="ticker"
+        name="ticker"
+        placeholder="Ej: AAPL"
+        style="text-transform: uppercase; width: 140px;"
+        oninput="this.value = this.value.toUpperCase();"
+        required
+      />
 
+      <div class="row">
+        <div>
+          <label for="temporal">Temporal:</label>
+          <select id="temporal" name="temporal" required>
+            <option value="" selected disabled>Selecciona una opción</option>
+            <option value="Corto Plazo">Corto Plazo</option>
+            <option value="Swing">Swing</option>
+            <option value="Buy and Hold">Buy and Hold</option>
+          </select>
+          <div class="hint">Define el horizonte para ajustar enfoque técnico, catalizadores y gestión de riesgo.</div>
+        </div>
 
+        <div>
+          <label for="riesgo">Riesgo:</label>
+          <select id="riesgo" name="riesgo" required>
+            <option value="" selected disabled>Selecciona una opción</option>
+            <option value="Bajo">Bajo</option>
+            <option value="Medio">Medio</option>
+            <option value="Alto">Alto</option>
+          </select>
+          <div class="hint">Ajusta la exigencia del modelo: volatilidad tolerada, rangos de SL/TP y tamaño de posición (%).</div>
+        </div>
+      </div>
 
-            <label for="capital">Capital total (USD):</label>
-            <input type="number" id="capital" name="capital" placeholder="Ej: 20000" style="text-transform: uppercase; width: 150px;" required>
+      <div class="btns">
+        <button type="submit">Generar Prompt</button>
+        <button id="resetBtn" type="button" class="ghost">Limpiar</button>
+      </div>
+    </form>
 
-            <label for="inversion">Inversión para este activo (USD):</label>
-            <input type="number" id="inversion" name="inversion" placeholder="Ej: 1000" style="text-transform: uppercase; width: 150px;" required>
-
-            <button type="submit">Generar Análisis</button>
-        </form>
-
-        <!-- TEXTO OCULTO -->
-        <p id="descripcion" class="hidden">
+    <!-- TEXTO OCULTO (PLANTILLA DEL PROMPT) -->
+    <p id="descripcion" class="hidden">
 # 📘 Rol
 
 Eres un **Analista Financiero Senior** con doctorado en **Mercados de Capitales**, especializado en:
@@ -108,176 +194,187 @@ Eres un **Analista Financiero Senior** con doctorado en **Mercados de Capitales*
 
 ---
 
-# 0) Contexto del Inversionista (para ambientar a la IA)
+# 0) Parámetros del usuario (OBLIGATORIO)
 
-* **Identidad & Mantra operativo (disciplina y proceso).**
-* **Horizonte y estilos:** combina **swing (10–20%)** y **largo plazo (80–90%)**; estilos **value / growth / dividend** con sesgo a calidad.
-* **Asignación de capital sugerida (referencial):** ETFs globales, acciones USA e internacionales, small caps (cuota táctica), dividendos internacionales y **cash** para oportunidades.
-* **Sesgos tácticos por sectores:** tecnología/IA, salud/biotech, energía limpia, consumo básico, finanzas, infraestructura, agro, turismo/entretenimiento, industriales/logística (ponderaciones orientativas).
-* **Prácticas de control de riesgo:** uso de **SL** (soportes/ATR), **RRR ≥ 2:1**, reglas de **rotación por inacción**, manejo de caídas ≥10% con revisión de fundamentales, y chequeos de VIX/Fear & Greed para timing.
-* **Perfil de riesgo:** [Moderado / Moderado–Alto] (disciplina y tamaño de posición ajustados al % de riesgo por operación).
-  *Fuente de perfil y lineamientos operativos: documento “quien soy?”.* 
+**Ticker:** [TICKER]  
+**Horizonte temporal:** [TEMPORAL]  (Corto Plazo / Swing / Buy and Hold)  
+**Perfil de riesgo:** [RIESGO] (Bajo / Medio / Alto)
 
-**Tipo de inversor:** Moderado  
-**Horizonte temporal:** Swing o Largo Plazo  
-**Estilos fundamentales:** Value · Growth · Dividendos  
-**Objetivo:** Crecimiento patrimonial sostenido y generación de flujo por dividendos con riesgo controlado.  
+**Reglas de interpretación por parámetro (aplícalas en todo el informe):**
 
-**Estrategia:**  
-Basada en análisis **fundamental, técnico y macroeconómico**, priorizando **ETFs globales** de renta variable con fundamentos sólidos, bajo coste y alta liquidez. No utiliza compras escalonadas. Aplica **stop loss fijo del −10 %** del valor del activo para evitar salidas por ruido y gestiona beneficios mediante **trailing stop** desde **+15 %**, ajustándolo progresivamente según la tendencia. Mantiene una **relación riesgo-beneficio mínima (RRR ≥ 2.0)** dentro de un marco disciplinado de gestión y consistencia operativa.
+## A) Horizonte temporal
+- **Corto Plazo:** foco en timing, volatilidad, niveles, catalizadores inmediatos (días–semanas). Señales más estrictas.
+- **Swing:** equilibrio técnico + fundamentales (semanas–meses). Priorizas tendencia y niveles relevantes.
+- **Buy and Hold:** foco en calidad del negocio, moat, valuación razonable, y riesgo estructural (años). Técnica solo como “timing secundario”.
+
+## B) Perfil de riesgo (define el “marco” saido, sin consejo)
+Usa estos rangos **educativos** para parametrizar el diagnóstico:
+- **Bajo:** riesgo por operación objetivo ~0.5%–1.0% del portafolio; prioriza liquidez, baja volatilidad relativa, setups claros; evita señales débiles.
+- **Medio:** riesgo por operación objetivo ~1.0%–2.0%; admite volatilidad moderada; exige RRR y confirmaciones razonables.
+- **Alto:** riesgo por operación objetivo ~2.0%–3.0%; tolera volatilidad y drawdowns mayores; aun así exige invalidación técnica y RRR aceptable.
+
+> Importante: si faltan datos, marca **N/D** y explica por qué. No inventes números.
 
 ---
 
 # 🧭 Objetivo
 
-Elabora un **informe de inversión completo y actualizado**, cuyo propósito es determinar si **conviene actuar hoy o esperar** con base en:
+Elabora un **informe completo y actualizado** para evaluar si el activo está:
+**Configuración favorable** / **Esperar confirmación** / **No favorable**,
 
-* Fundamentos
-* Contexto macroeconómico
-* Análisis técnico
-* Gestión de riesgo
+según:
+* Fundamentales
+* Contexto macro/top-down
+* Técnica / timing
+* Gestión de riesgo **en términos de %** (no requiere capital en USD)
 
-📌 La respuesta debe incluir **todas las secciones obligatorias** y una **clasificación operativa final justificada** (no-advice).
+📌 La salida debe ser **educativa (no-advice)**: no uses “compra/vende”. Usa lenguaje como “configuración”, “probabilidades”, “condiciones”, “si-entonces”.
 
 ---
 
-# 🧱 Estructura del Informe
+# 🧱 Estructura del Informe (OBLIGATORIA)
 
-## 1. Encabezado
+## 1) Encabezado
 
 * **Fecha de análisis:** [YYYY-MM-DD]
 * **Ticker:** [TICKER] – [Nombre completo]
-* **Capital total:** [Capital total]
-* **Inversión asignada:** [Inversión]
+* **Horizonte temporal:** [TEMPORAL]
+* **Perfil de riesgo:** [RIESGO]
 
-**Clasificación operativa (resultado del modelo):**
+**Clasificación operativa (resultado del modelo, no-advice):**
 **Configuración favorable** / **Esperar confirmación** / **No favorable**
+
+Incluye 2–3 líneas explicando por qué la clasificación **sí** encaja con [TEMPORAL] y [RIESGO].
 
 ---
 
-## 2. Datos Generales del Activo
+## 2) Datos Generales del Activo
 
 | Elemento           | Detalle                                     | Fuente   | Fecha   |
 | ------------------ | ------------------------------------------- | -------- | ------- |
 | Precio actual      | [USD …]                                     | [Fuente] | [Fecha] |
-| Sector / Subsector | [Texto]                                     |          |         |
-| País               | [Texto]                                     |          |         |
-| Clasificación      | [Acciones USA / ETF / Internacional / etc.] |          |         |
-| Estilo             | [Value / Growth / Dividend / CAN SLIM]      |          |         |
-| Estrategia         | [Swing / Mediano Plazo / Largo Plazo]       |          |         |
-| Insider ownership  | [Valor %]                                   | [Fuente] | [Fecha] |
+| Sector / Subsector | [Texto]                                     | [Fuente] | [Fecha] |
+| País               | [Texto]                                     | [Fuente] | [Fecha] |
+| Clasificación      | [Acción USA / ETF / Internacional / etc.]   | [Fuente] | [Fecha] |
+| Estilo             | [Value / Growth / Dividend / CAN SLIM]      | [Fuente] | [Fecha] |
+| Horizonte (param)  | **[TEMPORAL]**                               | —        | —       |
+| Riesgo (param)     | **[RIESGO]**                                 | —        | —       |
 
-**Descripción breve:**
-[1 párrafo]
+**Descripción breve (1 párrafo):**
+[Qué hace, cómo gana dinero, exposición, drivers]
 
-**Tesis de inversión:**
-[Ventajas competitivas / exposición temática]
-
----
-
-## 3. Análisis Fundamental
-
-**Tabla de ratios + análisis interpretativo (fortalezas, debilidades, valor relativo):**
-
-| Ratio                     | Valor     | Interpretación          | Fuente | Fecha |
-| ------------------------- | --------- | ----------------------- | ------ | ----- |
-| PER                       | [Valor]   | [Caro/Barato vs Sector] |        |       |
-| P/B                       | [Valor]   |                         |        |       |
-| ROE                       | [Valor]   |                         |        |       |
-| Margen operativo          | [Valor %] |                         |        |       |
-| Crec. ingresos 3 años     | [Valor %] |                         |        |       |
-| Deuda / Patrimonio        | [Valor]   |                         |        |       |
-| FCF (Flujo de Caja Libre) | [Valor]   |                         |        |       |
-
-**Catalizadores fundamentales próximos:**
-[Fechas de resultados, lanzamientos, aprobaciones, etc.]
+**Tesis de inversión (en bullets):**
+* [Ventaja competitiva / moat]
+* [Exposición temática]
+* [Riesgos clave]
 
 ---
 
-## 4. Contexto de Mercado (Top-Down)
+## 3) Análisis Fundamental
+
+**Tabla de ratios + interpretación (fortalezas, debilidades, valuación relativa):**
+
+| Ratio                     | Valor     | Interpretación                    | Fuente | Fecha |
+| ------------------------- | --------- | --------------------------------- | ------ | ----- |
+| PER                       | [Valor]   | [vs sector / histórico]           |        |       |
+| P/B                       | [Valor]   |                                   |        |       |
+| ROE                       | [Valor]   |                                   |        |       |
+| Margen operativo          | [Valor %] |                                   |        |       |
+| Crec. ingresos 3 años     | [Valor %] |                                   |        |       |
+| Deuda / Patrimonio        | [Valor]   |                                   |        |       |
+| FCF (Flujo de Caja Libre) | [Valor]   |                                   |        |       |
+
+**Catalizadores fundamentales próximos (con fechas):**
+[Resultados, guidance, aprobaciones, lanzamientos, etc.]
+
+---
+
+## 4) Contexto de Mercado (Top-Down)
 
 | Indicador              | Valor                                 | Interpretación      | Fuente | Fecha |
 | ---------------------- | ------------------------------------- | ------------------- | ------ | ----- |
 | VIX                    | [Valor]                               | [Bajo / Alto]       |        |       |
 | Fear & Greed Index     | [Nivel]                               | [Optimismo / Miedo] |        |       |
 | Tendencia del mercado  | [S&P 500 / Nasdaq / Sector]           |                     |        |       |
-| Eventos macro próximos | [Fechas clave: IPC, PIB, tasas, etc.] |                     |        |       |
+| Eventos macro próximos | [Fechas: IPC, tasas, PIB, etc.]       |                     |        |       |
 
-**Conclusión macro:**
-[¿El entorno favorece la entrada o sugiere cautela?]
+**Conclusión macro (1 párrafo):**
+Explica si el entorno favorece o limita el tipo de operación compatible con **[TEMPORAL]** y el umbral de tolerancia de **[RIESGO]**.
 
 ---
 
-## 5. Análisis Técnico y Configuración Operativa
+## 5) Análisis Técnico y Configuración Operativa
 
-> **Nota**: valores técnicos deben ser actualizados (<7 días).
+> **Nota:** valores técnicos deben ser actualizados (<7 días).
 
-* **Medias móviles:** MA50 = [..] / MA200 = [..] → [cruce / pendiente]
+Incluye, como mínimo, estos componentes:
+* **Medias móviles:** (elige según [TEMPORAL])  
+  - Corto Plazo: MA20/MA50  
+  - Swing: MA50/MA200  
+  - Buy and Hold: MA200 + estructura de máximos/mínimos
 * **ATR(20):** [..] → guía de volatilidad
 * **Volumen:** [..] vs prom. 20d [..] → [confirma / no confirma]
 * **RSI / MACD:** RSI = [..], MACD = [señal]
-* **Setup técnico (texto):** [p. ej., pullback a MA50 / ruptura de consolidación]
+* **Setup técnico (texto):** [ruptura / pullback / rango / tendencia]
 
-**Niveles propuestos (no-advice):**
+**Niveles propuestos (educativo, no-advice):**
+* **Zona de activación / Entrada referencial:** USD [..]
+* **Invalidación (Stop) — elige 1 y justifica según [TEMPORAL] y [RIESGO]:**
+  - **Por estructura:** bajo soporte / debajo de nivel clave
+  - **Por volatilidad (ATR):** SL = Entrada − (Factor × ATR(20)), Factor sugerido:
+    - Corto Plazo: 1.0–1.5
+    - Swing: 1.5–2.5
+    - Buy and Hold: 2.0–3.0 (o invalidación fundamental + MA200)
+* **Objetivo (TP) / salida parcial (si aplica):**
+  - Por nivel técnico (resistencia/objetivo de patrón), o
+  - Por múltiplos: TP = Entrada + (k × ATR), con k ≥ 2×Factor del SL (para sostener RRR)
 
-* **Entrada sugerida:** USD [Precio_entrada]
-* **Stop Loss (SL) – dos métodos (elige y justifica):**
-
-  * **Por porcentaje:** SL = Precio_entrada × (1 − 0.10 a 0.15).
-  * **Por volatilidad (ATR):** SL = Precio_entrada − (Factor × ATR(20)), con Factor ∈ [1.5, 2.5].
-* **Take Profit (TP):**
-
-  * **Por porcentaje/objetivo técnico:** TP = Precio_entrada × (1 + [%]).
-  * **O por múltiplo de ATR:** TP = Precio_entrada + (k × ATR(20)), con k ≥ 2×Factor del SL.
-* **RRR (Risk/Reward Ratio):**
-  [
-  \text{RRR}=\frac{\text{TP}-\text{Entrada}}{\text{Entrada}-\text{SL}}
-  ]
-  (Objetivo del modelo: **RRR ≥ 2.0**).
-
----
-
-## 6. Gestión de Riesgo
-
-**Cálculos y fórmulas (aplica SIEMPRE):**
-
-* **Riesgo monetario por acción:** ( r = \text{Entrada} - \text{SL} )
-* **Tamaño de posición (volumen):**
-  [
-  \text{Volumen}=\frac{\text{Riesgo%} \times \text{Capital total}}{r}
-  ]
-* **Riesgo monetario total:** ( r \times \text{Volumen} )
-* **% de riesgo sobre capital:** ( \frac{r \times \text{Volumen}}{\text{Capital total}}\times 100 )
-
-**Criterios del modelo:**
-
-* ⛔ **Riesgo% > 2** → No favorable
-* ⛔ **RRR < 1.5** → Riesgo excede recompensa
-* ⚪ **1.5 ≤ RRR < 2.0** → Precaución
-* ✅ **RRR ≥ 2.0** → Aprobación del criterio de recompensa
-
-> **Nota:** documenta si el SL se ubica por **%** o por **ATR** y justifica por técnico (soportes/resistencias).
-
----
-    
-### Gestión operativa y de riesgo (personalizada):
-El inversionista asume que el mercado es impredecible, por lo que el foco está en controlar el riesgo, no en predecir el timing exacto.
-
-Usa stop loss fijo del −10% del valor del activo (no dinámico por ATR) para evitar salidas por ruido.
-
-Horizonte: swing o largo plazo (mínimo 3–12 meses).
-
-Entradas escalonadas: se permiten compras graduales en activos con fundamentales sólidos, incluso si el modelo sugiere “esperar confirmación”.
-
-Criterio de salida: cuando se rompa el −10 % (stop fijo) o se cumplan niveles técnicos/fundamentales de reevaluación.
-
-Evaluación: se prioriza el riesgo monetario ≤ 2 % del capital total sobre la precisión del punto de entrada.
-
-El modelo debe indicar si, con este marco, el activo puede comprarse parcialmente o acumularse, aun si la señal técnica no es ideal.
+**RRR (Risk/Reward Ratio):**
+[
+\text{RRR}=\frac{\text{TP}-\text{Entrada}}{\text{Entrada}-\text{SL}}
+]
+Objetivo: **RRR ≥ 2.0** (si [RIESGO]=Bajo, sé más estricto; si Alto, admite 1.8–2.0 solo si la tesis es fuerte).
 
 ---
 
-## 7. Comparativa Sectorial
+## 6) Gestión de Riesgo (SIN capital en USD)
+
+Tu misión: proponer sizing **en porcentaje del portafolio**, usando el riesgo objetivo del perfil.
+
+### 6.1 Parámetro de riesgo por operación (según [RIESGO])
+- Bajo: **0.5%–1.0%**
+- Medio: **1.0%–2.0%**
+- Alto: **2.0%–3.0%**
+
+### 6.2 Cálculo de tamaño de posición (% del portafolio)
+Define:
+- **Stop%** = (Entrada − SL) / Entrada
+- **Riesgo%** = (según el rango del perfil)
+
+Entonces:
+[
+\text{Posición%}\approx\frac{\text{Riesgo%}}{\text{Stop%}}
+]
+
+Ejemplo conceptual: si Stop% = 5% y Riesgo% = 1%, entonces Posición% ≈ 20% (esto puede ser demasiado alto; debes aplicar “cap” por volatilidad y concentración).
+
+### 6.3 Reglas de control (educativas, no-advice)
+- Aplica un **cap** de concentración por activo según [RIESGO]:
+  - Bajo: 5%–10%
+  - Medio: 8%–15%
+  - Alto: 10%–25% (solo en tesis fuerte y liquidez alta)
+- Si el cálculo supera el cap, reduce Posición% y **mantén el riesgo** ajustando el SL (si técnicamente válido) o descartando la operación.
+- Si **RRR < 1.5** → No favorable (salvo Buy and Hold con tesis excepcional, pero explica por qué sería una excepción educativa).
+
+Entrega al final de esta sección:
+* Riesgo% elegido (dentro del rango)
+* Stop% estimado
+* Posición% sugerida (y cap aplicado)
+* Conclusión: si el plan encaja con [TEMPORAL] y [RIESGO]
+
+---
+
+## 7) Comparativa Sectorial
 
 | Compañía / ETF      | PER | ROE | YTD Return | Market Cap | Fuente | Fecha |
 | ------------------- | --- | --- | ---------- | ---------- | ------ | ----- |
@@ -286,22 +383,22 @@ El modelo debe indicar si, con este marco, el activo puede comprarse parcialment
 | [Competidor 2]      |     |     |            |            |        |       |
 | [ETF de referencia] |     |     |            |            |        |       |
 
-**Conclusión sectorial:**
-[Valoración relativa y competitividad]
+**Conclusión sectorial (1 párrafo):**
+Valoración relativa + resiliencia vs pares + riesgos.
 
 ---
 
-## 8. Catalizadores y Estrategia Global
+## 8) Catalizadores y Estrategia Global
 
-* Integración del activo en un portafolio diversificado
-* Eventos que pueden cambiar su valoración
-* Horizonte temporal más favorable (swing vs largo plazo)
+* Cómo encaja el activo con el horizonte **[TEMPORAL]**
+* Catalizadores que pueden cambiar el sesgo (fechas)
+* Principales riesgos que invalidan la tesis
 
 ---
 
-## 9. Score Global y Clasificación
+## 9) Score Global y Clasificación (0–100)
 
-> **Escala unificada**: **Puntuación (0–100)**.
+> **Escala unificada**: **Puntuación (0–100)**.  
 > Subtotal = Puntuación × Peso.
 
 | Factor           | Peso  | Puntuación (0–100) | Subtotal         |
@@ -313,60 +410,48 @@ El modelo debe indicar si, con este marco, el activo puede comprarse parcialment
 | **TOTAL**        | 100 % |                    | **[Score /100]** |
 
 **Interpretación (solo aquí se permiten emojis):**
-
 | Score total | Clasificación general     | Interpretación                                                 |
 | ----------- | ------------------------- | -------------------------------------------------------------- |
-| **80–100**  | 🟢 Alta calidad           | Fundamentos/contexto sólidos; cumple mayoría de criterios.     |
-| **65–79**   | 🟡 Moderada / Atractiva   | Buenos indicadores con riesgos puntuales o valuación exigente. |
-| **50–64**   | ⚪ Neutral / Promedio      | Alineado al mercado; sin ventajas claras.                      |
-| **35–49**   | 🟠 Débil / Riesgo Elevado | Fundamentos débiles o entorno adverso.                         |
-| **<35**     | 🔴 Deficiente / Basura    | Estructura deteriorada o sin perspectivas claras.              |
+| **80–100**  | 🟢 Alta calidad           | Sólido para el horizonte; cumple criterios con holgura.        |
+| **65–79**   | 🟡 Moderada / Atractiva   | Bueno con riesgos puntuales o valuación exigente.              |
+| **50–64**   | ⚪ Neutral / Promedio      | Sin ventaja clara; requiere confirmaciones.                    |
+| **35–49**   | 🟠 Débil / Riesgo Elevado | Riesgos relevantes; inconsistente con [RIESGO].                |
+| **<35**     | 🔴 Deficiente             | Estructura deteriorada o tesis débil.                           |
 
 ---
 
-## 10. Resumen Ejecutivo Final
+## 10) Resumen Ejecutivo Final (NO-ADVICE)
 
-**[Nombre de la Compañía] ([Ticker]) – Ficha de Clasificación**
+**[Nombre de la Compañía] ([TICKER]) – Ficha de Clasificación**
 
-* **Fecha de análisis:** [YYYY-MM-DD]
-* **Ticker:** [Ticker]
+* **Fecha:** [YYYY-MM-DD]
 * **Precio actual:** [USD …]
-* **Sector / Subsector:** [Texto]
-* **País:** [Texto]
-* **Clasificación:** [Acciones USA / ETF / Internacional / etc.]
-* **Estilo:** [Value / Growth / Dividend / CAN SLIM]
-* **Estrategia:** [Swing / Mediano Plazo / Largo Plazo]
+* **Sector:** [Texto]
+* **Horizonte:** **[TEMPORAL]**
+* **Riesgo:** **[RIESGO]**
 * **Score:** **[xx / 100]**
-* **Clasificación operativa (resultado del modelo):** **Configuración favorable / Esperar confirmación / No favorable**
-* **Comentario breve:** [3–4 líneas sobre fundamentos, contexto, técnica y catalizadores que justifican la clasificación.]
-
----
+* **Clasificación operativa (modelo):** **Configuración favorable / Esperar confirmación / No favorable**
+* **Diagnóstico breve (3–5 líneas):** explica con claridad por qué ese resultado es coherente con los parámetros.
 
 ### Plan Operativo Hipotético (educativo, no-advice)
+Incluye valores ilustrativos:
+* Entrada referencial: [..]
+* SL (invalidación) y lógica: [..]
+* TP / salida y lógica: [..]
+* RRR estimada: [..]
+* Riesgo% elegido (según [RIESGO]): [..]
+* Stop% estimado: [..]
+* Posición% sugerida + cap aplicado: [..]
 
-Valores **ilustrativos** para explicar la metodología (actualizar si se usan):
-
-* **Precio de entrada:** USD [Valor]
-* **Volumen estimado:** [Inversión / Valor] acciones (según sizing) Redondeado 0 decimales.
-* **Entrada × Volumen:** USD [Monto]
-* **Stop Loss:** USD [Valor SL] (por % o ATR)
-* **Take Profit:** USD [Valor TP] (por técnico o múltiplo de ATR)
-* **RRR estimada:** [≥ 2.0]
-
----
-
-### Diagnóstico Operativo (no-advice)
-
-* **Resultado del modelo:** [Favorable / En observación / No favorable]
-* **Justificación sintética:** [Config técnica, RRR ajustado, riesgo monetario, fundamentos y macro]
+### “Qué tendría que pasar para cambiar de opinión”
+Lista 3 condiciones verificables (técnicas/fundamentales/macro).
 
 ---
 
-## 11. Anexos y Fuentes
+## 11) Anexos y Fuentes
 
 Incluye todas las **URLs** y **fechas exactas** utilizadas.
 Ejemplo:
-
 * Yahoo Finance — [YYYY-MM-DD]
 * Bloomberg — [YYYY-MM-DD]
 * Investor Relations (10-Q, 8-K, Form 4) — [YYYY-MM-DD]
@@ -374,68 +459,88 @@ Ejemplo:
 * CNN Business (Fear & Greed) — [YYYY-MM-DD]
 * BLS/BEA/FED — [YYYY-MM-DD]
 
-Si el dato es intradía, incluir hora y zona horaria (UTC o ET
 ---
 
-# 💡 Requisitos de Calidad
+# ✅ Requisitos de Calidad
 
 * Usa datos **actualizados (<7 días)**
 * Si un dato no existe, marca **“N/D”** e indica la razón
-* Explica **fórmulas y cálculos intermedios** (RRR, % riesgo, position sizing)
-* Tono **profesional y analítico**
-* **No emitas recomendaciones** (comprar/vender). Tu función es **evaluar y clasificar** el activo según criterios objetivos y devolver un **diagnóstico** claro, estructurado y argumentado.
+* Mantén tono **profesional y analítico**
+* **No emitas recomendaciones** (comprar/vender). Tu función es **evaluar y clasificar** el activo según criterios objetivos, devolviendo un **diagnóstico educativo (no-advice)** alineado con **[TEMPORAL]** y **[RIESGO]**.
+    </p>
 
----
-
-        </p>
-
-        <!-- CONTENEDOR DEL RESULTADO -->
-        <div id="resultado" class="hidden"></div>
-
-        <!-- BOTÓN DE COPIAR -->
-        <div id="copySection" class="controls hidden">
-            <button id="copyBtn" type="button">Copiar texto</button>
-        </div>
+    <!-- RESULTADO -->
+    <div id="resultado" class="hidden">
+      <div class="chip" id="chipInfo"></div>
+      <div class="resultBox" id="resultadoTexto"></div>
     </div>
 
-    <script>
-        const form = document.getElementById('formulario');
-        const p = document.getElementById('descripcion');
-        const resultado = document.getElementById('resultado');
-        const copyBtn = document.getElementById('copyBtn');
-        const copySection = document.getElementById('copySection');
+    <!-- CONTROLES -->
+    <div id="copySection" class="controls hidden">
+      <div class="btns">
+        <button id="copyBtn" type="button" class="secondary">Copiar prompt</button>
+        <button id="newBtn" type="button" class="ghost">Nueva consulta</button>
+      </div>
+      <div class="hint">Pega el prompt en ChatGPT y agrega “Analiza este ticker” si quieres, o envíalo tal cual.</div>
+    </div>
+  </div>
 
-        form.addEventListener('submit', (e) => {
-            e.preventDefault();
+  <script>
+    const form = document.getElementById("formulario");
+    const plantilla = document.getElementById("descripcion");
+    const resultadoWrap = document.getElementById("resultado");
+    const resultadoTexto = document.getElementById("resultadoTexto");
+    const chipInfo = document.getElementById("chipInfo");
+    const copyBtn = document.getElementById("copyBtn");
+    const copySection = document.getElementById("copySection");
+    const resetBtn = document.getElementById("resetBtn");
+    const newBtn = document.getElementById("newBtn");
 
-            const ticker = document.getElementById('ticker').value.toUpperCase();
-            const capital = document.getElementById('capital').value;
-            const inversion = document.getElementById('inversion').value;
+    form.addEventListener("submit", (e) => {
+      e.preventDefault();
 
-            // Obtener texto base y reemplazar campos
-            let texto = p.textContent
-                .replaceAll('[TICKER]', ticker)
-                .replaceAll('[Capital total]', capital)
-                .replaceAll('[Inversión]', inversion);
+      const ticker = document.getElementById("ticker").value.trim().toUpperCase();
+      const temporal = document.getElementById("temporal").value;
+      const riesgo = document.getElementById("riesgo").value;
 
-            // Ocultar formulario y mostrar resultado
-            form.classList.add('hidden');
-            resultado.classList.remove('hidden');
-            resultado.textContent = texto;
-            copySection.classList.remove('hidden');
-        });
+      let texto = plantilla.textContent
+        .replaceAll("[TICKER]", ticker)
+        .replaceAll("[TEMPORAL]", temporal)
+        .replaceAll("[RIESGO]", riesgo);
 
-        // Copiar al portapapeles
-        copyBtn.addEventListener('click', async () => {
-            try {
-                await navigator.clipboard.writeText(resultado.textContent);
-                copyBtn.textContent = '¡Copiado!';
-                setTimeout(() => (copyBtn.textContent = 'Copiar texto'), 1500);
-            } catch (err) {
-                console.error('Error al copiar:', err);
-                copyBtn.textContent = 'Error';
-            }
-        });
-    </script>
+      // Mostrar resultado
+      form.classList.add("hidden");
+      resultadoWrap.classList.remove("hidden");
+      copySection.classList.remove("hidden");
+
+      chipInfo.textContent = `Ticker: ${ticker} · Temporal: ${temporal} · Riesgo: ${riesgo}`;
+      resultadoTexto.textContent = texto;
+    });
+
+    // Copiar al portapapeles
+    copyBtn.addEventListener("click", async () => {
+      try {
+        await navigator.clipboard.writeText(resultadoTexto.textContent);
+        copyBtn.textContent = "¡Copiado!";
+        setTimeout(() => (copyBtn.textContent = "Copiar prompt"), 1500);
+      } catch (err) {
+        console.error("Error al copiar:", err);
+        copyBtn.textContent = "Error al copiar";
+      }
+    });
+
+    // Limpiar formulario
+    resetBtn.addEventListener("click", () => {
+      document.getElementById("ticker").value = "";
+      document.getElementById("temporal").value = "";
+      document.getElementById("riesgo").value = "";
+      document.getElementById("ticker").focus();
+    });
+
+    // Nueva consulta (reiniciar)
+    newBtn.addEventListener("click", () => {
+      location.reload();
+    });
+  </script>
 </body>
 </html>
