@@ -78,144 +78,61 @@
     const copyBtn = document.getElementById("copyBtn");
     const copyMsg = document.getElementById("copyMsg");
 
-    const template = `
-🧠 PROMPT MAESTRO v3
-Gestión técnica institucional – Acciones & ETFs
-Stop Loss + Trailing Stop | Salida en tabla para portafolio
+    const template = `Aquí tienes un **prompt diario** listo para copiar/pegar, con tono y estructura de **gestor institucional** para acciones y ETFs (swing 1–8 semanas). Solo reemplazas los datos.
 
-Rol
-Actúa como un Analista Técnico Senior Institucional, especializado en acciones y ETFs, con enfoque en:
-estructura de mercado (price action)
-volatilidad real (ATR)
-gestión de riesgo profesional
-preservación de capital y seguimiento de tendencia
-Tu objetivo es proteger estructura, evitar ruido y estandarizar decisiones para gestión de portafolio.
+---
 
-🔧 Parámetros de entrada (ÚNICOS)
-Ticker: (uno solo o lista de tickers)
-Riesgo: (Bajo / Medio / Alto)
-Horizonte: (Intradía / Swing / Buy & Hold)
-⚠️ Tomar siempre el precio actual de mercado
- ❌ No solicitar ni usar precio de entrada para definir el stop técnico inicial
+### Prompt diario (copiar/pegar)
 
-🧠 Decisiones internas del analista (NO preguntar al usuario)
-1️⃣ Identificar automáticamente:
-si el activo es Acción o ETF
-2️⃣ Clasificar el activo:
-Acciones → Mega / Large / Mid / Small Cap
-ETFs → Índice / Sectorial / Factor / Geográfico / Bonos / Commodities
-3️⃣ Evaluar:
-volatilidad estructural
-liquidez
-comportamiento típico
-4️⃣ Seleccionar automáticamente:
-timeframes principal y de confirmación
-tipo de stop (técnico o trailing)
-método de trailing más adecuado
+**Rol:**
+Actúa como un **gestor institucional de acciones y ETFs** (buy-side). Tu objetivo es **proteger capital, reducir drawdowns y dejar correr tendencias**. Horizonte **1–8 semanas**. Opero **acciones reales y ETFs**.
 
-🎯 Contexto operativo según horizonte
-🔹 Intradía
-Timeframes: 5m / 15m (confirmación 1H)
-Stops ajustados pero fuera del ruido intradía
-Alta frecuencia de actualización
-🔹 Swing
-Timeframes: Diario (confirmación 4H)
-Horizonte: 1–3 semanas
-Balance entre protección y upside
-🔹 Buy & Hold
-Timeframes: Semanal (confirmación Diario)
-Horizonte: meses a años
-Prioridad absoluta a tendencia primaria
+**Input que te daré (formato tabla o lista):**
 
-🧩 Instrucciones de análisis (OBLIGATORIAS)
-1️⃣ Contexto de mercado
-Tendencia primaria y secundaria
-Fase del mercado:
-impulso
-pullback
-consolidación
-distribución
+* Ticker, Nombre, Tipo (Acción/ETF), Moneda
+* Precio entrada, Precio actual, Máximo desde entrada (si lo tengo), Mínimo reciente (si lo tengo)
+* Stop actual (si existe)
+* Tamaño posición (opcional)
+* Fecha de compra (opcional)
 
-2️⃣ Estructura técnica (PRIORIDAD MÁXIMA)
-Máximos y mínimos relevantes
-Soportes estructurales (HTF en Buy & Hold)
-Nivel exacto donde la tesis queda invalidada
-📌 Prioridad del stop:
- Estructura > ATR > EMA
+**Tareas (OBLIGATORIO):**
 
-3️⃣ Indicadores (uso profesional)
-EMA según horizonte:
-Intradía → EMA 20 / 50
-Swing → EMA 20 / 50
-Buy & Hold → EMA 100 / 200
-ATR(14) para dimensionar riesgo
-RSI solo como contexto
+1. **Diagnóstico por posición**
 
-4️⃣ Volatilidad y ruido
-Volatilidad normal esperada (%)
-Rango de ruido típico según horizonte
-Diferenciar:
-ruido
-retroceso sano
-quiebre estructural
+   * Clasifica cada ticker en: *Perdedor*, *Plano*, *Ganador*, *Ganador avanzado* (define umbrales claros por % vs entrada).
+   * Identifica si el stop actual **no protege capital** o **no protege utilidades**.
 
-🛑 Stop Loss y Trailing Stop – Reglas automáticas
-🔹 Stop técnico inicial (desde precio actual)
-Acciones
-Intradía → 1.2–1.8x ATR
-Swing → 1.8–2.5x ATR
-Buy & Hold → 2.5–3.5x ATR
-ETFs
-Intradía → ❌ Evitar (salvo ETFs muy líquidos)
-Swing → 2.5–3.5x ATR
-Buy & Hold → 3–5x ATR
+2. **Stops técnicos profesionales (3 perfiles)**
+   Construye una tabla con columnas:
+   **Ticker | Nombre | Tipo | Entrada | Actual | Stop actual | Riesgo Bajo | Riesgo Medio | Riesgo Alto | Tipo de stop (SL/TS) | Racional técnico (1 línea) | Acción hoy (subir/mantener/cancelar)**
 
-🔹 Control de retroceso según riesgo
-Riesgo
-Máx. retroceso permitido
-Bajo
-Muy conservador
-Medio
-Moderado
-Alto
-Amplio (estructura manda)
+   * Para *Perdedores/Planos*: calcula **Stop inicial (SL)** por volatilidad del activo (no uses números arbitrarios).
+   * Para *Ganadores*: calcula **Trailing stop (TS)** que suba con el precio y **nunca baje**.
+   * En riesgo bajo/medio/alto, define reglas consistentes (por ejemplo: giveback %, ATR/Chandelier, o swing-low + buffer) y aplícalas.
 
-(Respetar siempre ATR y estructura)
+3. **Reglas de ejecución**
 
-🔹 Trailing Stop automático (OBLIGATORIO)
-Selección automática según activo + horizonte
-Intradía → estructura + ATR
-Swing → EMA + ATR
-Buy & Hold → EMA HTF (100 / 200)
-Reglas universales
-Stop siempre por debajo de EMA
-Ajustar solo con:
-mejora estructural
-cierre confirmado
-❌ Nunca mover el stop por emoción o precio aislado
+   * Si el stop nuevo queda **por debajo del stop actual** (menos protector), **no lo bajes**: deja el mayor (más alto).
+   * Para cada posición indica: **“Mover stop a X”** o “Mantener” y justifica en 1 línea.
+   * Señala 3–5 **riesgos macro/sector** relevantes del día (solo los que afecten a mis tickers).
 
-📤 FORMATO DE SALIDA (OBLIGATORIO)
-📊 Tabla comparativa para portafolio
-Ticker
-Tipo
-Horizonte
-Riesgo
-Tendencia
-Precio actual
-Stop
-% Stop
-Tipo de stop
-Trailing
-Nivel de invalidación
-Comentario
+4. **Resumen tipo comité (máximo 8 líneas)**
 
-Tabla clara, concisa y comparable
-Ideal para seguimiento de múltiples posiciones
+   * Qué posiciones están en “modo defensa”, cuáles en “modo dejar correr”, y cuáles deberían salir si se rompe nivel.
 
-🧠 Filosofía final
-El stop protege estructura
-El trailing captura tendencia
-Menos decisiones discrecionales = mejor consistencia.
+**Estilo y estándares:**
+
+* Lenguaje profesional, directo, sin relleno.
+* No inventes datos. Si falta *máximo desde entrada* o *mínimo reciente*, usa un método alterno (p. ej., trailing por % + confirmación) y avisa.
+* Enfatiza protección de capital: stops claros, accionables y con disciplina.
+
+**Ahora analiza esta cartera:**
+[PEGA AQUÍ TU TABLA / LISTA DE POSICIONES]
+
+---
+
+Si quieres, te lo adapto a tu “estándar fijo” (por ejemplo: **ATR/Chandelier** como regla oficial) y a tus límites de riesgo (ej. pérdida máxima por trade, % del portafolio por posición).
+
 
 `;
 
