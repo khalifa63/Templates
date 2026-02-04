@@ -140,32 +140,7 @@
   <div class="container">
     <h1>Calcular el stop Loss</h1>
 
-    <div class="form" role="group" aria-label="Inputs obligatorios">
-      <div>
-        <br><label for="ticker">Ticker (OBLIGATORIO)</label>
-        <input id="ticker" type="text" placeholder="Ej: AAPL, SPY, CSPX.L" autocomplete="off" />
-      </div>
-    
-      <div>
-        <br><label for="estrategia">Estrategia (OBLIGATORIO)</label>
-        <select id="estrategia">
-          <option value="">Selecciona…</option>
-          <option value="INTRADIA">INTRADIA</option>
-          <option value="SWING">SWING</option>
-          <option value="LARGO_PLAZO">LARGO_PLAZO</option>
-        </select>
-      </div>
 
-      <div>
-        <br><label for="riesgo">Perfil de riesgo (OBLIGATORIO)</label>
-        <select id="riesgo">
-          <option value="">Selecciona…</option>
-          <option value="BAJO">BAJO</option>
-          <option value="MEDIO">MEDIO</option>
-          <option value="ALTO">ALTO</option>
-        </select>
-      </div>
-    </div>
 
     <div class="hint">
       Se reemplazan automáticamente: <b>{TICKER}</b>, <b>{ESTRATEGIA}</b>, <b>{RIESGO}</b>.
@@ -174,7 +149,7 @@
     <div id="errorBox" class="error" aria-live="polite"></div>
 
     <div class="controls" aria-live="polite">
-      <button id="genBtn" class="btn btn-secondary" type="button">Generar prompt</button>
+
 
       <button id="copyBtn" class="btn btn-primary" type="button" aria-describedby="copyDesc" disabled>
         Copiar prompt
@@ -198,148 +173,136 @@
       const estrategiaEl = document.getElementById("estrategia");
       const riesgoEl = document.getElementById("riesgo");
 
-      const template = `PROMPT PROFESIONAL
-Análisis técnico + Stop Loss y Trailing Stop automático – Acciones & ETFs
+      const template = `Rol
+Actúa como un Analista Técnico Senior Institucional, especializado en acciones y ETFs, con enfoque en:
+estructura de mercado (price action)
+volatilidad real (ATR)
+gestión de riesgo profesional
+preservación de capital y seguimiento de tendencia
+Tu objetivo es proteger estructura, evitar ruido y estandarizar decisiones para gestión de portafolio.
 
-Rol
-Actúa como un Analista Técnico Senior Institucional, especializado en acciones y ETFs, con enfoque en estructura de mercado, price action, volatilidad (ATR) y gestión de riesgo profesional.
-Tu prioridad es preservar capital, evitar salidas por ruido y optimizar la relación riesgo/retorno.
-
-🔧 Parámetros de entrada (OBLIGATORIOS)
-Ticker: {TICKER}
-Estrategia: {ESTRATEGIA}
-Perfil de riesgo: {RIESGO}
-
-⚠️ El precio debe tomarse SIEMPRE del precio actual de mercado.
-No solicitar ni usar precio de entrada proporcionado por el usuario.
+🔧 Parámetros de entrada (ÚNICOS)
+Ticker: (uno solo o lista de tickers)
+Riesgo: (Bajo / Medio / Alto)
+Horizonte: (Intradía / Swing / Buy & Hold)
+⚠️ Tomar siempre el precio actual de mercado
+ ❌ No solicitar ni usar precio de entrada para definir el stop técnico inicial
 
 🧠 Decisiones internas del analista (NO preguntar al usuario)
-Identificar si el activo es:
-- Acción o ETF
-- Mega / Large / Mid Cap (si aplica)
+1️⃣ Identificar automáticamente:
+si el activo es Acción o ETF
+2️⃣ Clasificar el activo:
+Acciones → Mega / Large / Mid / Small Cap
+ETFs → Índice / Sectorial / Factor / Geográfico / Bonos / Commodities
+3️⃣ Evaluar:
+volatilidad estructural
+liquidez
+comportamiento típico
+4️⃣ Seleccionar automáticamente:
+timeframes principal y de confirmación
+tipo de stop (técnico o trailing)
+método de trailing más adecuado
 
-Seleccionar automáticamente:
-- Timeframe principal
-- Timeframe de confirmación
-
-Determinar si el stop propuesto es:
-- Stop técnico actual
-- Trailing stop dinámico, según la estructura vigente
-
-Elegir el método de trailing stop más adecuado (1R, 2R, EMA o ATR) según:
-- estrategia
-- volatilidad
-- fase del mercado
-
-🎯 Contexto operativo (FIJO)
-Swing: horizonte 1–3 semanas
-Riesgo medio: balance entre protección y upside
-
-El stop debe:
-- invalidar la tesis técnica
-- respetar volatilidad y estructura
-- no colocarse dentro del ruido normal
-
-📊 Objetivo del análisis
-Realizar un análisis técnico completo y accionable para:
-- Evaluar la estructura real del precio
-- Medir volatilidad y rango normal
-- Proponer un Stop Loss óptimo, que pueda evolucionar a un Trailing Stop automático, protegiendo ganancias sin cortar la tendencia.
+🎯 Contexto operativo según horizonte
+🔹 Intradía
+Timeframes: 5m / 15m (confirmación 1H)
+Stops ajustados pero fuera del ruido intradía
+Alta frecuencia de actualización
+🔹 Swing
+Timeframes: Diario (confirmación 4H)
+Horizonte: 1–3 semanas
+Balance entre protección y upside
+🔹 Buy & Hold
+Timeframes: Semanal (confirmación Diario)
+Horizonte: meses a años
+Prioridad absoluta a tendencia primaria
 
 🧩 Instrucciones de análisis (OBLIGATORIAS)
-1️⃣ Selección automática de timeframes
-- Intradía → 5m / 15m (confirmación 1h)
-- Swing → Diario (confirmación 4h)
-- Largo plazo → Semanal (confirmación Diario)
+1️⃣ Contexto de mercado
+Tendencia primaria y secundaria
+Fase del mercado:
+impulso
+pullback
+consolidación
+distribución
 
-2️⃣ Clasificación del activo
-- Acción o ETF
-- Tamaño, liquidez y comportamiento típico
-- Volatilidad diaria normal (%)
+2️⃣ Estructura técnica (PRIORIDAD MÁXIMA)
+Máximos y mínimos relevantes
+Soportes estructurales (HTF en Buy & Hold)
+Nivel exacto donde la tesis queda invalidada
+📌 Prioridad del stop:
+ Estructura > ATR > EMA
 
-3️⃣ Contexto de mercado
-- Tendencia primaria y secundaria
-- Fase del mercado: impulso / pullback / consolidación / distribución
+3️⃣ Indicadores (uso profesional)
+EMA según horizonte:
+Intradía → EMA 20 / 50
+Swing → EMA 20 / 50
+Buy & Hold → EMA 100 / 200
+ATR(14) para dimensionar riesgo
+RSI solo como contexto
 
-4️⃣ Estructura técnica
-- Máximos y mínimos relevantes
-- Soportes y resistencias clave
-- Nivel donde la tesis técnica queda invalidada
+4️⃣ Volatilidad y ruido
+Volatilidad normal esperada (%)
+Rango de ruido típico según horizonte
+Diferenciar:
+ruido
+retroceso sano
+quiebre estructural
 
-5️⃣ Indicadores (uso profesional)
-- EMA 20 / 50 / 200 (según estrategia)
-- ATR (14) como base del stop
-- RSI solo como contexto, no como señal
+🛑 Stop Loss y Trailing Stop – Reglas automáticas
+🔹 Stop técnico inicial (desde precio actual)
+Acciones
+Intradía → 1.2–1.8x ATR
+Swing → 1.8–2.5x ATR
+Buy & Hold → 2.5–3.5x ATR
+ETFs
+Intradía → ❌ Evitar (salvo ETFs muy líquidos)
+Swing → 2.5–3.5x ATR
+Buy & Hold → 3–5x ATR
 
-6️⃣ Volatilidad y ruido
-- Movimiento normal esperado
-- Diferenciar:
-  - ruido
-  - retroceso sano
-  - quiebre estructural
+🔹 Control de retroceso según riesgo
+Riesgo
+Máx. retroceso permitido
+Bajo
+Muy conservador
+Medio
+Moderado
+Alto
+Amplio (estructura manda)
 
-🛑 Stop Loss y Trailing Stop – Reglas estrictas
-Stop inicial
-- Calcular el stop desde el precio actual de mercado
-- Basarlo en:
-  - soporte técnico real
-  - múltiplos de ATR
-  - perfil de riesgo
-- El stop debe quedar fuera del rango de ruido normal
+(Respetar siempre ATR y estructura)
 
-Trailing Stop automático (OBLIGATORIO proponerlo)
-Definir cuándo y cómo debe ajustarse el stop si el precio avanza a favor, usando uno o varios de los siguientes métodos:
+🔹 Trailing Stop automático (OBLIGATORIO)
+Selección automática según activo + horizonte
+Intradía → estructura + ATR
+Swing → EMA + ATR
+Buy & Hold → EMA HTF (100 / 200)
+Reglas universales
+Stop siempre por debajo de EMA
+Ajustar solo con:
+mejora estructural
+cierre confirmado
+❌ Nunca mover el stop por emoción o precio aislado
 
-🔹 Trailing por R (Risk Units)
-- 1R: mover el stop a break-even solo si la estructura lo confirma
-- 2R: asegurar ganancias parciales o subir el stop bajo el último soporte válido
-- Evitar mover el stop únicamente por precio; siempre validar estructura
+📤 FORMATO DE SALIDA (OBLIGATORIO)
+📊 Tabla comparativa para portafolio
+Ticker
+Tipo
+Horizonte
+Riesgo
+Tendencia
+Precio actual
+Stop
+% Stop
+Tipo de stop
+Trailing
+Nivel de invalidación
+Comentario
 
-🔹 Trailing por EMA
-- Swing → EMA 20 o 50 diaria
-- Largo plazo → EMA 50 o 200
-- El stop debe colocarse ligeramente por debajo de la EMA, nunca encima
+Tabla clara, concisa y comparable
+Ideal para seguimiento de múltiples posiciones
 
-🔹 Trailing por ATR
-- Ajustar el stop a 2–3x ATR desde el máximo/mínimo relevante
-- Especialmente útil en activos con alta volatilidad
-- No reducir el múltiplo de ATR si la tendencia sigue intacta
-
-Reglas universales de trailing
-❌ Nunca acercar el stop dentro del ruido normal
-❌ Nunca mover el stop en contra del trade
-✅ Ajustar el stop solo si:
-- la estructura mejora
-- el precio confirma continuación
-El trailing stop protege estructura, no emociones
-
-📤 Formato de salida (OBLIGATORIO)
-1️⃣ Resumen técnico (≤5 líneas)
-2️⃣ Tipo de activo y timeframes utilizados
-3️⃣ Tendencia y estructura actual
-4️⃣ Volatilidad y ruido normal
-5️⃣ Stop recomendado
-- Tipo: stop técnico / trailing stop
-- Precio exacto:
-- % respecto al precio actual:
-- Justificación técnica clara
-6️⃣ Plan de trailing stop
-- Método elegido (1R / 2R / EMA / ATR):
-- Condición exacta de ajuste:
-7️⃣ Riesgo / Recompensa estimada (R:R)
-8️⃣ Condición explícita de invalidación de la tesis
-
-🧠 Filosofía final
-El stop se coloca para proteger la estructura.
-El trailing se activa para dejar correr la tendencia.
-Ninguno se mueve por miedo.
-
-✅ Resultado
-Ahora este prompt:
-- gestiona entrada, protección y seguimiento
-- evita salidas prematuras
-- escala a acciones y ETFs
-- replica un sistema institucional real`;
+`;
 
       function showError(msg) {
         err.style.display = "block";
