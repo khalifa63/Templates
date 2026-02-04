@@ -3,393 +3,102 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Calcular el stop Loss</title>
+  <title>Prompt Stop Loss</title>
+
   <style>
     body {
-      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
-      margin: 0;
-      padding: 20px;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
       background-color: #f5f5f7;
-      color: #1d1d1f;
+      padding: 20px;
     }
+
     .container {
       max-width: 900px;
-      margin: 0 auto;
-      background-color: white;
-      border-radius: 18px;
+      margin: auto;
+      background: white;
       padding: 30px;
-      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+      border-radius: 18px;
+      box-shadow: 0 2px 10px rgba(0,0,0,.1);
     }
+
     h1 {
-      font-size: 32px;
-      font-weight: 600;
-      margin-bottom: 18px;
-      color: #1d1d1f;
-    }
-    p, pre {
-      font-size: 15px;
-      line-height: 1.6;
-      color: #1d1d1f;
-      margin-bottom: 18px;
-      white-space: pre-wrap;
-      word-wrap: break-word;
+      margin-bottom: 16px;
     }
 
     .controls {
-      display: flex;
-      gap: 12px;
-      align-items: center;
-      flex-wrap: wrap;
-      margin-top: 10px;
+      margin-bottom: 12px;
     }
 
-    .btn {
+    button {
+      background: #0a84ff;
+      color: white;
       border: none;
       padding: 10px 16px;
       border-radius: 10px;
-      font-size: 15px;
       cursor: pointer;
-      transition: background-color 0.15s ease, transform 0.05s ease;
-    }
-    .btn:active { transform: translateY(1px); }
-
-    .btn-primary {
-      background-color: #0a84ff;
-      color: white;
-    }
-    .btn-primary:disabled {
-      background-color: #7fb6ff;
-      cursor: default;
-    }
-
-    .btn-secondary {
-      background-color: #1d1d1f;
-      color: white;
-    }
-    .btn-secondary:disabled {
-      background-color: #8b8b90;
-      cursor: default;
-    }
-
-    .form {
-      display: grid;
-      grid-template-columns: 1fr 1fr 1fr;
-      gap: 12px;
-      margin: 14px 0 18px;
-    }
-    @media (max-width: 820px) {
-      .form { grid-template-columns: 1fr; }
-    }
-    label {
-      font-size: 13px;
-      color: #3a3a3c;
-      display: block;
-      margin-bottom: 6px;
-    }
-    input, select {
-      width: 70%;
-      padding: 10px 12px;
-      border-radius: 10px;
-      border: 1px solid #d2d2d7;
-      background: #fff;
       font-size: 15px;
-      outline: none;
-    }
-    input:focus, select:focus {
-      border-color: #0a84ff;
-      box-shadow: 0 0 0 3px rgba(10,132,255,0.15);
     }
 
-    .hint {
-      font-size: 13px;
-      color: #6e6e73;
-      margin-top: -6px;
-      margin-bottom: 10px;
-    }
-    .error {
-      background: #fff2f2;
-      border: 1px solid #ffd0d0;
-      color: #b42318;
-      padding: 10px 12px;
-      border-radius: 12px;
-      margin-bottom: 12px;
-      display: none;
-    }
-
-    .sr-only {
-      position: absolute;
-      width: 1px;
-      height: 1px;
-      padding: 0;
-      margin: -1px;
-      overflow: hidden;
-      clip: rect(0,0,0,0);
-      white-space: nowrap;
-      border: 0;
+    button:disabled {
+      background: #7fb6ff;
+      cursor: default;
     }
 
     .output {
       background: #f5f5f7;
-      border-radius: 16px;
-      padding: 16px;
       border: 1px solid #e5e5ea;
+      border-radius: 14px;
+      padding: 16px;
+      white-space: pre-wrap;
+      margin-top: 10px;
+    }
+
+    .copied {
+      color: #0a84ff;
+      margin-left: 10px;
+      font-size: 14px;
     }
   </style>
 </head>
+
 <body>
   <div class="container">
-    <h1>Calcular el stop Loss</h1>
+    <h1>Prompt Stop Loss</h1>
 
-
-
-
-
-    <div id="errorBox" class="error" aria-live="polite"></div>
-
-    <div class="controls" aria-live="polite">
-
-
-      <button id="copyBtn" class="btn btn-primary" type="button" aria-describedby="copyDesc" disabled>
-        Copiar prompt
-      </button>
-      <span id="copyDesc" class="sr-only">Copia el prompt generado al portapapeles</span>
+    <div class="controls">
+      <button id="copyBtn">Copiar prompt</button>
+      <span id="copyMsg" class="copied" hidden>✔ Texto copiado</span>
     </div>
 
-    <div class="output" style="margin-top: 14px;">
-      <pre id="descripcion">Completa los 3 campos y pulsa “Generar prompt”.</pre>
-    </div>
+    <pre id="descripcion" class="output"></pre>
   </div>
 
   <script>
-    (function () {
-      const out = document.getElementById("descripcion");
-      const btnCopy = document.getElementById("copyBtn");
-      const btnGen = document.getElementById("genBtn");
-      const err = document.getElementById("errorBox");
+    const out = document.getElementById("descripcion");
+    const copyBtn = document.getElementById("copyBtn");
+    const copyMsg = document.getElementById("copyMsg");
 
-      const template = `Rol
-Actúa como un Analista Técnico Senior Institucional, especializado en acciones y ETFs, con enfoque en:
-estructura de mercado (price action)
-volatilidad real (ATR)
-gestión de riesgo profesional
-preservación de capital y seguimiento de tendencia
-Tu objetivo es proteger estructura, evitar ruido y estandarizar decisiones para gestión de portafolio.
-
-🔧 Parámetros de entrada (ÚNICOS)
-Ticker: (uno solo o lista de tickers)
-Riesgo: (Bajo / Medio / Alto)
-Horizonte: (Intradía / Swing / Buy & Hold)
-⚠️ Tomar siempre el precio actual de mercado
- ❌ No solicitar ni usar precio de entrada para definir el stop técnico inicial
-
-🧠 Decisiones internas del analista (NO preguntar al usuario)
-1️⃣ Identificar automáticamente:
-si el activo es Acción o ETF
-2️⃣ Clasificar el activo:
-Acciones → Mega / Large / Mid / Small Cap
-ETFs → Índice / Sectorial / Factor / Geográfico / Bonos / Commodities
-3️⃣ Evaluar:
-volatilidad estructural
-liquidez
-comportamiento típico
-4️⃣ Seleccionar automáticamente:
-timeframes principal y de confirmación
-tipo de stop (técnico o trailing)
-método de trailing más adecuado
-
-🎯 Contexto operativo según horizonte
-🔹 Intradía
-Timeframes: 5m / 15m (confirmación 1H)
-Stops ajustados pero fuera del ruido intradía
-Alta frecuencia de actualización
-🔹 Swing
-Timeframes: Diario (confirmación 4H)
-Horizonte: 1–3 semanas
-Balance entre protección y upside
-🔹 Buy & Hold
-Timeframes: Semanal (confirmación Diario)
-Horizonte: meses a años
-Prioridad absoluta a tendencia primaria
-
-🧩 Instrucciones de análisis (OBLIGATORIAS)
-1️⃣ Contexto de mercado
-Tendencia primaria y secundaria
-Fase del mercado:
-impulso
-pullback
-consolidación
-distribución
-
-2️⃣ Estructura técnica (PRIORIDAD MÁXIMA)
-Máximos y mínimos relevantes
-Soportes estructurales (HTF en Buy & Hold)
-Nivel exacto donde la tesis queda invalidada
-📌 Prioridad del stop:
- Estructura > ATR > EMA
-
-3️⃣ Indicadores (uso profesional)
-EMA según horizonte:
-Intradía → EMA 20 / 50
-Swing → EMA 20 / 50
-Buy & Hold → EMA 100 / 200
-ATR(14) para dimensionar riesgo
-RSI solo como contexto
-
-4️⃣ Volatilidad y ruido
-Volatilidad normal esperada (%)
-Rango de ruido típico según horizonte
-Diferenciar:
-ruido
-retroceso sano
-quiebre estructural
-
-🛑 Stop Loss y Trailing Stop – Reglas automáticas
-🔹 Stop técnico inicial (desde precio actual)
-Acciones
-Intradía → 1.2–1.8x ATR
-Swing → 1.8–2.5x ATR
-Buy & Hold → 2.5–3.5x ATR
-ETFs
-Intradía → ❌ Evitar (salvo ETFs muy líquidos)
-Swing → 2.5–3.5x ATR
-Buy & Hold → 3–5x ATR
-
-🔹 Control de retroceso según riesgo
-Riesgo
-Máx. retroceso permitido
-Bajo
-Muy conservador
-Medio
-Moderado
-Alto
-Amplio (estructura manda)
-
-(Respetar siempre ATR y estructura)
-
-🔹 Trailing Stop automático (OBLIGATORIO)
-Selección automática según activo + horizonte
-Intradía → estructura + ATR
-Swing → EMA + ATR
-Buy & Hold → EMA HTF (100 / 200)
-Reglas universales
-Stop siempre por debajo de EMA
-Ajustar solo con:
-mejora estructural
-cierre confirmado
-❌ Nunca mover el stop por emoción o precio aislado
-
-📤 FORMATO DE SALIDA (OBLIGATORIO)
-📊 Tabla comparativa para portafolio
-Ticker
-Tipo
-Horizonte
-Riesgo
-Tendencia
-Precio actual
-Stop
-% Stop
-Tipo de stop
-Trailing
-Nivel de invalidación
-Comentario
-
-Tabla clara, concisa y comparable
-Ideal para seguimiento de múltiples posiciones
-
+    const template = `Rol
+Actúa como un Analista Técnico Senior Institucional...
+[TODO TU PROMPT COMPLETO AQUÍ]
 `;
 
-      function showError(msg) {
-        err.style.display = "block";
-        err.textContent = msg;
+    // Mostrar el template al cargar
+    out.textContent = template;
+
+    copyBtn.addEventListener("click", async () => {
+      try {
+        await navigator.clipboard.writeText(template);
+        copyMsg.hidden = false;
+
+        setTimeout(() => {
+          copyMsg.hidden = true;
+        }, 1500);
+      } catch (e) {
+        alert("No se pudo copiar el texto");
       }
-      function clearError() {
-        err.style.display = "none";
-        err.textContent = "";
-      }
-
-      function normalizeTicker(t) {
-        return (t || "").trim().toUpperCase();
-      }
-
-      function buildPrompt() {
-        const ticker = normalizeTicker(tickerEl.value);
-        const estrategia = (estrategiaEl.value || "").trim();
-        const riesgo = (riesgoEl.value || "").trim();
-
-        const missing = [];
-        if (!ticker) missing.push("Ticker");
-        if (!estrategia) missing.push("Estrategia");
-        if (!riesgo) missing.push("Perfil de riesgo");
-
-        if (missing.length) {
-          showError("Faltan campos obligatorios: " + missing.join(", ") + ".");
-          btnCopy.disabled = true;
-          return null;
-        }
-
-        clearError();
-
-        const finalPrompt = template
-          .replaceAll("{TICKER}", ticker)
-          .replaceAll("{ESTRATEGIA}", estrategia)
-          .replaceAll("{RIESGO}", riesgo);
-
-        return finalPrompt;
-      }
-
-      async function fallbackCopyTextToClipboard(text) {
-        const textarea = document.createElement("textarea");
-        textarea.value = text;
-        textarea.style.position = "fixed";
-        textarea.style.top = "-9999px";
-        document.body.appendChild(textarea);
-        textarea.focus();
-        textarea.select();
-        try {
-          document.execCommand("copy");
-        } catch (e) {
-          console.error("Fallo el copy fallback", e);
-          throw e;
-        } finally {
-          document.body.removeChild(textarea);
-        }
-      }
-
-      async function copyText(text) {
-        if (navigator.clipboard && navigator.clipboard.writeText) {
-          return navigator.clipboard.writeText(text);
-        }
-        return fallbackCopyTextToClipboard(text);
-      }
-
-      btnGen.addEventListener("click", () => {
-        const finalPrompt = buildPrompt();
-        if (!finalPrompt) return;
-        out.textContent = finalPrompt;
-        btnCopy.disabled = false;
-      });
-
-      btnCopy.addEventListener("click", async () => {
-        const text = out.innerText || out.textContent;
-        if (!text || text.includes("Completa los 3 campos")) return;
-
-        btnCopy.disabled = true;
-        const originalText = btnCopy.textContent;
-
-        try {
-          await copyText(text);
-          btnCopy.textContent = "¡Copiado!";
-        } catch (err) {
-          console.error("No se pudo copiar:", err);
-          btnCopy.textContent = "Error al copiar";
-        } finally {
-          setTimeout(() => {
-            btnCopy.textContent = originalText;
-            btnCopy.disabled = false;
-          }, 1500);
-        }
-      });
-    })();
+    });
   </script>
 </body>
 </html>
+
