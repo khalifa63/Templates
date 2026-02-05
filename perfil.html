@@ -330,27 +330,72 @@
             <legend>Mercados preferidos</legend>
             <div class="inline-options">
               <label class="option">
-                <input type="checkbox" name="assets" value="ETF" />
-                <span>ETF</span>
-              </label>
-              <label class="option">
-                <input type="checkbox" name="assets" value="Acciones" />
+                <input type="checkbox" name="assets[]" value="Acciones" />
                 <span>Acciones</span>
               </label>
+          
               <label class="option">
-                <input type="checkbox" name="assets" value="Criptomonedas" />
-                <span>Criptomonedas</span>
+                <input type="checkbox" name="assets[]" value="ETF" />
+                <span>ETF</span>
               </label>
+          
               <label class="option">
-                <input type="checkbox" name="assets" value="Forex" />
+                <input type="checkbox" name="assets[]" value="Índices" />
+                <span>Índices</span>
+              </label>
+          
+              <label class="option">
+                <input type="checkbox" name="assets[]" value="Opciones" />
+                <span>Opciones</span>
+              </label>
+          
+              <label class="option">
+                <input type="checkbox" name="assets[]" value="Futuros" />
+                <span>Futuros</span>
+              </label>
+          
+              <label class="option">
+                <input type="checkbox" name="assets[]" value="Forex" />
                 <span>Forex</span>
               </label>
+          
               <label class="option">
-                <input type="checkbox" name="assets" value="Materias primas" />
+                <input type="checkbox" name="assets[]" value="Materias primas" />
                 <span>Materias primas</span>
+              </label>
+          
+              <label class="option">
+                <input type="checkbox" name="assets[]" value="Metales preciosos" />
+                <span>Metales preciosos</span>
+              </label>
+          
+              <label class="option">
+                <input type="checkbox" name="assets[]" value="Energía" />
+                <span>Energía</span>
+              </label>
+          
+              <label class="option">
+                <input type="checkbox" name="assets[]" value="Bonos / Renta fija" />
+                <span>Bonos / Renta fija</span>
+              </label>
+          
+              <label class="option">
+                <input type="checkbox" name="assets[]" value="REITs" />
+                <span>REITs</span>
+              </label>
+          
+              <label class="option">
+                <input type="checkbox" name="assets[]" value="CFDs" />
+                <span>CFDs</span>
+              </label>
+          
+              <label class="option">
+                <input type="checkbox" name="assets[]" value="Criptomonedas" />
+                <span>Criptomonedas</span>
               </label>
             </div>
           </fieldset>
+
 
           <div class="field">
             <label for="capital">Capital destinado</label>
@@ -367,12 +412,15 @@
             <label for="frequency">Frecuencia de operación</label>
             <select id="frequency" name="frequency" required>
               <option value="" selected disabled>Selecciona una opción</option>
+              <option value="Intradía">Intradía</option>
               <option value="Diaria">Diaria</option>
               <option value="Semanal">Semanal</option>
+              <option value="Quincenal">Quincenal</option>
               <option value="Mensual">Mensual</option>
-              <option value="Solo cuando hay oportunidades">Solo cuando hay oportunidades</option>
+              <option value="Por señal / oportunidades">Por señal / oportunidades</option>
             </select>
           </div>
+
 
           <div class="field">
             <label for="brokers">Brokers</label>
