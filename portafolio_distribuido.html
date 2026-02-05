@@ -1,188 +1,13 @@
-<!doctype html>
-<html lang="es">
-<head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Generador de Prompt Distribucion de Portafolio</title>
-  <style>
-    :root {
-      color-scheme: light dark;
-      --bg: #0f172a;
-      --card: #111827;
-      --text: #e2e8f0;
-      --muted: #94a3b8;
-      --primary: #38bdf8;
-      --primary-dark: #0ea5e9;
-      --border: #1f2937;
-      --shadow: 0 20px 40px rgba(15, 23, 42, 0.4);
-    }
+<script>
+  const profileInput = document.getElementById("profile");
+  const resultOutput = document.getElementById("result");
+  const status = document.getElementById("status");
 
-    * {
-      box-sizing: border-box;
-      margin: 0;
-      padding: 0;
-    }
-
-    body {
-      font-family: "Inter", "Segoe UI", system-ui, sans-serif;
-      background: radial-gradient(circle at top, #1e293b, var(--bg));
-      color: var(--text);
-      min-height: 100vh;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      padding: 40px 16px;
-    }
-
-    .app {
-      width: min(100%, 900px);
-      display: grid;
-      gap: 24px;
-    }
-
-    header {
-      text-align: center;
-      display: grid;
-      gap: 8px;
-    }
-
-    h1 {
-      font-size: clamp(1.8rem, 2.8vw, 2.4rem);
-    }
-
-    p {
-      color: var(--muted);
-      line-height: 1.6;
-    }
-
-    .card {
-      background: color-mix(in srgb, var(--card) 90%, transparent);
-      border: 1px solid var(--border);
-      border-radius: 18px;
-      box-shadow: var(--shadow);
-      padding: 24px;
-      display: grid;
-      gap: 16px;
-    }
-
-    label {
-      font-weight: 600;
-      margin-bottom: 6px;
-      display: inline-block;
-    }
-
-    textarea {
-      width: 100%;
-      min-height: 140px;
-      background: #0b1120;
-      border: 1px solid var(--border);
-      border-radius: 12px;
-      padding: 16px;
-      color: var(--text);
-      font-size: 1rem;
-      line-height: 1.6;
-      resize: vertical;
-    }
-
-    textarea:focus {
-      outline: 2px solid var(--primary);
-      outline-offset: 2px;
-    }
-
-    .actions {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 12px;
-      justify-content: flex-end;
-    }
-
-    button {
-      border: none;
-      border-radius: 999px;
-      padding: 12px 20px;
-      font-weight: 600;
-      cursor: pointer;
-      transition: transform 0.2s ease, box-shadow 0.2s ease;
-    }
-
-    .primary {
-      background: linear-gradient(135deg, var(--primary), var(--primary-dark));
-      color: #081427;
-      box-shadow: 0 10px 20px rgba(14, 165, 233, 0.35);
-    }
-
-    .secondary {
-      background: #0b1120;
-      color: var(--text);
-      border: 1px solid var(--border);
-    }
-
-    button:hover {
-      transform: translateY(-1px);
-    }
-
-    .output {
-      display: grid;
-      gap: 12px;
-    }
-
-    .status {
-      font-size: 0.9rem;
-      color: var(--muted);
-      min-height: 1.2em;
-    }
-
-    @media (max-width: 640px) {
-      .actions {
-        justify-content: stretch;
-      }
-
-      button {
-        width: 100%;
-      }
-    }
-  </style>
-</head>
-<body>
-  <main class="app">
-    <header>
-      <h1>Generador de Prompt para Portafolios</h1>
-      <p>Completa el perfil del trader y genera el prompt listo para copiar.</p>
-    </header>
-
-    <section class="card">
-      <div>
-        <label for="profile">Perfil del trader</label>
-        <textarea
-          id="profile"
-          placeholder="Hola, soy [NOMBRE]. Tengo un perfil de [NIVEL] / [ESTILO], con un objetivo principal de [OBJETIVO]. Mi tolerancia al riesgo es [RIESGO] y mi horizonte es de [HORIZONTE]. Prefiero operar en [INSTRUMENTOS] y en mercados geográficos de [MERCADOS]. Uso estilos como [ESTILOS] con un capital estimado de [CAPITAL]. Mis brokers son [BROKERS]. Mi frecuencia de operación es [FRECUENCIA]."
-        ></textarea>
-      </div>
-      <div class="actions">
-        <button class="primary" id="generate" type="button">Generar prompt</button>
-      </div>
-    </section>
-
-    <section class="card output">
-      <div>
-        <label for="result">Prompt generado</label>
-        <textarea id="result" readonly></textarea>
-      </div>
-      <div class="actions">
-        <button class="secondary" id="copy" type="button">Copiar texto</button>
-      </div>
-      <div class="status" id="status"></div>
-    </section>
-  </main>
-
-  <script>
-    const profileInput = document.getElementById("profile");
-    const resultOutput = document.getElementById("result");
-    const status = document.getElementById("status");
-    const template = (profile) => `Eres un **gestor de portafolios cuantitativo institucional (20+ años)** en equity markets, especializado en **swing trading y momentum**. Debes construir una **tabla de diversificación profesional** basada en el perfil del trader, priorizando **calidad de ejecución** y evitando sobreoperar.
+  // ✅ Ahora inserta el perfil real en la sección INPUT
+  const template = (profile) => `Eres un **gestor de portafolios cuantitativo institucional (20+ años)** en equity markets, especializado en **swing trading y momentum**. Debes construir una **tabla de diversificación profesional** basada en el perfil del trader, priorizando **calidad de ejecución** y evitando sobreoperar.
 
 ## INPUT (PERFIL DEL TRADER)
-{PEGA_AQUÍ_EL_PERFIL_EN_TEXTO}
+${profile}
 
 ## REGLAS INSTITUCIONALES (ANTI-SOBREOPERACIÓN)
 1) **Total tickers (PORTAFOLIO)**: objetivo **10–14** (máximo 16).  
@@ -226,29 +51,27 @@
 - ¿Acciones (no ETF) salvo que el perfil diga lo contrario?
 `;
 
-    document.getElementById("generate").addEventListener("click", () => {
-      const profile = profileInput.value.trim();
-      if (!profile) {
-        status.textContent = "Ingresa un perfil para generar el prompt.";
-        resultOutput.value = "";
-        return;
-      }
-      resultOutput.value = template(profile);
-      status.textContent = "Prompt generado. Puedes copiarlo cuando quieras.";
-    });
+  document.getElementById("generate").addEventListener("click", () => {
+    const profile = profileInput.value.trim();
+    if (!profile) {
+      status.textContent = "Ingresa un perfil para generar el prompt.";
+      resultOutput.value = "";
+      return;
+    }
+    resultOutput.value = template(profile);
+    status.textContent = "Prompt generado. Puedes copiarlo cuando quieras.";
+  });
 
-    document.getElementById("copy").addEventListener("click", async () => {
-      if (!resultOutput.value) {
-        status.textContent = "Primero genera un prompt para copiarlo.";
-        return;
-      }
-      try {
-        await navigator.clipboard.writeText(resultOutput.value);
-        status.textContent = "Texto copiado al portapapeles.";
-      } catch (error) {
-        status.textContent = "No se pudo copiar automáticamente. Selecciona el texto manualmente.";
-      }
-    });
-  </script>
-</body>
-</html>
+  document.getElementById("copy").addEventListener("click", async () => {
+    if (!resultOutput.value) {
+      status.textContent = "Primero genera un prompt para copiarlo.";
+      return;
+    }
+    try {
+      await navigator.clipboard.writeText(resultOutput.value);
+      status.textContent = "Texto copiado al portapapeles.";
+    } catch (error) {
+      status.textContent = "No se pudo copiar automáticamente. Selecciona el texto manualmente.";
+    }
+  });
+</script>
