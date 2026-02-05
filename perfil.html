@@ -322,40 +322,54 @@
 
           <div class="field">
             <label for="style">Estilo que usas</label>
-            <input
-              id="style"
-              name="style"
-              type="text"
-              placeholder="Ej: swing trading con breakouts, scalping en momentum, mean reversion"
-              required
-            />
+            <select id="style" name="style" multiple required>
+              <option value="Scalping">Scalping</option>
+              <option value="Day Trading">Day Trading</option>
+              <option value="Swing Trading">Swing Trading</option>
+              <option value="Position Trading">Position Trading</option>
+              <option value="Trend Following">Trend Following</option>
+              <option value="Momentum Trading">Momentum Trading</option>
+              <option value="Breakout Trading">Breakout Trading</option>
+              <option value="Mean Reversion">Mean Reversion</option>
+              <option value="Range Trading">Range Trading</option>
+              <option value="News Trading">News Trading</option>
+              <option value="Event-Driven Trading">Event-Driven Trading</option>
+              <option value="Algorithmic Trading">Algorithmic Trading</option>
+              <option value="Quantitative Trading">Quantitative Trading</option>
+              <option value="High-Frequency Trading (HFT)">
+                High-Frequency Trading (HFT)
+              </option>
+              <option value="Pairs Trading">Pairs Trading</option>
+              <option value="Arbitrage Trading">Arbitrage Trading</option>
+              <option value="Options Trading">Options Trading</option>
+              <option value="Futures Trading">Futures Trading</option>
+            </select>
+            <small>Selecciona varias opciones con Ctrl o Cmd.</small>
           </div>
 
-          <fieldset class="field">
-            <legend>Mercados geográficos</legend>
-            <div class="inline-options">
-              <label class="option">
-                <input type="checkbox" name="regions" value="USA" />
-                <span>USA</span>
-              </label>
-              <label class="option">
-                <input type="checkbox" name="regions" value="Internacionales" />
-                <span>Internacionales</span>
-              </label>
-              <label class="option">
-                <input type="checkbox" name="regions" value="Latinoamérica" />
-                <span>Latinoamérica</span>
-              </label>
-              <label class="option">
-                <input type="checkbox" name="regions" value="Europa" />
-                <span>Europa</span>
-              </label>
-              <label class="option">
-                <input type="checkbox" name="regions" value="Asia" />
-                <span>Asia</span>
-              </label>
-            </div>
-          </fieldset>
+          <div class="field">
+            <label for="regions">Mercados geográficos</label>
+            <select id="regions" name="regions" multiple required>
+              <option value="Mercados Desarrollados (DM)">
+                Mercados Desarrollados (DM)
+              </option>
+              <option value="Mercados Emergentes (EM)">
+                Mercados Emergentes (EM)
+              </option>
+              <option value="Mercados Frontera (FM)">Mercados Frontera (FM)</option>
+              <option value="BRICS">BRICS</option>
+              <option value="MENA">MENA</option>
+              <option value="LATAM">LATAM</option>
+              <option value="APAC">APAC</option>
+              <option value="EEMEA">EEMEA</option>
+              <option value="G7">G7</option>
+              <option value="G20">G20</option>
+              <option value="MSCI">MSCI</option>
+              <option value="FTSE Russell">FTSE Russell</option>
+              <option value="S&P Dow Jones Indices">S&P Dow Jones Indices</option>
+            </select>
+            <small>Selecciona varias opciones con Ctrl o Cmd.</small>
+          </div>
 
           <div class="actions">
             <button type="submit" class="primary">Generar perfil</button>
@@ -406,8 +420,11 @@
         const regions = data.regions.length
           ? formatter.format(data.regions)
           : "regiones por definir";
+        const styles = data.styles.length
+          ? formatter.format(data.styles)
+          : "estilos por definir";
 
-        return `Hola, soy ${data.name}. Tengo un perfil de ${role} ${data.experience.toLowerCase()}, con un objetivo principal de ${data.goal}. Mi tolerancia al riesgo es ${data.risk.toLowerCase()} y mi horizonte es de ${data.horizon.toLowerCase()}. Prefiero operar en ${assets} y en mercados geográficos de ${regions}. Uso un estilo como ${data.style} con un capital estimado de ${data.capital}. Mi frecuencia de operación es ${data.frequency.toLowerCase()}.`;
+        return `Hola, soy ${data.name}. Tengo un perfil de ${role} ${data.experience.toLowerCase()}, con un objetivo principal de ${data.goal}. Mi tolerancia al riesgo es ${data.risk.toLowerCase()} y mi horizonte es de ${data.horizon.toLowerCase()}. Prefiero operar en ${assets} y en mercados geográficos de ${regions}. Uso estilos como ${styles} con un capital estimado de ${data.capital}. Mi frecuencia de operación es ${data.frequency.toLowerCase()}.`;
       };
 
       form.addEventListener("submit", (event) => {
@@ -424,7 +441,7 @@
           assets: formData.getAll("assets"),
           capital: formData.get("capital").trim(),
           frequency: formData.get("frequency"),
-          style: formData.get("style").trim(),
+          styles: formData.getAll("style"),
           regions: formData.getAll("regions"),
         };
 
