@@ -320,56 +320,157 @@
             </select>
           </div>
 
-          <div class="field">
-            <label for="style">Estilo que usas</label>
-            <select id="style" name="style" multiple required>
-              <option value="Scalping">Scalping</option>
-              <option value="Day Trading">Day Trading</option>
-              <option value="Swing Trading">Swing Trading</option>
-              <option value="Position Trading">Position Trading</option>
-              <option value="Trend Following">Trend Following</option>
-              <option value="Momentum Trading">Momentum Trading</option>
-              <option value="Breakout Trading">Breakout Trading</option>
-              <option value="Mean Reversion">Mean Reversion</option>
-              <option value="Range Trading">Range Trading</option>
-              <option value="News Trading">News Trading</option>
-              <option value="Event-Driven Trading">Event-Driven Trading</option>
-              <option value="Algorithmic Trading">Algorithmic Trading</option>
-              <option value="Quantitative Trading">Quantitative Trading</option>
-              <option value="High-Frequency Trading (HFT)">
-                High-Frequency Trading (HFT)
-              </option>
-              <option value="Pairs Trading">Pairs Trading</option>
-              <option value="Arbitrage Trading">Arbitrage Trading</option>
-              <option value="Options Trading">Options Trading</option>
-              <option value="Futures Trading">Futures Trading</option>
-            </select>
-            <small>Selecciona varias opciones con Ctrl o Cmd.</small>
-          </div>
+          <fieldset class="field">
+            <legend>Estilo que usas</legend>
+            <div class="inline-options">
+              <label class="option">
+                <input type="checkbox" name="style" value="Scalping" />
+                <span>Scalping</span>
+              </label>
+              <label class="option">
+                <input type="checkbox" name="style" value="Day Trading" />
+                <span>Day Trading</span>
+              </label>
+              <label class="option">
+                <input type="checkbox" name="style" value="Swing Trading" />
+                <span>Swing Trading</span>
+              </label>
+              <label class="option">
+                <input type="checkbox" name="style" value="Position Trading" />
+                <span>Position Trading</span>
+              </label>
+              <label class="option">
+                <input type="checkbox" name="style" value="Trend Following" />
+                <span>Trend Following</span>
+              </label>
+              <label class="option">
+                <input type="checkbox" name="style" value="Momentum Trading" />
+                <span>Momentum Trading</span>
+              </label>
+              <label class="option">
+                <input type="checkbox" name="style" value="Breakout Trading" />
+                <span>Breakout Trading</span>
+              </label>
+              <label class="option">
+                <input type="checkbox" name="style" value="Mean Reversion" />
+                <span>Mean Reversion</span>
+              </label>
+              <label class="option">
+                <input type="checkbox" name="style" value="Range Trading" />
+                <span>Range Trading</span>
+              </label>
+              <label class="option">
+                <input type="checkbox" name="style" value="News Trading" />
+                <span>News Trading</span>
+              </label>
+              <label class="option">
+                <input type="checkbox" name="style" value="Event-Driven Trading" />
+                <span>Event-Driven Trading</span>
+              </label>
+              <label class="option">
+                <input type="checkbox" name="style" value="Algorithmic Trading" />
+                <span>Algorithmic Trading</span>
+              </label>
+              <label class="option">
+                <input type="checkbox" name="style" value="Quantitative Trading" />
+                <span>Quantitative Trading</span>
+              </label>
+              <label class="option">
+                <input
+                  type="checkbox"
+                  name="style"
+                  value="High-Frequency Trading (HFT)"
+                />
+                <span>High-Frequency Trading (HFT)</span>
+              </label>
+              <label class="option">
+                <input type="checkbox" name="style" value="Pairs Trading" />
+                <span>Pairs Trading</span>
+              </label>
+              <label class="option">
+                <input type="checkbox" name="style" value="Arbitrage Trading" />
+                <span>Arbitrage Trading</span>
+              </label>
+              <label class="option">
+                <input type="checkbox" name="style" value="Options Trading" />
+                <span>Options Trading</span>
+              </label>
+              <label class="option">
+                <input type="checkbox" name="style" value="Futures Trading" />
+                <span>Futures Trading</span>
+              </label>
+            </div>
+          </fieldset>
 
-          <div class="field">
-            <label for="regions">Mercados geográficos</label>
-            <select id="regions" name="regions" multiple required>
-              <option value="Mercados Desarrollados (DM)">
-                Mercados Desarrollados (DM)
-              </option>
-              <option value="Mercados Emergentes (EM)">
-                Mercados Emergentes (EM)
-              </option>
-              <option value="Mercados Frontera (FM)">Mercados Frontera (FM)</option>
-              <option value="BRICS">BRICS</option>
-              <option value="MENA">MENA</option>
-              <option value="LATAM">LATAM</option>
-              <option value="APAC">APAC</option>
-              <option value="EEMEA">EEMEA</option>
-              <option value="G7">G7</option>
-              <option value="G20">G20</option>
-              <option value="MSCI">MSCI</option>
-              <option value="FTSE Russell">FTSE Russell</option>
-              <option value="S&P Dow Jones Indices">S&P Dow Jones Indices</option>
-            </select>
-            <small>Selecciona varias opciones con Ctrl o Cmd.</small>
-          </div>
+          <fieldset class="field">
+            <legend>Mercados geográficos</legend>
+            <div class="inline-options">
+              <label class="option">
+                <input
+                  type="checkbox"
+                  name="regions"
+                  value="Mercados Desarrollados (DM)"
+                />
+                <span>Mercados Desarrollados (DM)</span>
+              </label>
+              <label class="option">
+                <input
+                  type="checkbox"
+                  name="regions"
+                  value="Mercados Emergentes (EM)"
+                />
+                <span>Mercados Emergentes (EM)</span>
+              </label>
+              <label class="option">
+                <input
+                  type="checkbox"
+                  name="regions"
+                  value="Mercados Frontera (FM)"
+                />
+                <span>Mercados Frontera (FM)</span>
+              </label>
+              <label class="option">
+                <input type="checkbox" name="regions" value="BRICS" />
+                <span>BRICS</span>
+              </label>
+              <label class="option">
+                <input type="checkbox" name="regions" value="MENA" />
+                <span>MENA</span>
+              </label>
+              <label class="option">
+                <input type="checkbox" name="regions" value="LATAM" />
+                <span>LATAM</span>
+              </label>
+              <label class="option">
+                <input type="checkbox" name="regions" value="APAC" />
+                <span>APAC</span>
+              </label>
+              <label class="option">
+                <input type="checkbox" name="regions" value="EEMEA" />
+                <span>EEMEA</span>
+              </label>
+              <label class="option">
+                <input type="checkbox" name="regions" value="G7" />
+                <span>G7</span>
+              </label>
+              <label class="option">
+                <input type="checkbox" name="regions" value="G20" />
+                <span>G20</span>
+              </label>
+              <label class="option">
+                <input type="checkbox" name="regions" value="MSCI" />
+                <span>MSCI</span>
+              </label>
+              <label class="option">
+                <input type="checkbox" name="regions" value="FTSE Russell" />
+                <span>FTSE Russell</span>
+              </label>
+              <label class="option">
+                <input type="checkbox" name="regions" value="S&P Dow Jones Indices" />
+                <span>S&P Dow Jones Indices</span>
+              </label>
+            </div>
+          </fieldset>
 
           <div class="actions">
             <button type="submit" class="primary">Generar perfil</button>
