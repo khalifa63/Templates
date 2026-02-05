@@ -320,6 +320,43 @@
             </select>
           </div>
 
+          <div class="field">
+            <label for="style">Estilo que usas</label>
+            <input
+              id="style"
+              name="style"
+              type="text"
+              placeholder="Ej: swing trading con breakouts, scalping en momentum, mean reversion"
+              required
+            />
+          </div>
+
+          <fieldset class="field">
+            <legend>Mercados geográficos</legend>
+            <div class="inline-options">
+              <label class="option">
+                <input type="checkbox" name="regions" value="USA" />
+                <span>USA</span>
+              </label>
+              <label class="option">
+                <input type="checkbox" name="regions" value="Internacionales" />
+                <span>Internacionales</span>
+              </label>
+              <label class="option">
+                <input type="checkbox" name="regions" value="Latinoamérica" />
+                <span>Latinoamérica</span>
+              </label>
+              <label class="option">
+                <input type="checkbox" name="regions" value="Europa" />
+                <span>Europa</span>
+              </label>
+              <label class="option">
+                <input type="checkbox" name="regions" value="Asia" />
+                <span>Asia</span>
+              </label>
+            </div>
+          </fieldset>
+
           <div class="actions">
             <button type="submit" class="primary">Generar perfil</button>
             <button type="button" id="reset" class="ghost">Limpiar</button>
@@ -366,7 +403,11 @@
             ? "trader"
             : "inversor";
 
-        return `Hola, soy ${data.name}. Tengo un perfil de ${role} ${data.experience.toLowerCase()}, con un objetivo principal de ${data.goal}. Mi tolerancia al riesgo es ${data.risk.toLowerCase()} y mi horizonte es de ${data.horizon.toLowerCase()}. Prefiero operar en ${assets}, con un capital estimado de ${data.capital}. Mi frecuencia de operación es ${data.frequency.toLowerCase()}.`;
+        const regions = data.regions.length
+          ? formatter.format(data.regions)
+          : "regiones por definir";
+
+        return `Hola, soy ${data.name}. Tengo un perfil de ${role} ${data.experience.toLowerCase()}, con un objetivo principal de ${data.goal}. Mi tolerancia al riesgo es ${data.risk.toLowerCase()} y mi horizonte es de ${data.horizon.toLowerCase()}. Prefiero operar en ${assets} y en mercados geográficos de ${regions}. Uso un estilo como ${data.style} con un capital estimado de ${data.capital}. Mi frecuencia de operación es ${data.frequency.toLowerCase()}.`;
       };
 
       form.addEventListener("submit", (event) => {
@@ -383,6 +424,8 @@
           assets: formData.getAll("assets"),
           capital: formData.get("capital").trim(),
           frequency: formData.get("frequency"),
+          style: formData.get("style").trim(),
+          regions: formData.getAll("regions"),
         };
 
         const profileText = buildProfileText(data);
