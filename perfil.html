@@ -216,20 +216,20 @@
             <label for="experience">Nivel de experiencia</label>
             <select id="experience" name="experience" required>
               <option value="" selected disabled>Selecciona una opción</option>
-              <option value="Básico / conservador estructurado">
-                Básico / conservador estructurado
-              </option>
-              <option value="Intermedio / inversor estratégico">
-                Intermedio / inversor estratégico
-              </option>
-              <option value="Avanzado / gestor activo">
-                Avanzado / gestor activo
+              <option value="Institucional / patrimonial">
+                Institucional / patrimonial
               </option>
               <option value="Profesional / cuantitativo">
                 Profesional / cuantitativo
               </option>
-              <option value="Institucional / patrimonial">
-                Institucional / patrimonial
+              <option value="Avanzado / gestor activo">
+                Avanzado / gestor activo
+              </option>
+              <option value="Intermedio / inversor estratégico">
+                Intermedio / inversor estratégico
+              </option>
+              <option value="Básico / conservador estructurado">
+                Básico / conservador estructurado
               </option>
             </select>
           </div>
@@ -238,9 +238,9 @@
             <label for="horizon">Horizonte de inversión</label>
             <select id="horizon" name="horizon" required>
               <option value="" selected disabled>Selecciona una opción</option>
-              <option value="Corto plazo">Corto plazo</option>
-              <option value="Mediano plazo">Mediano plazo</option>
               <option value="Largo plazo">Largo plazo</option>
+              <option value="Mediano plazo">Mediano plazo</option>
+              <option value="Corto plazo">Corto plazo</option>
             </select>
           </div>
 
@@ -266,9 +266,9 @@
             <label for="risk">Tolerancia al riesgo</label>
             <select id="risk" name="risk" required>
               <option value="" selected disabled>Selecciona una opción</option>
-              <option value="Baja">Baja</option>
-              <option value="Media">Media</option>
               <option value="Alta">Alta</option>
+              <option value="Media">Media</option>
+              <option value="Baja">Baja</option>
             </select>
           </div>
 
@@ -276,12 +276,12 @@
             <legend>Mercados preferidos</legend>
             <div class="inline-options">
               <label class="option">
-                <input type="checkbox" name="assets" value="Acciones" />
-                <span>Acciones</span>
-              </label>
-              <label class="option">
                 <input type="checkbox" name="assets" value="ETF" />
                 <span>ETF</span>
+              </label>
+              <label class="option">
+                <input type="checkbox" name="assets" value="Acciones" />
+                <span>Acciones</span>
               </label>
               <label class="option">
                 <input type="checkbox" name="assets" value="Criptomonedas" />
@@ -320,16 +320,55 @@
             </select>
           </div>
 
+          <div class="field">
+            <label for="brokers">Brokers</label>
+            <input
+              id="brokers"
+              name="brokers"
+              type="text"
+              placeholder="Ej: Interactive Brokers, TD Ameritrade"
+              required
+            />
+          </div>
+
           <fieldset class="field">
             <legend>Estilo que usas</legend>
             <div class="inline-options">
               <label class="option">
-                <input type="checkbox" name="style" value="Scalping" />
-                <span>Scalping</span>
+                <input type="checkbox" name="style" value="High-Frequency Trading (HFT)" />
+                <span>High-Frequency Trading (HFT)</span>
+              </label>
+              <label class="option">
+                <input type="checkbox" name="style" value="Algorithmic Trading" />
+                <span>Algorithmic Trading</span>
+              </label>
+              <label class="option">
+                <input type="checkbox" name="style" value="Quantitative Trading" />
+                <span>Quantitative Trading</span>
+              </label>
+              <label class="option">
+                <input type="checkbox" name="style" value="Arbitrage Trading" />
+                <span>Arbitrage Trading</span>
+              </label>
+              <label class="option">
+                <input type="checkbox" name="style" value="Pairs Trading" />
+                <span>Pairs Trading</span>
+              </label>
+              <label class="option">
+                <input type="checkbox" name="style" value="Options Trading" />
+                <span>Options Trading</span>
+              </label>
+              <label class="option">
+                <input type="checkbox" name="style" value="Futures Trading" />
+                <span>Futures Trading</span>
               </label>
               <label class="option">
                 <input type="checkbox" name="style" value="Day Trading" />
                 <span>Day Trading</span>
+              </label>
+              <label class="option">
+                <input type="checkbox" name="style" value="Scalping" />
+                <span>Scalping</span>
               </label>
               <label class="option">
                 <input type="checkbox" name="style" value="Swing Trading" />
@@ -344,20 +383,20 @@
                 <span>Trend Following</span>
               </label>
               <label class="option">
-                <input type="checkbox" name="style" value="Momentum Trading" />
-                <span>Momentum Trading</span>
-              </label>
-              <label class="option">
-                <input type="checkbox" name="style" value="Breakout Trading" />
-                <span>Breakout Trading</span>
-              </label>
-              <label class="option">
                 <input type="checkbox" name="style" value="Mean Reversion" />
                 <span>Mean Reversion</span>
               </label>
               <label class="option">
                 <input type="checkbox" name="style" value="Range Trading" />
                 <span>Range Trading</span>
+              </label>
+              <label class="option">
+                <input type="checkbox" name="style" value="Momentum Trading" />
+                <span>Momentum Trading</span>
+              </label>
+              <label class="option">
+                <input type="checkbox" name="style" value="Breakout Trading" />
+                <span>Breakout Trading</span>
               </label>
               <label class="option">
                 <input type="checkbox" name="style" value="News Trading" />
@@ -367,52 +406,12 @@
                 <input type="checkbox" name="style" value="Event-Driven Trading" />
                 <span>Event-Driven Trading</span>
               </label>
-              <label class="option">
-                <input type="checkbox" name="style" value="Algorithmic Trading" />
-                <span>Algorithmic Trading</span>
-              </label>
-              <label class="option">
-                <input type="checkbox" name="style" value="Quantitative Trading" />
-                <span>Quantitative Trading</span>
-              </label>
-              <label class="option">
-                <input
-                  type="checkbox"
-                  name="style"
-                  value="High-Frequency Trading (HFT)"
-                />
-                <span>High-Frequency Trading (HFT)</span>
-              </label>
-              <label class="option">
-                <input type="checkbox" name="style" value="Pairs Trading" />
-                <span>Pairs Trading</span>
-              </label>
-              <label class="option">
-                <input type="checkbox" name="style" value="Arbitrage Trading" />
-                <span>Arbitrage Trading</span>
-              </label>
-              <label class="option">
-                <input type="checkbox" name="style" value="Options Trading" />
-                <span>Options Trading</span>
-              </label>
-              <label class="option">
-                <input type="checkbox" name="style" value="Futures Trading" />
-                <span>Futures Trading</span>
-              </label>
             </div>
           </fieldset>
 
           <fieldset class="field">
             <legend>Mercados geográficos</legend>
             <div class="inline-options">
-              <label class="option">
-                <input
-                  type="checkbox"
-                  name="regions"
-                  value="Mercados Desarrollados (DM)"
-                />
-                <span>Mercados Desarrollados (DM)</span>
-              </label>
               <label class="option">
                 <input
                   type="checkbox"
@@ -428,6 +427,14 @@
                   value="Mercados Frontera (FM)"
                 />
                 <span>Mercados Frontera (FM)</span>
+              </label>
+              <label class="option">
+                <input
+                  type="checkbox"
+                  name="regions"
+                  value="Mercados Desarrollados (DM)"
+                />
+                <span>Mercados Desarrollados (DM)</span>
               </label>
               <label class="option">
                 <input type="checkbox" name="regions" value="BRICS" />
@@ -450,14 +457,6 @@
                 <span>EEMEA</span>
               </label>
               <label class="option">
-                <input type="checkbox" name="regions" value="G7" />
-                <span>G7</span>
-              </label>
-              <label class="option">
-                <input type="checkbox" name="regions" value="G20" />
-                <span>G20</span>
-              </label>
-              <label class="option">
                 <input type="checkbox" name="regions" value="MSCI" />
                 <span>MSCI</span>
               </label>
@@ -468,6 +467,14 @@
               <label class="option">
                 <input type="checkbox" name="regions" value="S&P Dow Jones Indices" />
                 <span>S&P Dow Jones Indices</span>
+              </label>
+              <label class="option">
+                <input type="checkbox" name="regions" value="G7" />
+                <span>G7</span>
+              </label>
+              <label class="option">
+                <input type="checkbox" name="regions" value="G20" />
+                <span>G20</span>
               </label>
             </div>
           </fieldset>
@@ -525,7 +532,7 @@
           ? formatter.format(data.styles)
           : "estilos por definir";
 
-        return `Hola, soy ${data.name}. Tengo un perfil de ${role} ${data.experience.toLowerCase()}, con un objetivo principal de ${data.goal}. Mi tolerancia al riesgo es ${data.risk.toLowerCase()} y mi horizonte es de ${data.horizon.toLowerCase()}. Prefiero operar en ${assets} y en mercados geográficos de ${regions}. Uso estilos como ${styles} con un capital estimado de ${data.capital}. Mi frecuencia de operación es ${data.frequency.toLowerCase()}.`;
+        return `Hola, soy ${data.name}. Tengo un perfil de ${role} ${data.experience.toLowerCase()}, con un objetivo principal de ${data.goal}. Mi tolerancia al riesgo es ${data.risk.toLowerCase()} y mi horizonte es de ${data.horizon.toLowerCase()}. Prefiero operar en ${assets} y en mercados geográficos de ${regions}. Uso estilos como ${styles} con un capital estimado de ${data.capital}. Mis brokers son ${data.brokers}. Mi frecuencia de operación es ${data.frequency.toLowerCase()}.`;
       };
 
       form.addEventListener("submit", (event) => {
@@ -541,6 +548,7 @@
           risk: formData.get("risk"),
           assets: formData.getAll("assets"),
           capital: formData.get("capital").trim(),
+          brokers: formData.get("brokers").trim(),
           frequency: formData.get("frequency"),
           styles: formData.getAll("style"),
           regions: formData.getAll("regions"),
