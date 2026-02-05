@@ -216,9 +216,21 @@
             <label for="experience">Nivel de experiencia</label>
             <select id="experience" name="experience" required>
               <option value="" selected disabled>Selecciona una opción</option>
-              <option value="Principiante">Principiante</option>
-              <option value="Intermedio">Intermedio</option>
-              <option value="Avanzado">Avanzado</option>
+              <option value="Básico / conservador estructurado">
+                Básico / conservador estructurado
+              </option>
+              <option value="Intermedio / inversor estratégico">
+                Intermedio / inversor estratégico
+              </option>
+              <option value="Avanzado / gestor activo">
+                Avanzado / gestor activo
+              </option>
+              <option value="Profesional / cuantitativo">
+                Profesional / cuantitativo
+              </option>
+              <option value="Institucional / patrimonial">
+                Institucional / patrimonial
+              </option>
             </select>
           </div>
 
@@ -260,17 +272,31 @@
             </select>
           </div>
 
-          <div class="field">
-            <label for="assets">Mercados preferidos</label>
-            <select id="assets" name="assets" multiple required>
-              <option value="Acciones">Acciones</option>
-              <option value="ETF">ETF</option>
-              <option value="Criptomonedas">Criptomonedas</option>
-              <option value="Forex">Forex</option>
-              <option value="Materias primas">Materias primas</option>
-            </select>
-            <small>Selecciona uno o varios manteniendo presionada la tecla Ctrl o Cmd.</small>
-          </div>
+          <fieldset class="field">
+            <legend>Mercados preferidos</legend>
+            <div class="inline-options">
+              <label class="option">
+                <input type="checkbox" name="assets" value="Acciones" />
+                <span>Acciones</span>
+              </label>
+              <label class="option">
+                <input type="checkbox" name="assets" value="ETF" />
+                <span>ETF</span>
+              </label>
+              <label class="option">
+                <input type="checkbox" name="assets" value="Criptomonedas" />
+                <span>Criptomonedas</span>
+              </label>
+              <label class="option">
+                <input type="checkbox" name="assets" value="Forex" />
+                <span>Forex</span>
+              </label>
+              <label class="option">
+                <input type="checkbox" name="assets" value="Materias primas" />
+                <span>Materias primas</span>
+              </label>
+            </div>
+          </fieldset>
 
           <div class="field">
             <label for="capital">Capital destinado</label>
