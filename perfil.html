@@ -1,4 +1,22 @@
-<!DOCTYPE html>
+
+Fix profile generation to include main goal
+5 feb
+·
+khalifa63/Basic
+·
+master
+·
++697
+-0
+
+Archivar
+
+Compartir
+
+Crear solicitud de extracción
+
+
+@DOCTYPE html
 <html lang="es">
   <head>
     <meta charset="UTF-8" />
@@ -647,6 +665,748 @@
           experience: formData.get("experience"),
           horizon: formData.get("horizon"),
           goal: formData.get("goal"),
+          risk: formData.get("risk"),
+          assets: formData.getAll("assets"),
+          capital: formData.get("capital").trim(),
+          brokers: formData.get("brokers").trim(),
+          frequency: formData.get("frequency"),
+          styles: formData.getAll("style"),
+          regions: formData.getAll("regions"),
+        };
+
+        const profileText = buildProfileText(data);
+        result.value = profileText;
+        copyButton.disabled = false;
+        status.textContent = "Perfil generado. Puedes copiarlo cuando quieras.";
+      });
+
+      resetButton.addEventListener("click", () => {
+        form.reset();
+        result.value = "";
+        copyButton.disabled = true;
+        status.textContent = "Formulario limpiado.";
+      });
+
+      copyButton.addEventListener("click", async () => {
+        if (!result.value) return;
+
+        try {
+          await navigator.clipboard.writeText(result.value);
+          status.textContent = "Texto copiado al portapapeles.";
+        } catch (error) {
+          status.textContent =
+            "No se pudo copiar automáticamente. Selecciona el texto y copia manualmente.";
+        }
+      });
+    </script>
+  </body>
+</html> arregla el codigo para mostrar el objetivo principal en el texto generado.
+Copiar
+Summary
+
+Added the investor profile generator page and updated the profile text builder to include selected objetivos principales from the form data.
+
+Corrected the form data collection to read the objetivos principales list for the generated output.
+
+Testing
+
+Not run (static HTML update).
+
+Screenshots
+
+Attempted to capture a screenshot with Playwright, but the browser crashed in this environment, so no image is available.
+
+
+Archivo (1)
+muestrame el codigo arreglado
+Copiar
+Summary
+
+Ajusté el texto generado para manejar correctamente singular/plural en “objetivo(s) principal(es)” y un fallback más claro cuando no hay selección.
+
+Testing
+
+Not run (static HTML change).
+
+
+Archivo (1)
+
+index.html
+index.html
+Nuevo
+
+
+
+Diferencia
+Registros
+
+index.html
+index.html
+Nuevo
++697
+-0
+
+<!DOCTYPE html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Perfil de Inversor o Trader</title>
+    <style>
+      :root {
+        color-scheme: light;
+        font-family: "Inter", "Segoe UI", system-ui, sans-serif;
+        --bg: #f5f7fb;
+        --card: #ffffff;
+        --text: #1d2433;
+        --muted: #5c6474;
+        --primary: #2b6ef5;
+        --primary-dark: #1b4fb8;
+        --border: #d7dce7;
+        --shadow: 0 18px 45px rgba(23, 36, 64, 0.12);
+      }
+
+      * {
+        box-sizing: border-box;
+      }
+
+      body {
+        margin: 0;
+        background: var(--bg);
+        color: var(--text);
+      }
+
+      .container {
+        max-width: 1100px;
+        margin: 0 auto;
+        padding: 48px 20px 80px;
+        display: grid;
+        gap: 24px;
+      }
+
+      .header {
+        text-align: center;
+        display: grid;
+        gap: 12px;
+      }
+
+      .eyebrow {
+        text-transform: uppercase;
+        letter-spacing: 2px;
+        font-size: 12px;
+        color: var(--primary);
+        font-weight: 600;
+        margin: 0;
+      }
+
+      h1 {
+        font-size: clamp(28px, 3vw, 40px);
+        margin: 0;
+      }
+
+      .subtitle {
+        margin: 0;
+        color: var(--muted);
+        font-size: 16px;
+      }
+
+      .card {
+        background: var(--card);
+        border-radius: 20px;
+        padding: 24px;
+        box-shadow: var(--shadow);
+        border: 1px solid rgba(215, 220, 231, 0.6);
+      }
+
+      .form {
+        display: grid;
+        gap: 16px;
+      }
+
+      .field {
+        display: grid;
+        gap: 8px;
+      }
+
+      label,
+      legend {
+        font-weight: 600;
+        font-size: 14px;
+      }
+
+      input,
+      select,
+      textarea {
+        font: inherit;
+        padding: 12px 14px;
+        border-radius: 12px;
+        border: 1px solid var(--border);
+        background: #fff;
+      }
+
+      select[multiple] {
+        min-height: 120px;
+      }
+
+      small {
+        color: var(--muted);
+        font-size: 12px;
+      }
+
+      .inline-options {
+        display: grid;
+        gap: 8px;
+      }
+
+      .option {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        background: #f8f9fc;
+        padding: 10px 12px;
+        border-radius: 12px;
+        border: 1px solid transparent;
+      }
+
+      .option input:checked + span,
+      .option input:checked {
+        accent-color: var(--primary);
+      }
+
+      .actions {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 12px;
+      }
+
+      button {
+        font: inherit;
+        border: none;
+        border-radius: 999px;
+        padding: 12px 20px;
+        cursor: pointer;
+        font-weight: 600;
+      }
+
+      .primary {
+        background: var(--primary);
+        color: #fff;
+      }
+
+      .primary:hover {
+        background: var(--primary-dark);
+      }
+
+      .secondary {
+        background: #e8efff;
+        color: var(--primary-dark);
+      }
+
+      .ghost {
+        background: transparent;
+        border: 1px solid var(--border);
+        color: var(--muted);
+      }
+
+      .output {
+        display: grid;
+        gap: 16px;
+      }
+
+      .output-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        gap: 12px;
+      }
+
+      textarea {
+        width: 100%;
+        resize: vertical;
+        min-height: 180px;
+      }
+
+      .status {
+        margin: 0;
+        color: var(--primary-dark);
+        font-weight: 600;
+      }
+
+      @media (min-width: 900px) {
+        .container {
+          grid-template-columns: repeat(2, minmax(0, 1fr));
+        }
+
+        .header {
+          grid-column: 1 / -1;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <main class="container">
+      <header class="header">
+        <p class="eyebrow">Perfil de inversión</p>
+        <h1>Generador de perfil de inversor o trader</h1>
+        <p class="subtitle">
+          Completa el formulario y genera un texto listo para copiar con tu perfil.
+        </p>
+      </header>
+
+      <section class="card">
+        <form id="profile-form" class="form">
+          <div class="field">
+            <label for="name">Nombre o alias</label>
+            <input id="name" name="name" type="text" placeholder="Ej: Sofía" required />
+          </div>
+
+          <div class="field">
+            <label for="experience">Nivel de experiencia</label>
+            <select id="experience" name="experience" required>
+              <option value="" selected disabled>Selecciona una opción</option>
+              <option value="Institucional / patrimonial">
+                Institucional / patrimonial
+              </option>
+              <option value="Profesional / cuantitativo">
+                Profesional / cuantitativo
+              </option>
+              <option value="Avanzado / gestor activo">
+                Avanzado / gestor activo
+              </option>
+              <option value="Intermedio / inversor estratégico">
+                Intermedio / inversor estratégico
+              </option>
+              <option value="Básico / conservador estructurado">
+                Básico / conservador estructurado
+              </option>
+            </select>
+          </div>
+
+          <div class="field">
+            <label for="horizon">Horizonte de inversión</label>
+            <select id="horizon" name="horizon" required>
+              <option value="" selected disabled>Selecciona una opción</option>
+              <option value="Muy corto plazo - Scalping / HFT">
+                Muy corto plazo – Scalping / HFT
+              </option>
+              <option value="Corto plazo - Day Trading">Corto plazo – Day Trading</option>
+              <option value="Corto-mediano plazo - Swing Trading">
+                Corto–mediano plazo – Swing Trading
+              </option>
+              <option value="Mediano plazo - Position Trading">
+                Mediano plazo – Position Trading
+              </option>
+              <option value="Largo plazo - Trend Following">
+                Largo plazo – Trend Following
+              </option>
+              <option value="Muy largo plazo - Buy and Hold">
+                Muy largo plazo – Buy and Hold
+              </option>
+            </select>
+          </div>
+
+          <fieldset class="field">
+            <legend>Objetivo principal</legend>
+            <div class="inline-options">
+              <label class="option">
+                <input type="checkbox" name="goals[]" value="Crecer capital" />
+                <span>Crecer capital</span>
+              </label>
+
+              <label class="option">
+                <input type="checkbox" name="goals[]" value="Generar ingresos" />
+                <span>Generar ingresos</span>
+              </label>
+
+              <label class="option">
+                <input type="checkbox" name="goals[]" value="Preservar patrimonio" />
+                <span>Preservar patrimonio</span>
+              </label>
+
+              <label class="option">
+                <input type="checkbox" name="goals[]" value="Batir al mercado (Alpha)" />
+                <span>Batir al mercado (Alpha)</span>
+              </label>
+
+              <label class="option">
+                <input type="checkbox" name="goals[]" value="Reducir volatilidad" />
+                <span>Reducir volatilidad</span>
+              </label>
+
+              <label class="option">
+                <input type="checkbox" name="goals[]" value="Proteger contra inflación" />
+                <span>Proteger contra inflación</span>
+              </label>
+
+              <label class="option">
+                <input type="checkbox" name="goals[]" value="Diversificar riesgo" />
+                <span>Diversificar riesgo</span>
+              </label>
+
+              <label class="option">
+                <input type="checkbox" name="goals[]" value="Flujo de caja recurrente" />
+                <span>Flujo de caja recurrente</span>
+              </label>
+
+              <label class="option">
+                <input type="checkbox" name="goals[]" value="Cobertura (Hedging)" />
+                <span>Cobertura (Hedging)</span>
+              </label>
+
+              <label class="option">
+                <input type="checkbox" name="goals[]" value="Especulación táctica" />
+                <span>Especulación táctica</span>
+              </label>
+
+              <label class="option">
+                <input type="checkbox" name="goals[]" value="Optimización fiscal" />
+                <span>Optimización fiscal</span>
+              </label>
+
+              <label class="option">
+                <input type="checkbox" name="goals[]" value="Protección ante crisis" />
+                <span>Protección ante crisis</span>
+              </label>
+            </div>
+          </fieldset>
+
+          <div class="field">
+            <label for="risk">Tolerancia al riesgo</label>
+            <select id="risk" name="risk" required>
+              <option value="" selected disabled>Selecciona una opción</option>
+              <option value="Muy alta">Muy alta</option>
+              <option value="Alta">Alta</option>
+              <option value="Media">Media</option>
+              <option value="Baja">Baja</option>
+              <option value="Muy baja">Muy baja</option>
+            </select>
+          </div>
+
+          <fieldset class="field">
+            <legend>Mercados preferidos</legend>
+            <div class="inline-options">
+              <label class="option">
+                <input type="checkbox" name="assets[]" value="Acciones" />
+                <span>Acciones</span>
+              </label>
+
+              <label class="option">
+                <input type="checkbox" name="assets[]" value="ETF" />
+                <span>ETF</span>
+              </label>
+
+              <label class="option">
+                <input type="checkbox" name="assets[]" value="Índices" />
+                <span>Índices</span>
+              </label>
+
+              <label class="option">
+                <input type="checkbox" name="assets[]" value="Opciones" />
+                <span>Opciones</span>
+              </label>
+
+              <label class="option">
+                <input type="checkbox" name="assets[]" value="Futuros" />
+                <span>Futuros</span>
+              </label>
+
+              <label class="option">
+                <input type="checkbox" name="assets[]" value="Forex" />
+                <span>Forex</span>
+              </label>
+
+              <label class="option">
+                <input type="checkbox" name="assets[]" value="Materias primas" />
+                <span>Materias primas</span>
+              </label>
+
+              <label class="option">
+                <input type="checkbox" name="assets[]" value="Metales preciosos" />
+                <span>Metales preciosos</span>
+              </label>
+
+              <label class="option">
+                <input type="checkbox" name="assets[]" value="Energía" />
+                <span>Energía</span>
+              </label>
+
+              <label class="option">
+                <input type="checkbox" name="assets[]" value="Bonos / Renta fija" />
+                <span>Bonos / Renta fija</span>
+              </label>
+
+              <label class="option">
+                <input type="checkbox" name="assets[]" value="REITs" />
+                <span>REITs</span>
+              </label>
+
+              <label class="option">
+                <input type="checkbox" name="assets[]" value="CFDs" />
+                <span>CFDs</span>
+              </label>
+
+              <label class="option">
+                <input type="checkbox" name="assets[]" value="Criptomonedas" />
+                <span>Criptomonedas</span>
+              </label>
+            </div>
+          </fieldset>
+
+          <div class="field">
+            <label for="capital">Capital destinado</label>
+            <input
+              id="capital"
+              name="capital"
+              type="text"
+              placeholder="Ej: 5.000 USD"
+              required
+            />
+          </div>
+
+          <div class="field">
+            <label for="frequency">Frecuencia de operación</label>
+            <select id="frequency" name="frequency" required>
+              <option value="" selected disabled>Selecciona una opción</option>
+              <option value="Intradía">Intradía</option>
+              <option value="Diaria">Diaria</option>
+              <option value="Semanal">Semanal</option>
+              <option value="Quincenal">Quincenal</option>
+              <option value="Mensual">Mensual</option>
+              <option value="Por señal / oportunidades">Por señal / oportunidades</option>
+            </select>
+          </div>
+
+          <div class="field">
+            <label for="brokers">Brokers</label>
+            <input
+              id="brokers"
+              name="brokers"
+              type="text"
+              placeholder="Ej: Interactive Brokers, TD Ameritrade"
+              required
+            />
+          </div>
+
+          <fieldset class="field">
+            <legend>Estilo que usas</legend>
+            <div class="inline-options">
+              <label class="option">
+                <input type="checkbox" name="style" value="High-Frequency Trading (HFT)" />
+                <span>High-Frequency Trading (HFT)</span>
+              </label>
+              <label class="option">
+                <input type="checkbox" name="style" value="Algorithmic Trading" />
+                <span>Algorithmic Trading</span>
+              </label>
+              <label class="option">
+                <input type="checkbox" name="style" value="Quantitative Trading" />
+                <span>Quantitative Trading</span>
+              </label>
+              <label class="option">
+                <input type="checkbox" name="style" value="Arbitrage Trading" />
+                <span>Arbitrage Trading</span>
+              </label>
+              <label class="option">
+                <input type="checkbox" name="style" value="Pairs Trading" />
+                <span>Pairs Trading</span>
+              </label>
+              <label class="option">
+                <input type="checkbox" name="style" value="Options Trading" />
+                <span>Options Trading</span>
+              </label>
+              <label class="option">
+                <input type="checkbox" name="style" value="Futures Trading" />
+                <span>Futures Trading</span>
+              </label>
+              <label class="option">
+                <input type="checkbox" name="style" value="Day Trading" />
+                <span>Day Trading</span>
+              </label>
+              <label class="option">
+                <input type="checkbox" name="style" value="Scalping" />
+                <span>Scalping</span>
+              </label>
+              <label class="option">
+                <input type="checkbox" name="style" value="Swing Trading" />
+                <span>Swing Trading</span>
+              </label>
+              <label class="option">
+                <input type="checkbox" name="style" value="Position Trading" />
+                <span>Position Trading</span>
+              </label>
+              <label class="option">
+                <input type="checkbox" name="style" value="Trend Following" />
+                <span>Trend Following</span>
+              </label>
+              <label class="option">
+                <input type="checkbox" name="style" value="Mean Reversion" />
+                <span>Mean Reversion</span>
+              </label>
+              <label class="option">
+                <input type="checkbox" name="style" value="Range Trading" />
+                <span>Range Trading</span>
+              </label>
+              <label class="option">
+                <input type="checkbox" name="style" value="Momentum Trading" />
+                <span>Momentum Trading</span>
+              </label>
+              <label class="option">
+                <input type="checkbox" name="style" value="Breakout Trading" />
+                <span>Breakout Trading</span>
+              </label>
+              <label class="option">
+                <input type="checkbox" name="style" value="News Trading" />
+                <span>News Trading</span>
+              </label>
+              <label class="option">
+                <input type="checkbox" name="style" value="Event-Driven Trading" />
+                <span>Event-Driven Trading</span>
+              </label>
+            </div>
+          </fieldset>
+
+          <fieldset class="field">
+            <legend>Mercados geográficos</legend>
+            <div class="inline-options">
+              <label class="option">
+                <input
+                  type="checkbox"
+                  name="regions"
+                  value="Mercados Emergentes (EM)"
+                />
+                <span>Mercados Emergentes (EM)</span>
+              </label>
+              <label class="option">
+                <input
+                  type="checkbox"
+                  name="regions"
+                  value="Mercados Frontera (FM)"
+                />
+                <span>Mercados Frontera (FM)</span>
+              </label>
+              <label class="option">
+                <input
+                  type="checkbox"
+                  name="regions"
+                  value="Mercados Desarrollados (DM)"
+                />
+                <span>Mercados Desarrollados (DM)</span>
+              </label>
+              <label class="option">
+                <input type="checkbox" name="regions" value="BRICS" />
+                <span>BRICS</span>
+              </label>
+              <label class="option">
+                <input type="checkbox" name="regions" value="MENA" />
+                <span>MENA</span>
+              </label>
+              <label class="option">
+                <input type="checkbox" name="regions" value="LATAM" />
+                <span>LATAM</span>
+              </label>
+              <label class="option">
+                <input type="checkbox" name="regions" value="APAC" />
+                <span>APAC</span>
+              </label>
+              <label class="option">
+                <input type="checkbox" name="regions" value="EEMEA" />
+                <span>EEMEA</span>
+              </label>
+              <label class="option">
+                <input type="checkbox" name="regions" value="MSCI" />
+                <span>MSCI</span>
+              </label>
+              <label class="option">
+                <input type="checkbox" name="regions" value="FTSE Russell" />
+                <span>FTSE Russell</span>
+              </label>
+              <label class="option">
+                <input type="checkbox" name="regions" value="S&P Dow Jones Indices" />
+                <span>S&P Dow Jones Indices</span>
+              </label>
+              <label class="option">
+                <input type="checkbox" name="regions" value="G7" />
+                <span>G7</span>
+              </label>
+              <label class="option">
+                <input type="checkbox" name="regions" value="G20" />
+                <span>G20</span>
+              </label>
+            </div>
+          </fieldset>
+
+          <div class="actions">
+            <button type="submit" class="primary">Generar perfil</button>
+            <button type="button" id="reset" class="ghost">Limpiar</button>
+          </div>
+        </form>
+      </section>
+
+      <section class="card output" aria-live="polite">
+        <div class="output-header">
+          <h2>Perfil generado</h2>
+          <button id="copy" class="secondary" type="button" disabled>
+            Copiar texto
+          </button>
+        </div>
+        <textarea
+          id="result"
+          rows="8"
+          placeholder="Completa el formulario para ver tu perfil aquí."
+          readonly
+        ></textarea>
+        <p id="status" class="status" role="status"></p>
+      </section>
+    </main>
+
+    <script>
+      const form = document.querySelector("#profile-form");
+      const result = document.querySelector("#result");
+      const copyButton = document.querySelector("#copy");
+      const resetButton = document.querySelector("#reset");
+      const status = document.querySelector("#status");
+
+      const formatter = new Intl.ListFormat("es", {
+        style: "long",
+        type: "conjunction",
+      });
+
+      const buildProfileText = (data) => {
+        const assets = data.assets.length
+          ? formatter.format(data.assets)
+          : "mercados por definir";
+
+        const role =
+          data.horizon === "Corto plazo" || data.frequency === "Diaria"
+            ? "trader"
+            : "inversor";
+
+        const regions = data.regions.length
+          ? formatter.format(data.regions)
+          : "regiones por definir";
+        const styles = data.styles.length
+          ? formatter.format(data.styles)
+          : "estilos por definir";
+        const hasGoals = data.goals.length > 0;
+        const goals = hasGoals
+          ? formatter.format(data.goals)
+          : "objetivo por definir";
+        const goalLabel =
+          data.goals.length > 1 ? "objetivos principales" : "objetivo principal";
+
+        return `Hola, soy ${data.name}. Tengo un perfil de ${role} ${data.experience.toLowerCase()}, con ${goalLabel} de ${goals}. Mi tolerancia al riesgo es ${data.risk.toLowerCase()} y mi horizonte es de ${data.horizon.toLowerCase()}. Prefiero operar en ${assets} y en mercados geográficos de ${regions}. Uso estilos como ${styles} con un capital estimado de ${data.capital}. Mis brokers son ${data.brokers}. Mi frecuencia de operación es ${data.frequency.toLowerCase()}.`;
+      };
+
+      form.addEventListener("submit", (event) => {
+        event.preventDefault();
+        status.textContent = "";
+
+        const formData = new FormData(form);
+        const data = {
+          name: formData.get("name").trim(),
+          experience: formData.get("experience"),
+          horizon: formData.get("horizon"),
+          goals: formData.getAll("goals[]"),
           risk: formData.get("risk"),
           assets: formData.getAll("assets"),
           capital: formData.get("capital").trim(),
