@@ -1,0 +1,388 @@
+<!DOCTYPE html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Perfil de Inversor o Trader</title>
+    <style>
+      :root {
+        color-scheme: light;
+        font-family: "Inter", "Segoe UI", system-ui, sans-serif;
+        --bg: #f5f7fb;
+        --card: #ffffff;
+        --text: #1d2433;
+        --muted: #5c6474;
+        --primary: #2b6ef5;
+        --primary-dark: #1b4fb8;
+        --border: #d7dce7;
+        --shadow: 0 18px 45px rgba(23, 36, 64, 0.12);
+      }
+
+      * {
+        box-sizing: border-box;
+      }
+
+      body {
+        margin: 0;
+        background: var(--bg);
+        color: var(--text);
+      }
+
+      .container {
+        max-width: 1100px;
+        margin: 0 auto;
+        padding: 48px 20px 80px;
+        display: grid;
+        gap: 24px;
+      }
+
+      .header {
+        text-align: center;
+        display: grid;
+        gap: 12px;
+      }
+
+      .eyebrow {
+        text-transform: uppercase;
+        letter-spacing: 2px;
+        font-size: 12px;
+        color: var(--primary);
+        font-weight: 600;
+        margin: 0;
+      }
+
+      h1 {
+        font-size: clamp(28px, 3vw, 40px);
+        margin: 0;
+      }
+
+      .subtitle {
+        margin: 0;
+        color: var(--muted);
+        font-size: 16px;
+      }
+
+      .card {
+        background: var(--card);
+        border-radius: 20px;
+        padding: 24px;
+        box-shadow: var(--shadow);
+        border: 1px solid rgba(215, 220, 231, 0.6);
+      }
+
+      .form {
+        display: grid;
+        gap: 16px;
+      }
+
+      .field {
+        display: grid;
+        gap: 8px;
+      }
+
+      label,
+      legend {
+        font-weight: 600;
+        font-size: 14px;
+      }
+
+      input,
+      select,
+      textarea {
+        font: inherit;
+        padding: 12px 14px;
+        border-radius: 12px;
+        border: 1px solid var(--border);
+        background: #fff;
+      }
+
+      select[multiple] {
+        min-height: 120px;
+      }
+
+      small {
+        color: var(--muted);
+        font-size: 12px;
+      }
+
+      .inline-options {
+        display: grid;
+        gap: 8px;
+      }
+
+      .option {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        background: #f8f9fc;
+        padding: 10px 12px;
+        border-radius: 12px;
+        border: 1px solid transparent;
+      }
+
+      .option input:checked + span,
+      .option input:checked {
+        accent-color: var(--primary);
+      }
+
+      .actions {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 12px;
+      }
+
+      button {
+        font: inherit;
+        border: none;
+        border-radius: 999px;
+        padding: 12px 20px;
+        cursor: pointer;
+        font-weight: 600;
+      }
+
+      .primary {
+        background: var(--primary);
+        color: #fff;
+      }
+
+      .primary:hover {
+        background: var(--primary-dark);
+      }
+
+      .secondary {
+        background: #e8efff;
+        color: var(--primary-dark);
+      }
+
+      .ghost {
+        background: transparent;
+        border: 1px solid var(--border);
+        color: var(--muted);
+      }
+
+      .output {
+        display: grid;
+        gap: 16px;
+      }
+
+      .output-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        gap: 12px;
+      }
+
+      textarea {
+        width: 100%;
+        resize: vertical;
+        min-height: 180px;
+      }
+
+      .status {
+        margin: 0;
+        color: var(--primary-dark);
+        font-weight: 600;
+      }
+
+      @media (min-width: 900px) {
+        .container {
+          grid-template-columns: repeat(2, minmax(0, 1fr));
+        }
+
+        .header {
+          grid-column: 1 / -1;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <main class="container">
+      <header class="header">
+        <p class="eyebrow">Perfil de inversión</p>
+        <h1>Generador de perfil de inversor o trader</h1>
+        <p class="subtitle">
+          Completa el formulario y genera un texto listo para copiar con tu perfil.
+        </p>
+      </header>
+
+      <section class="card">
+        <form id="profile-form" class="form">
+          <div class="field">
+            <label for="name">Nombre o alias</label>
+            <input id="name" name="name" type="text" placeholder="Ej: Sofía" required />
+          </div>
+
+          <div class="field">
+            <label for="experience">Nivel de experiencia</label>
+            <select id="experience" name="experience" required>
+              <option value="" selected disabled>Selecciona una opción</option>
+              <option value="Principiante">Principiante</option>
+              <option value="Intermedio">Intermedio</option>
+              <option value="Avanzado">Avanzado</option>
+            </select>
+          </div>
+
+          <div class="field">
+            <label for="horizon">Horizonte de inversión</label>
+            <select id="horizon" name="horizon" required>
+              <option value="" selected disabled>Selecciona una opción</option>
+              <option value="Corto plazo">Corto plazo</option>
+              <option value="Mediano plazo">Mediano plazo</option>
+              <option value="Largo plazo">Largo plazo</option>
+            </select>
+          </div>
+
+          <fieldset class="field">
+            <legend>Objetivo principal</legend>
+            <div class="inline-options">
+              <label class="option">
+                <input type="radio" name="goal" value="Crecer capital" required />
+                <span>Crecer capital</span>
+              </label>
+              <label class="option">
+                <input type="radio" name="goal" value="Generar ingresos" required />
+                <span>Generar ingresos</span>
+              </label>
+              <label class="option">
+                <input type="radio" name="goal" value="Preservar patrimonio" required />
+                <span>Preservar patrimonio</span>
+              </label>
+            </div>
+          </fieldset>
+
+          <div class="field">
+            <label for="risk">Tolerancia al riesgo</label>
+            <select id="risk" name="risk" required>
+              <option value="" selected disabled>Selecciona una opción</option>
+              <option value="Baja">Baja</option>
+              <option value="Media">Media</option>
+              <option value="Alta">Alta</option>
+            </select>
+          </div>
+
+          <div class="field">
+            <label for="assets">Mercados preferidos</label>
+            <select id="assets" name="assets" multiple required>
+              <option value="Acciones">Acciones</option>
+              <option value="ETF">ETF</option>
+              <option value="Criptomonedas">Criptomonedas</option>
+              <option value="Forex">Forex</option>
+              <option value="Materias primas">Materias primas</option>
+            </select>
+            <small>Selecciona uno o varios manteniendo presionada la tecla Ctrl o Cmd.</small>
+          </div>
+
+          <div class="field">
+            <label for="capital">Capital destinado</label>
+            <input
+              id="capital"
+              name="capital"
+              type="text"
+              placeholder="Ej: 5.000 USD"
+              required
+            />
+          </div>
+
+          <div class="field">
+            <label for="frequency">Frecuencia de operación</label>
+            <select id="frequency" name="frequency" required>
+              <option value="" selected disabled>Selecciona una opción</option>
+              <option value="Diaria">Diaria</option>
+              <option value="Semanal">Semanal</option>
+              <option value="Mensual">Mensual</option>
+              <option value="Solo cuando hay oportunidades">Solo cuando hay oportunidades</option>
+            </select>
+          </div>
+
+          <div class="actions">
+            <button type="submit" class="primary">Generar perfil</button>
+            <button type="button" id="reset" class="ghost">Limpiar</button>
+          </div>
+        </form>
+      </section>
+
+      <section class="card output" aria-live="polite">
+        <div class="output-header">
+          <h2>Perfil generado</h2>
+          <button id="copy" class="secondary" type="button" disabled>
+            Copiar texto
+          </button>
+        </div>
+        <textarea
+          id="result"
+          rows="8"
+          placeholder="Completa el formulario para ver tu perfil aquí."
+          readonly
+        ></textarea>
+        <p id="status" class="status" role="status"></p>
+      </section>
+    </main>
+
+    <script>
+      const form = document.querySelector("#profile-form");
+      const result = document.querySelector("#result");
+      const copyButton = document.querySelector("#copy");
+      const resetButton = document.querySelector("#reset");
+      const status = document.querySelector("#status");
+
+      const formatter = new Intl.ListFormat("es", {
+        style: "long",
+        type: "conjunction",
+      });
+
+      const buildProfileText = (data) => {
+        const assets = data.assets.length
+          ? formatter.format(data.assets)
+          : "mercados por definir";
+
+        const role =
+          data.horizon === "Corto plazo" || data.frequency === "Diaria"
+            ? "trader"
+            : "inversor";
+
+        return `Hola, soy ${data.name}. Tengo un perfil de ${role} ${data.experience.toLowerCase()}, con un objetivo principal de ${data.goal}. Mi tolerancia al riesgo es ${data.risk.toLowerCase()} y mi horizonte es de ${data.horizon.toLowerCase()}. Prefiero operar en ${assets}, con un capital estimado de ${data.capital}. Mi frecuencia de operación es ${data.frequency.toLowerCase()}.`;
+      };
+
+      form.addEventListener("submit", (event) => {
+        event.preventDefault();
+        status.textContent = "";
+
+        const formData = new FormData(form);
+        const data = {
+          name: formData.get("name").trim(),
+          experience: formData.get("experience"),
+          horizon: formData.get("horizon"),
+          goal: formData.get("goal"),
+          risk: formData.get("risk"),
+          assets: formData.getAll("assets"),
+          capital: formData.get("capital").trim(),
+          frequency: formData.get("frequency"),
+        };
+
+        const profileText = buildProfileText(data);
+        result.value = profileText;
+        copyButton.disabled = false;
+        status.textContent = "Perfil generado. Puedes copiarlo cuando quieras.";
+      });
+
+      resetButton.addEventListener("click", () => {
+        form.reset();
+        result.value = "";
+        copyButton.disabled = true;
+        status.textContent = "Formulario limpiado.";
+      });
+
+      copyButton.addEventListener("click", async () => {
+        if (!result.value) return;
+
+        try {
+          await navigator.clipboard.writeText(result.value);
+          status.textContent = "Texto copiado al portapapeles.";
+        } catch (error) {
+          status.textContent =
+            "No se pudo copiar automáticamente. Selecciona el texto y copia manualmente.";
+        }
+      });
+    </script>
+  </body>
+</html>
