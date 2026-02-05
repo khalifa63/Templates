@@ -179,7 +179,52 @@
     const profileInput = document.getElementById("profile");
     const resultOutput = document.getElementById("result");
     const status = document.getElementById("status");
-    const template = (profile) => `Eres un gestor de portafolios cuantitativo con 20+ años de experiencia en equity markets, especializado en swing trading y momentum strategies.\n\n**TAREA**: Genera una tabla de diversificación de portafolio profesional adaptada al siguiente perfil de trader:\n\n**PERFIL**:\n"${profile}"\n\n**CRITERIOS DE DISEÑO** (AJUSTA PESOS SEGÚN PERFIL):\n1. **Riesgo alto**: overweight Tech/Energía/Financiero (50%+), beta >1.2, volatilidad diaria\n2. **Riesgo bajo**: overweight Salud/Utilidades/Consumo Básico (40%+), beta <0.9, dividendos\n3. **Corto plazo/diario**: 3+ tickers por sector, alta liquidez, volumen spikes\n4. **Mediano plazo**: 1-2 tickers/sector, dividendos + crecimiento\n5. **DM exclusivo**: S&P500, Nasdaq100, Dow Jones leaders\n6. **EM/LATAM**: overweight commodities, bancos locales, consumer growth\n\n**FORMATO EXACTO - TABLA markdown**:\n| Sector (GICS) | Subsector | Mercado | % Portafolio | Tickers | N° Tickers | Distribución Mercados | Instrumento |\n|---------------|-----------|---------|-------------|---------|------------|----------------------|-------------|\n{[FILAS OPTIMIZADAS]}\n\n**REGLAS**:\n- Capital: $[CAPITAL] USD distribuido (muestra $ amounts)\n- Total tickers: 18-25 máximo\n- 100% DM si especificado; diversifica si EM/LATAM\n- Tickers: Líquidos en XTB, volumen >1M shares/día\n- Top 3 sectores ≥45% siempre\n- Acciones individuales (no ETF) si especificado\n- Distribución mercados suma 100% por fila\n\n**OUTPUT**:\n1. 1 párrafo intro contextualizando ajustes por perfil\n2. TABLA completa \n3. 1 línea resumen: "Total tickers: X. Distribución mercados: Y%. Reglas: Z% riesgo/trade, rebalance [FREQ]."\n\n**EJEMPLO RÁPIDO** (riesgo alto/DM/acciones):\n| Tecnología | Semiconductors | DM/S&P | 30% ($1200) | NVDA,AMD,TSM | 3 | DM:100% | Acciones |`;
+    const template = (profile) => `Eres un **gestor de portafolios cuantitativo institucional (20+ años)** en equity markets, especializado en **swing trading y momentum**. Debes construir una **tabla de diversificación profesional** basada en el perfil del trader, priorizando **calidad de ejecución** y evitando sobreoperar.
+
+## INPUT (PERFIL DEL TRADER)
+{PEGA_AQUÍ_EL_PERFIL_EN_TEXTO}
+
+## REGLAS INSTITUCIONALES (ANTI-SOBREOPERACIÓN)
+1) **Total tickers (PORTAFOLIO)**: objetivo **10–14** (máximo 16).  
+   - Si capital < $10k → preferir **10–12** tickers.
+   - Si frecuencia diaria → mantener **8–12 posiciones activas simultáneas** (aunque el portafolio tenga 10–14).
+2) **Top 3 sectores ≥45%** SIEMPRE (y ajusta según riesgo: alto/bajo).
+3) **Por sector**:
+   - Si frecuencia diaria/corto plazo → **2–3 tickers por sector** (NO más).
+   - Si mediano plazo → **1–2 tickers por sector**.
+4) **Instrumento**:
+   - Por defecto: **Acciones individuales**.
+   - Solo usar ETF si el perfil lo pide explícitamente.
+5) **Mercados**:
+   - Si perfil dice “DM exclusivo” → 100% DM.
+   - Si perfil incluye EM/LATAM → asignación 10–35% EM según riesgo y estilo (commodities/bancos/consumer growth).
+   - En cada fila, “Distribución Mercados” debe sumar 100%.
+6) **Liquidez (en broker indicado)**: seleccionar tickers **altamente líquidos** (objetivo >1M shares/día en promedio) y con ejecución fácil para swing/momentum.
+7) **Capital**: distribuir exactamente el capital total y mostrar **% + $ amount** por fila.
+8) **Coherencia con el perfil**:
+   - Riesgo alto: overweight **Tech/Energía/Financiero** (≥50%), beta objetivo >1.2.
+   - Riesgo bajo: overweight **Salud/Utilidades/Consumo Básico** (≥40%), beta objetivo <0.9, sesgo dividendos.
+9) **No sobre-diversificar**: preferir menos nombres, más calidad, y rotación por momentum (watchlist separada NO solicitada aquí).
+
+## FORMATO EXACTO (TABLA Markdown)
+| Sector (GICS) | Subsector | Mercado | % Portafolio | Tickers | N° Tickers | Distribución Mercados | Instrumento |
+|---------------|-----------|---------|-------------|---------|------------|----------------------|-------------|
+{[FILAS OPTIMIZADAS]}
+
+## OUTPUT OBLIGATORIO
+1) 1 párrafo breve explicando cómo ajustaste pesos, mercados y número de tickers para el perfil.
+2) La tabla completa (markdown) cumpliendo todas las reglas.
+3) 1 línea final:
+"Total tickers: X. Distribución mercados: DM Y% / EM Z%. Reglas: riesgo por trade A% (por stop), rebalance B (frecuencia)."
+
+## CONTROL DE CALIDAD (ANTES DE RESPONDER)
+- ¿Total tickers está entre 10–14 (máx 16)?
+- ¿Top 3 sectores suman ≥45%?
+- ¿Cada fila suma 100% en Distribución Mercados?
+- ¿% y $ amounts suman 100% y capital total?
+- ¿2–3 tickers/sector si diario, 1–2 si mediano?
+- ¿Acciones (no ETF) salvo que el perfil diga lo contrario?
+`;
 
     document.getElementById("generate").addEventListener("click", () => {
       const profile = profileInput.value.trim();
