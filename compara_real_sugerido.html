@@ -5,130 +5,119 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Generador de Prompt Profesional</title>
 
-    <style>
-      :root {
-        color-scheme: light dark;
-        font-family: "Inter", "Segoe UI", system-ui, -apple-system, sans-serif;
-        background-color: #f4f6fb;
-        color: #1f2933;
-      }
+   <style>
+  :root {
+    font-family: "Inter", "Segoe UI", system-ui, -apple-system, sans-serif;
+    background-color: #f8fafc;
+    color: #1e293b;
+  }
 
-      body {
-        margin: 0;
-        padding: 32px 20px;
-        background: linear-gradient(135deg, #f4f6fb 0%, #eef1f8 100%);
-        min-height: 100vh;
-      }
+  body {
+    margin: 0;
+    padding: 32px 20px;
+    background: #f8fafc;
+    min-height: 100vh;
+  }
 
-      .container {
-        max-width: 900px;
-        margin: 0 auto;
-        background: #ffffff;
-        border-radius: 16px;
-        box-shadow: 0 18px 40px rgba(15, 23, 42, 0.12);
-        padding: 28px;
-      }
+  .container {
+    max-width: 900px;
+    margin: 0 auto;
+    background: #ffffff;
+    border-radius: 16px;
+    box-shadow: 0 10px 30px rgba(15, 23, 42, 0.08);
+    padding: 32px;
+  }
 
-      h1 {
-        margin-top: 0;
-        font-size: 1.6rem;
-      }
+  h1 {
+    margin-top: 0;
+    font-size: 1.6rem;
+    color: #0f172a;
+  }
 
-      p {
-        color: #52606d;
-      }
+  h3 {
+    margin-bottom: 8px;
+    color: #1e293b;
+  }
 
-      .section {
-        margin-top: 24px;
-      }
+  p {
+    color: #475569;
+    font-size: 0.95rem;
+  }
 
-      .box {
-        border: 1px solid #d9e2ec;
-        border-radius: 12px;
-        background: #f9fafb;
-        padding: 16px;
-      }
+  .section {
+    margin-top: 28px;
+  }
 
-      textarea {
-        width: 100%;
-        min-height: 180px;
-        border: none;
-        resize: vertical;
-        background: transparent;
-        font-size: 0.95rem;
-        line-height: 1.5;
-        color: inherit;
-      }
+  .box {
+    border: 1px solid #e2e8f0;
+    border-radius: 12px;
+    background: #f9fafb;
+    padding: 16px;
+  }
 
-      textarea:focus {
-        outline: none;
-      }
+  textarea {
+    width: 100%;
+    min-height: 180px;
+    border: none;
+    resize: vertical;
+    background: transparent;
+    font-size: 0.95rem;
+    line-height: 1.6;
+    color: #0f172a;
+  }
 
-      .actions {
-        display: flex;
-        gap: 12px;
-        margin-top: 20px;
-        flex-wrap: wrap;
-      }
+  textarea::placeholder {
+    color: #94a3b8;
+  }
 
-      button {
-        border: none;
-        padding: 10px 20px;
-        border-radius: 999px;
-        font-weight: 600;
-        cursor: pointer;
-        transition: all 0.2s ease;
-      }
+  textarea:focus {
+    outline: none;
+  }
 
-      button.primary {
-        background: #2563eb;
-        color: white;
-        box-shadow: 0 6px 16px rgba(37, 99, 235, 0.3);
-      }
+  .actions {
+    display: flex;
+    gap: 12px;
+    margin-top: 24px;
+    flex-wrap: wrap;
+  }
 
-      button.secondary {
-        background: #e2e8f0;
-      }
+  button {
+    border: none;
+    padding: 10px 22px;
+    border-radius: 999px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    font-size: 0.95rem;
+  }
 
-      button:hover {
-        transform: translateY(-1px);
-      }
+  button.primary {
+    background: #3b82f6;
+    color: #ffffff;
+    box-shadow: 0 6px 14px rgba(59, 130, 246, 0.25);
+  }
 
-      .status {
-        margin-top: 12px;
-        font-size: 0.9rem;
-        color: #0f766e;
-        min-height: 20px;
-      }
+  button.primary:hover {
+    background: #2563eb;
+  }
 
-      @media (prefers-color-scheme: dark) {
-        body {
-          background: linear-gradient(135deg, #0f172a 0%, #111827 100%);
-        }
+  button.secondary {
+    background: #f1f5f9;
+    color: #0f172a;
+  }
 
-        .container {
-          background: #111827;
-        }
+  button.secondary:hover {
+    background: #e2e8f0;
+  }
 
-        .box {
-          background: #0f172a;
-          border-color: #1f2937;
-        }
+  .status {
+    margin-top: 14px;
+    font-size: 0.9rem;
+    color: #0284c7;
+    min-height: 20px;
+  }
+</style>
 
-        button.secondary {
-          background: #1f2937;
-          color: #e2e8f0;
-        }
-
-        p {
-          color: #9aa4b2;
-        }
-
-        .status {
-          color: #5eead4;
-        }
-      }
-    </style>
   </head>
 
   <body>
