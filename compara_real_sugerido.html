@@ -3,7 +3,8 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Prompt para copiar</title>
+    <title>Generador de Prompt Profesional</title>
+
     <style>
       :root {
         color-scheme: light dark;
@@ -20,7 +21,7 @@
       }
 
       .container {
-        max-width: 880px;
+        max-width: 900px;
         margin: 0 auto;
         background: #ffffff;
         border-radius: 16px;
@@ -28,40 +29,35 @@
         padding: 28px;
       }
 
-      header {
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
-        gap: 16px;
-        flex-wrap: wrap;
-      }
-
       h1 {
-        font-size: 1.5rem;
-        margin: 0;
+        margin-top: 0;
+        font-size: 1.6rem;
       }
 
       p {
-        margin: 8px 0 20px;
         color: #52606d;
       }
 
-      .prompt-box {
+      .section {
+        margin-top: 24px;
+      }
+
+      .box {
         border: 1px solid #d9e2ec;
         border-radius: 12px;
         background: #f9fafb;
-        padding: 18px;
+        padding: 16px;
       }
 
       textarea {
         width: 100%;
-        min-height: 360px;
+        min-height: 180px;
         border: none;
         resize: vertical;
         background: transparent;
         font-size: 0.95rem;
         line-height: 1.5;
-        color: #1f2933;
+        color: inherit;
       }
 
       textarea:focus {
@@ -71,17 +67,17 @@
       .actions {
         display: flex;
         gap: 12px;
-        margin-top: 16px;
+        margin-top: 20px;
         flex-wrap: wrap;
       }
 
       button {
         border: none;
-        padding: 10px 18px;
+        padding: 10px 20px;
         border-radius: 999px;
         font-weight: 600;
         cursor: pointer;
-        transition: transform 0.2s ease, box-shadow 0.2s ease;
+        transition: all 0.2s ease;
       }
 
       button.primary {
@@ -92,52 +88,40 @@
 
       button.secondary {
         background: #e2e8f0;
-        color: #1f2933;
       }
 
       button:hover {
         transform: translateY(-1px);
-        box-shadow: 0 8px 18px rgba(37, 99, 235, 0.3);
       }
 
       .status {
+        margin-top: 12px;
         font-size: 0.9rem;
         color: #0f766e;
-        margin-top: 12px;
         min-height: 20px;
       }
 
       @media (prefers-color-scheme: dark) {
-        :root {
-          background-color: #0f172a;
-          color: #e2e8f0;
-        }
-
         body {
           background: linear-gradient(135deg, #0f172a 0%, #111827 100%);
         }
 
         .container {
           background: #111827;
-          box-shadow: 0 18px 40px rgba(0, 0, 0, 0.45);
         }
 
-        p {
-          color: #9aa4b2;
-        }
-
-        .prompt-box {
-          border-color: #1f2937;
+        .box {
           background: #0f172a;
-        }
-
-        textarea {
-          color: #e2e8f0;
+          border-color: #1f2937;
         }
 
         button.secondary {
           background: #1f2937;
           color: #e2e8f0;
+        }
+
+        p {
+          color: #9aa4b2;
         }
 
         .status {
@@ -146,156 +130,113 @@
       }
     </style>
   </head>
+
   <body>
     <div class="container">
-      <header>
-        <h1>Prompt profesional listo para copiar</h1>
-      </header>
+      <h1>Generador de Prompt — Rebalanceo Institucional</h1>
       <p>
-        Usa el botón para copiar el prompt completo al portapapeles y pegarlo donde
-        lo necesites.
+        Pega abajo el <strong>portafolio propuesto</strong>.  
+        Al generar, se incrusta automáticamente dentro del prompt profesional.
       </p>
-      <div class="prompt-box">
-        <textarea id="prompt" readonly></textarea>
+
+      <!-- INPUT PORTAFOLIO -->
+      <div class="section">
+        <h3>Portafolio propuesto (input)</h3>
+        <div class="box">
+          <textarea
+            id="portfolioInput"
+            placeholder="Ejemplo:
+AAPL $3,200
+MSFT $2,800
+XLE $1,500
+Cash $500"
+          ></textarea>
+        </div>
       </div>
+
+      <!-- PROMPT FINAL -->
+      <div class="section">
+        <h3>Prompt generado (listo para copiar)</h3>
+        <div class="box">
+          <textarea id="promptOutput" readonly></textarea>
+        </div>
+      </div>
+
+      <!-- ACTIONS -->
       <div class="actions">
-        <button class="primary" id="copy">Copiar prompt</button>
-        <button class="secondary" id="select">Seleccionar todo</button>
+        <button class="primary" id="generate">Generar prompt</button>
+        <button class="secondary" id="copy">Copiar prompt</button>
       </div>
-      <div class="status" id="status" aria-live="polite"></div>
+
+      <div class="status" id="status"></div>
     </div>
 
     <script>
-      const promptText = `PROMPT PROFESIONAL — REBALANCEO INSTITUCIONAL CON CAPITALIZACIÓN 
+      const basePrompt = `
+PROMPT PROFESIONAL — REBALANCEO INSTITUCIONAL CON CAPITALIZACIÓN
+
 Actúa como un gestor de portafolios cuantitativo institucional (20+ años en equity markets) especializado en:
 Asignación táctica sectorial
 Swing trading y momentum
 Control de riesgo y ejecución
 Selección por capitalización bursátil y liquidez
-Tu tarea es comparar un portafolio real vs. una distribución objetivo por sectores GICS y producir únicamente una tabla profesional de variaciones necesarias, incorporando además la clasificación óptima por capitalización de mercado según el perfil del trader.
 
-INPUTS
-Te proporcionaré:
-1) Portafolio actual
-Lista de tickers
-Valor de mercado por posición
-Capital total
-2) Distribución objetivo
-% por sector
-$ equivalente sobre el capital total
-3) Perfil del trader
+OBJETIVO
+Comparar un portafolio real vs. una distribución objetivo por sectores GICS y producir únicamente una tabla profesional de variaciones necesarias.
+
+PERFIL DEL TRADER
 Horizonte: swing / corto-mediano plazo
 Frecuencia: diaria
 Riesgo: alto
 Broker: XTB
 Mercados: DM + EM
 
-OBJETIVO DEL ANÁLISIS
-Calcular con estándar institucional:
-% real por sector del portafolio
-Diferencia vs. % objetivo
-Variación en puntos porcentuales
-Variación en USD sobre el capital total
-Acción operativa necesaria
-Capitalización recomendada para los nuevos tickers del sector
+PORTAFOLIO PROPUESTO (INPUT REAL)
+{{PORTFOLIO}}
 
-REGLAS PROFESIONALES
-1) Precisión matemática
+REGLAS
 % reales suman 100%
-Variaciones en $ netas suman 0
-2) Clasificación correcta
-Sectores bajo GICS
-Capitalización bursátil:
-Mega cap > $200B
-Large cap $10B–$200B
-Mid cap $2B–$10B
-Small/Micro < $2B
-3) Regla institucional para selección por capitalización (swing/momentum)
-Para sectores que requieran agregar 2–3 tickers:
-60–80% del peso → Mega/Large caps DM
-Máxima liquidez
-Spreads bajos
-Ejecución limpia en swing
-20–40% del peso → Large/Mid caps DM o EM líquidas
-Mayor beta y expansión de momentum
-0% en micro/small caps
-Evitar gaps, slippage y mala ejecución en XTB
-4) Enfoque institucional de salida
-Lenguaje técnico
-Sin narrativa
-Sin recomendaciones emocionales
-Solo tabla
+Variación $ neta = 0
+Solo tabla, sin narrativa
+Capitalización coherente con swing trading
+Liquidez alta (XTB compatible)
 
-FORMATO EXACTO DE SALIDA (OBLIGATORIO)
+FORMATO DE SALIDA
 Sector (GICS)
 Propuesto % ($)
 Actual % ($)
 Variación (pp)
 Variación $
 Acción
-Capitalización objetivo nuevos tickers
-…
-…
-…
-…
-…
-…
-…
+Capitalización objetivo
+`;
 
-
-
-DEFINICIÓN DE “ACCIÓN”
-Aumentar → subir peso en posiciones existentes
-Agregar → sector inexistente en el portafolio
-Reducir → sobreponderación
-Salir → exposición fuera del modelo
-
-CONTROL DE CALIDAD (ANTES DE RESPONDER)
-Verifica estrictamente:
-% actuales = 100%
-Variación $ neta = 0
-Coherencia % ↔ $
-Capitalización coherente con:
-Swing trading
-Liquidez >1M acciones/día
-Broker XTB
-Sin texto fuera de la tabla
-Si alguna condición falla → recalcula.`;
-
-      const textarea = document.getElementById("prompt");
+      const portfolioInput = document.getElementById("portfolioInput");
+      const promptOutput = document.getElementById("promptOutput");
       const status = document.getElementById("status");
-      const copyButton = document.getElementById("copy");
-      const selectButton = document.getElementById("select");
 
-      textarea.value = promptText;
+      document.getElementById("generate").addEventListener("click", () => {
+        const portfolioText = portfolioInput.value.trim();
 
-      const showStatus = (message) => {
-        status.textContent = message;
-        setTimeout(() => {
-          status.textContent = "";
-        }, 2400);
-      };
-
-      copyButton.addEventListener("click", async () => {
-        try {
-          await navigator.clipboard.writeText(promptText);
-          showStatus("Prompt copiado al portapapeles.");
-        } catch (error) {
-          textarea.focus();
-          textarea.select();
-          const success = document.execCommand("copy");
-          showStatus(
-            success
-              ? "Prompt copiado al portapapeles."
-              : "No se pudo copiar automáticamente."
-          );
+        if (!portfolioText) {
+          status.textContent = "Debes ingresar el portafolio propuesto.";
+          return;
         }
+
+        const finalPrompt = basePrompt.replace(
+          "{{PORTFOLIO}}",
+          portfolioText
+        );
+
+        promptOutput.value = finalPrompt;
+        status.textContent = "Prompt generado correctamente.";
       });
 
-      selectButton.addEventListener("click", () => {
-        textarea.focus();
-        textarea.select();
-        showStatus("Prompt seleccionado.");
+      document.getElementById("copy").addEventListener("click", async () => {
+        if (!promptOutput.value) return;
+
+        await navigator.clipboard.writeText(promptOutput.value);
+        status.textContent = "Prompt copiado al portapapeles.";
       });
     </script>
   </body>
