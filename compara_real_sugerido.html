@@ -166,7 +166,6 @@ PROMPT PROFESIONAL — REBALANCEO INSTITUCIONAL CON CAPITALIZACIÓN
 
 Actúa como un gestor de portafolios cuantitativo institucional (20+ años en equity markets) especializado en:
 Asignación táctica sectorial
-Swing trading y momentum
 Control de riesgo y ejecución
 Selección por capitalización bursátil y liquidez
 
@@ -190,14 +189,32 @@ Solo tabla, sin narrativa
 Capitalización coherente con swing trading
 Liquidez alta (XTB compatible)
 
-FORMATO DE SALIDA
-Sector (GICS)
-Propuesto % ($)
-Actual % ($)
-Variación (pp)
-Variación $
-Acción
-Capitalización objetivo
+REGLAS DE ANÁLISIS (OBLIGATORIAS)
+
+La suma de los % reales debe ser 100%
+
+La variación $ neta total debe ser = 0
+
+La distribución objetivo debe ser coherente con el perfil del usuario
+
+No sugerir instrumentos ilíquidos o no compatibles con el broker indicado
+
+Capitalización alineada a horizonte, riesgo y frecuencia operativa
+
+No narrativa, no explicaciones, no comentarios fuera de la tabla
+
+CRITERIOS DE CAPITALIZACIÓN (AJUSTABLES AL PERFIL)
+
+Large Cap: base estructural, liquidez, ejecución limpia
+
+Mid Cap: alpha y momentum, peso controlado
+
+Small Cap: solo táctico, acorde a riesgo y experiencia
+
+FORMATO DE SALIDA (ÚNICO RESULTADO)
+Sector (GICS)	Mercado (DM/EM)	Propuesto % ($)	Actual % ($)	Variación (pp)	Variación $	Acción	Capitalización objetivo
+
+⚠️ No incluir texto adicional fuera de la tabla.
 `;
 
       const portfolioInput = document.getElementById("portfolioInput");
