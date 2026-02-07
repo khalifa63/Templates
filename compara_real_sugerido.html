@@ -167,9 +167,42 @@ Control de riesgo y ejecución
 
 Selección por capitalización bursátil y liquidez
 
+PERFIL DEL USUARIO (INPUT OBLIGATORIO)
+
+Hola, soy {{NOMBRE}}.
+Tengo un perfil de {{NIVEL_TRADER}} (ej. avanzado / gestor activo), con objetivos principales de {{OBJETIVOS}} (ej. crecer capital, generar ingresos, diversificar riesgo).
+
+Tolerancia al riesgo: {{RIESGO}} (baja / media / alta)
+
+Horizonte operativo: {{HORIZONTE}} (ej. corto–mediano plazo / swing trading)
+
+Estilos operativos: {{ESTILOS}} (ej. swing trading, momentum trading)
+
+Instrumentos preferidos: {{INSTRUMENTOS}} (acciones, ETFs)
+
+Mercados geográficos: {{MERCADOS}} (DM / EM)
+
+Capital total estimado: {{CAPITAL_TOTAL}}
+
+Frecuencia de operación: {{FRECUENCIA}} (diaria / semanal)
+
+Broker(s): {{BROKER}}
+
+⚠️ Este perfil define y restringe:
+
+la distribución objetivo por sector
+
+la capitalización objetivo (Large / Mid / Small)
+
+el uso de acciones vs ETFs
+
+el peso relativo DM vs EM
+
+el nivel de concentración permitido
+
 OBJETIVO
 
-Comparar un portafolio real vs. una distribución objetivo por sectores GICS y producir únicamente una tabla profesional de variaciones necesarias.
+Comparar un portafolio real vs. una distribución objetivo por sectores GICS, coherente con el perfil del usuario, y producir únicamente una tabla profesional de variaciones necesarias.
 
 PORTAFOLIO PROPUESTO (INPUT REAL)
 
@@ -191,18 +224,17 @@ Instrumento (Acción / ETF)
 
 DEFINICIÓN DE LA TABLA (OBLIGATORIA)
 
-La tabla resultante debe construirse bajo un enfoque look-through institucional, asignando cada posición a sectores y subsectores GICS por exposición económica dominante, incluso cuando el ticker no pertenezca formalmente a dicho subsector.
+La tabla debe construirse bajo un enfoque look-through institucional, asignando cada posición a sectores y subsectores GICS por exposición económica dominante, incluso cuando el ticker no pertenezca formalmente a dicho subsector.
+
 Cuando aplique, se debe anotar explícitamente el ticker dominante que explica la exposición (ej. TSM – look-through).
 
-El resultado debe ser una única tabla profesional, sin narrativa ni comentarios adicionales, cumpliendo que la variación $ neta total sea igual a 0 y que la capitalización objetivo sea coherente con el perfil operativo del trader.
+El resultado debe ser una única tabla profesional, sin narrativa ni comentarios adicionales, cumpliendo que la variación $ neta total sea igual a 0 y que la capitalización objetivo sea coherente con el perfil del usuario.
 
 REGLAS
 
 La suma de los % reales debe ser 100%
 
 La variación $ neta total debe ser 0
-
-La distribución objetivo debe ser coherente con el perfil del usuario
 
 No sugerir instrumentos ilíquidos o no compatibles con el broker indicado
 
