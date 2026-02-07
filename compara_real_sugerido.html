@@ -134,11 +134,7 @@
         <div class="box">
           <textarea
             id="portfolioInput"
-            placeholder="Ejemplo:
-AAPL $3,200
-MSFT $2,800
-XLE $1,500
-Cash $500"
+            placeholder="Copia aqui el portafolio propuesto."
           ></textarea>
         </div>
       </div>
@@ -161,32 +157,50 @@ Cash $500"
     </div>
 
     <script>
-      const basePrompt = `
-PROMPT PROFESIONAL — REBALANCEO INSTITUCIONAL CON CAPITALIZACIÓN
+      const basePrompt = `PROMPT PROFESIONAL — REBALANCEO INSTITUCIONAL CON CAPITALIZACIÓN
 
 Actúa como un gestor de portafolios cuantitativo institucional (20+ años en equity markets) especializado en:
+
 Asignación táctica sectorial
+
 Control de riesgo y ejecución
+
 Selección por capitalización bursátil y liquidez
 
 OBJETIVO
+
 Comparar un portafolio real vs. una distribución objetivo por sectores GICS y producir únicamente una tabla profesional de variaciones necesarias.
 
 PORTAFOLIO PROPUESTO (INPUT REAL)
-{{PORTFOLIO}}
+
+Te proporcionaré una tabla con las siguientes columnas:
+
+Sector (GICS)
+
+Subsector
+
+Mercado (DM / EM)
+
+% Portafolio
+
+N° Tickers
+
+Distribución por mercado
+
+Instrumento (Acción / ETF)
+
+DEFINICIÓN DE LA TABLA (OBLIGATORIA)
+
+La tabla resultante debe construirse bajo un enfoque look-through institucional, asignando cada posición a sectores y subsectores GICS por exposición económica dominante, incluso cuando el ticker no pertenezca formalmente a dicho subsector.
+Cuando aplique, se debe anotar explícitamente el ticker dominante que explica la exposición (ej. TSM – look-through).
+
+El resultado debe ser una única tabla profesional, sin narrativa ni comentarios adicionales, cumpliendo que la variación $ neta total sea igual a 0 y que la capitalización objetivo sea coherente con el perfil operativo del trader.
 
 REGLAS
-% reales suman 100%
-Variación $ neta = 0
-Solo tabla, sin narrativa
-Capitalización coherente con swing trading
-Liquidez alta (XTB compatible)
-
-REGLAS DE ANÁLISIS (OBLIGATORIAS)
 
 La suma de los % reales debe ser 100%
 
-La variación $ neta total debe ser = 0
+La variación $ neta total debe ser 0
 
 La distribución objetivo debe ser coherente con el perfil del usuario
 
@@ -194,7 +208,7 @@ No sugerir instrumentos ilíquidos o no compatibles con el broker indicado
 
 Capitalización alineada a horizonte, riesgo y frecuencia operativa
 
-No narrativa, no explicaciones, no comentarios fuera de la tabla
+No narrativa, no explicaciones, no texto fuera de la tabla
 
 CRITERIOS DE CAPITALIZACIÓN (AJUSTABLES AL PERFIL)
 
@@ -205,7 +219,8 @@ Mid Cap: alpha y momentum, peso controlado
 Small Cap: solo táctico, acorde a riesgo y experiencia
 
 FORMATO DE SALIDA (ÚNICO RESULTADO)
-Sector (GICS)	Mercado (DM/EM)	Propuesto % ($)	Actual % ($)	Variación (pp)	Variación $	Acción	Capitalización objetivo
+
+| Sector (GICS) | Subsector | Mercado (DM/EM) | Tickers actuales | Propuesto % ($) | Actual % ($) | Variación (pp) | Variación $ | Acción | Capitalización objetivo |
 
 ⚠️ No incluir texto adicional fuera de la tabla.
 `;
