@@ -168,131 +168,71 @@
     </div>
 
     <script>
-      const basePrompt = `PROMPT PROFESIONAL — REBALANCEO INSTITUCIONAL CON CAPITALIZACIÓN
+  const basePrompt = `PROMPT PROFESIONAL — REBALANCEO INSTITUCIONAL CON CAPITALIZACIÓN
 
 Actúa como un gestor de portafolios cuantitativo institucional (20+ años en equity markets) especializado en:
-
 Asignación táctica sectorial
-
 Control de riesgo y ejecución
-
 Selección por capitalización bursátil y liquidez
 
 PERFIL DEL USUARIO (INPUT OBLIGATORIO)
 
-Hola, soy {{PERFIL DEL USUARIO}}.
+Hola, soy {{PERFIL_DEL_USUARIO}}.
 
 ⚠️ Este perfil define y restringe:
-
-la distribución objetivo por sector
-
-la capitalización objetivo (Large / Mid / Small)
-
-el uso de acciones vs ETFs
-
-el peso relativo DM vs EM
-
-el nivel de concentración permitido
+- la distribución objetivo por sector
+- la capitalización objetivo (Large / Mid / Small)
+- el uso de acciones vs ETFs
+- el peso relativo DM vs EM
+- el nivel de concentración permitido
 
 OBJETIVO
-
 Comparar un portafolio real vs. una distribución objetivo por sectores GICS, coherente con el perfil del usuario, y producir únicamente una tabla profesional de variaciones necesarias.
 
 PORTAFOLIO PROPUESTO (INPUT REAL)
 
-Distribucion propuesta:
-
 {{PORTFOLIO}}
 
-Te proporcionaré una tabla con las siguientes columnas:
-
-Sector (GICS)
-
-Subsector
-
-Mercado (DM / EM)
-
-% Portafolio
-
-N° Tickers
-
-Distribución por mercado
-
-Instrumento (Acción / ETF)
-
-DEFINICIÓN DE LA TABLA (OBLIGATORIA)
-
-La tabla debe construirse bajo un enfoque look-through institucional, asignando cada posición a sectores y subsectores GICS por exposición económica dominante, incluso cuando el ticker no pertenezca formalmente a dicho subsector.
-
-Cuando aplique, se debe anotar explícitamente el ticker dominante que explica la exposición (ej. TSM – look-through).
-
-El resultado debe ser una única tabla profesional, sin narrativa ni comentarios adicionales, cumpliendo que la variación $ neta total sea igual a 0 y que la capitalización objetivo sea coherente con el perfil del usuario.
-
-REGLAS
-
-La suma de los % reales debe ser 100%
-
-La variación $ neta total debe ser 0
-
-No sugerir instrumentos ilíquidos o no compatibles con el broker indicado
-
-Capitalización alineada a horizonte, riesgo y frecuencia operativa
-
-No narrativa, no explicaciones, no texto fuera de la tabla
-
-CRITERIOS DE CAPITALIZACIÓN (AJUSTABLES AL PERFIL)
-
-Large Cap: base estructural, liquidez, ejecución limpia
-
-Mid Cap: alpha y momentum, peso controlado
-
-Small Cap: solo táctico, acorde a riesgo y experiencia
-
 FORMATO DE SALIDA (ÚNICO RESULTADO)
-
 | Sector (GICS) | Subsector | Mercado (DM/EM) | Tickers actuales | Propuesto % ($) | Actual % ($) | Variación (pp) | Variación $ | Acción | Capitalización objetivo |
 
 ⚠️ No incluir texto adicional fuera de la tabla.
 `;
 
-      const portfolioInput = document.getElementById("portfolioInput");
-      const promptOutput = document.getElementById("promptOutput");
-      const status = document.getElementById("status");
-      const perfil = document.getElementById("perfil");
+  const perfilInput = document.getElementById("perfilInput");
+  const portfolioInput = document.getElementById("portfolioInput");
+  const promptOutput = document.getElementById("promptOutput");
+  const status = document.getElementById("status");
 
-      document.getElementById("generate").addEventListener("click", () => {
-        const portfolioText = portfolioInput.value.trim();
+  document.getElementById("generate").addEventListener("click", () => {
+    const perfilText = perfilInput.value.trim();
+    const portfolioText = portfolioInput.value.trim();
 
-        if (!perfil) {
-          status.textContent = "Debes ingresar el perfil del usuario.";
-          return;
-        }
-        
-        if (!portfolioText) {
-          status.textContent = "Debes ingresar el portafolio propuesto.";
-          return;
-        }
+    if (!perfilText) {
+      status.textContent = "Debes ingresar el perfil del usuario.";
+      return;
+    }
 
-        const finalPrompt = basePrompt.replace(
-          "{{PERFIL DEL USUARIO}}",
-          perfil
-        );
+    if (!portfolioText) {
+      status.textContent = "Debes ingresar el portafolio propuesto.";
+      return;
+    }
 
-        const finalPrompt = basePrompt.replace(
-          "{{PORTFOLIO}}",
-          portfolioText
-        );
+    let finalPrompt = basePrompt
+      .replace("{{PERFIL_DEL_USUARIO}}", perfilText)
+      .replace("{{PORTFOLIO}}", portfolioText);
 
-        promptOutput.value = finalPrompt;
-        status.textContent = "Prompt generado correctamente.";
-      });
+    promptOutput.value = finalPrompt;
+    status.textContent = "Prompt generado correctamente.";
+  });
 
-      document.getElementById("copy").addEventListener("click", async () => {
-        if (!promptOutput.value) return;
+  document.getElementById("copy").addEventListener("click", async () => {
+    if (!promptOutput.value) return;
 
-        await navigator.clipboard.writeText(promptOutput.value);
-        status.textContent = "Prompt copiado al portapapeles.";
-      });
-    </script>
+    await navigator.clipboard.writeText(promptOutput.value);
+    status.textContent = "Prompt copiado al portapapeles.";
+  });
+</script>
+
   </body>
 </html>
