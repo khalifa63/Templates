@@ -190,7 +190,42 @@ PORTAFOLIO PROPUESTO:
 El presupuesto real es la imagen suministrada.
 
 FORMATO DE SALIDA (ÚNICO RESULTADO)
-| Sector (GICS) | Subsector | Mercado (DM/EM) | Tickers actuales | Propuesto % ($) | Actual % ($) | Variación (pp) | Variación $ | Acción | Capitalización objetivo |
+Genera únicamente una tabla profesional sin texto adicional fuera de ella.
+
+Columnas obligatorias:
+
+Sector (GICS)
+Subsector
+Mercado (DM/EM)
+Tickers actuales
+Propuesto % ($)
+Actual % ($)
+Variación (pp)
+Variación $
+Acción
+Ticker objetivo
+Capitalización objetivo
+
+Reglas de la columna “Acción”:
+
+Crear → cuando el peso actual del sector es 0% y se requiere abrir nueva posición.
+
+Aumentar → cuando ya existe exposición y debe incrementarse para alcanzar el % objetivo.
+
+Reducir → cuando existe exposición superior al objetivo pero no es 0%.
+
+Salir → cuando el objetivo del sector es 0%.
+
+Reglas de la columna “Ticker objetivo”:
+
+Si la acción es Aumentar o Reducir, mostrar el/los tickers existentes.
+
+Si la acción es Salir, mostrar el ticker que debe cerrarse.
+
+Si la acción es Crear, mostrar: “Nuevo (a definir)”.
+
+Restricción estricta:
+No incluir narrativa, explicaciones ni texto adicional antes o después de la tabla.
 
 ⚠️ No incluir texto adicional fuera de la tabla.
 `;
