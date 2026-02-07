@@ -128,6 +128,17 @@
         Al generar, se incrusta automáticamente dentro del prompt profesional.
       </p>
 
+        <!-- INPUT PERFIL DEL USUARIO -->
+      <div class="section">
+        <h3><Perfil del usuario (input)</h3>
+        <div class="box">
+          <textarea
+            id="perfilInput"
+            placeholder="Copia aqui el perfil del usuario."
+          ></textarea>
+        </div>
+      </div>
+
       <!-- INPUT PORTAFOLIO -->
       <div class="section">
         <h3>Portafolio propuesto (input)</h3>
@@ -169,24 +180,7 @@ Selección por capitalización bursátil y liquidez
 
 PERFIL DEL USUARIO (INPUT OBLIGATORIO)
 
-Hola, soy {{NOMBRE}}.
-Tengo un perfil de {{NIVEL_TRADER}} (ej. avanzado / gestor activo), con objetivos principales de {{OBJETIVOS}} (ej. crecer capital, generar ingresos, diversificar riesgo).
-
-Tolerancia al riesgo: {{RIESGO}} (baja / media / alta)
-
-Horizonte operativo: {{HORIZONTE}} (ej. corto–mediano plazo / swing trading)
-
-Estilos operativos: {{ESTILOS}} (ej. swing trading, momentum trading)
-
-Instrumentos preferidos: {{INSTRUMENTOS}} (acciones, ETFs)
-
-Mercados geográficos: {{MERCADOS}} (DM / EM)
-
-Capital total estimado: {{CAPITAL_TOTAL}}
-
-Frecuencia de operación: {{FRECUENCIA}} (diaria / semanal)
-
-Broker(s): {{BROKER}}
+Hola, soy {{PERFIL DEL USUARIO}}.
 
 ⚠️ Este perfil define y restringe:
 
@@ -205,6 +199,10 @@ OBJETIVO
 Comparar un portafolio real vs. una distribución objetivo por sectores GICS, coherente con el perfil del usuario, y producir únicamente una tabla profesional de variaciones necesarias.
 
 PORTAFOLIO PROPUESTO (INPUT REAL)
+
+Distribucion propuesta:
+
+{{PORTFOLIO}}
 
 Te proporcionaré una tabla con las siguientes columnas:
 
@@ -260,14 +258,25 @@ FORMATO DE SALIDA (ÚNICO RESULTADO)
       const portfolioInput = document.getElementById("portfolioInput");
       const promptOutput = document.getElementById("promptOutput");
       const status = document.getElementById("status");
+      const perfil = document.getElementById("perfil");
 
       document.getElementById("generate").addEventListener("click", () => {
         const portfolioText = portfolioInput.value.trim();
 
+        if (!perfil) {
+          status.textContent = "Debes ingresar el perfil del usuario.";
+          return;
+        }
+        
         if (!portfolioText) {
           status.textContent = "Debes ingresar el portafolio propuesto.";
           return;
         }
+
+        const finalPrompt = basePrompt.replace(
+          "{{PERFIL DEL USUARIO}}",
+          perfil
+        );
 
         const finalPrompt = basePrompt.replace(
           "{{PORTFOLIO}}",
