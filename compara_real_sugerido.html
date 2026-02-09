@@ -169,65 +169,145 @@
 
     <script>
   const basePrompt = `PROMPT PROFESIONAL — REBALANCEO INSTITUCIONAL CON CAPITALIZACIÓN
+# PROMPT PROFESIONAL — REBALANCEO INSTITUCIONAL CON PLAN DE EJECUCIÓN COMPLETO
 
-Actúa como un gestor de portafolios cuantitativo institucional (20+ años en equity markets) especializado en:
-Asignación táctica sectorial
-Control de riesgo y ejecución
-Selección por capitalización bursátil y liquidez
+Actúa como un **gestor de portafolios cuantitativo institucional (20+ años en equity markets)** especializado en:
+- Asignación táctica sectorial
+- Control de riesgo y ejecución profesional
+- Transition management y secuenciación de trades
+- Selección por capitalización bursátil y liquidez
 
-PERFIL DEL USUARIO (INPUT OBLIGATORIO)
+---
 
-Hola, soy {{PERFIL_DEL_USUARIO}}.
+## PERFIL DEL USUARIO (INPUT OBLIGATORIO)
+
+[INSERTAR AQUÍ EL PERFIL COMPLETO DEL TRADER: tolerancia riesgo, horizonte, estilos, capital, brokers, frecuencia]
+
+---
+
+## OBJETIVO
+
+Comparar un portafolio real vs. distribución objetivo por sectores GICS y producir un **plan de rebalanceo institucional ejecutable** con secuenciación lógica de trades.
+
+---
+
+## PORTAFOLIO PROPUESTO (TARGET)
+
+[TABLA CON ASIGNACIÓN OBJETIVO POR SECTOR]
+
+---
+
+## PORTAFOLIO ACTUAL (REAL)
+
+[IMAGEN/DATOS DEL PORTAFOLIO ACTUAL CON POSICIONES, VALORES Y TICKERS]
+
+---
+
+## FORMATO DE SALIDA (TABLA PROFESIONAL ÚNICA)
+
+Genera **únicamente una tabla** en formato Markdown con las siguientes columnas obligatorias:
+
+### Columnas principales:
+
+1. **Prioridad**: Número secuencial (1, 2, 3...) basado en:
+   - Fase 1 primero: Liquidar posiciones a salir
+   - Fase 2 segundo: Reducir sobreexposiciones
+   - Fase 3 tercero: Aumentar/Crear posiciones (ordenadas por magnitud de desviación descendente)
+
+2. **Sector (GICS)**: Nombre del sector estándar GICS
+
+3. **Subsector**: Detalle de subsectores dentro del sector
+
+4. **Mercado (DM/EM)**: Distribución geográfica (ej: "DM 65% / EM 35%")
+
+5. **Tickers actuales**: Tickers existentes en la posición actual (o "-" si no existe)
+
+6. **Propuesto % ($)**: Peso objetivo y monto en dólares (ej: "20% ($800)")
+
+7. **Actual % ($)**: Peso actual y monto en dólares (ej: "17.3% ($604)")
+
+8. **Variación (pp)**: Diferencia en puntos porcentuales (ej: "+2.7 pp")
+
+9. **Variación $**: Diferencia en dólares (ej: "$+93")
+
+10. **Acción**: Una de las siguientes:
+    - **Crear** → cuando el peso actual del sector es 0% y se requiere abrir nueva posición
+    - **Aumentar** → cuando ya existe exposición y debe incrementarse
+    - **Reducir** → cuando existe exposición superior al objetivo
+    - **Salir** → cuando el objetivo del sector es 0%
+
+11. **Ticker objetivo**: Detalle específico de la acción según estas reglas:
+    - Si **Crear**: "Agregar [N] ticker(s) nuevo(s)" (donde N = número de tickers objetivo)
+    - Si **Aumentar** y faltan tickers: "[Tickers actuales] + Agregar [N] ticker(s)" (donde N = diferencia)
+    - Si **Aumentar** y NO faltan tickers: "Incrementar: [Tickers actuales]"
+    - Si **Reducir** y sobran tickers: "Reducir [N] ticker(s) de: [Tickers actuales]"
+    - Si **Reducir** y NO sobran tickers: "Reducir posición: [Tickers actuales]"
+    - Si **Salir**: "Cerrar: [Tickers actuales]"
+
+12. **Tipo de orden**: Tipo de orden recomendado:
+    - "Market/Limit (venta)" para Salir
+    - "Market/Limit (venta parcial)" para Reducir
+    - "Limit (compra adicional)" para Aumentar
+    - "Limit (compra nueva)" para Crear
+
+13. **Secuencia ejecución**: Fase del plan:
+    - "Fase 1: Liquidar" para salidas completas
+    - "Fase 2: Reducir" para reducciones parciales
+    - "Fase 3: Aumentar" para incrementos
+    - "Fase 3: Crear" para posiciones nuevas
+
+14. **Capitalización objetivo**: Rango de capitalización bursátil recomendado:
+    - "Large/Mega Cap (>$200B)" para sectores momentum/growth
+    - "Large Cap ($10B-$200B)" para sectores core
+    - "Mid/Large Cap ($2B-$200B)" para sectores diversificadores
+    - "-" para posiciones a salir
+
+---
+
+## REGLAS DE PRIORIZACIÓN (CRÍTICO)
+
+1. **Fase 1 (Prioridad 1-2)**: Ejecutar PRIMERO todas las salidas (Acción = "Salir") para generar liquidez inmediata
+
+2. **Fase 2 (Prioridad siguiente)**: Ejecutar todas las reducciones (Acción = "Reducir") ordenadas por magnitud de desviación descendente
+
+3. **Fase 3 (Prioridad final)**: Ejecutar aumentos y creaciones (Acción = "Aumentar" o "Crear") ordenadas por magnitud de desviación descendente
+
+4. Dentro de cada fase, ordenar por **magnitud absoluta de desviación (pp)** de mayor a menor
+
+---
+
+## VALIDACIÓN FINAL (INCLUIR AL FINAL DE LA RESPUESTA)
+
+Después de la tabla, incluir un resumen ejecutivo con:
+
+=== RESUMEN DE EJECUCIÓN ===
+Cash disponible actual: $[MONTO]
+Liquidez a generar (Fase 1-2): $[MONTO] (suma de variaciones negativas)
+Capital necesario (Fase 3): $[MONTO] (suma de variaciones positivas)
+Validación: [SUFICIENTE/INSUFICIENTE] para ejecutar el rebalanceo completo
 
 
+---
 
-OBJETIVO
-Comparar un portafolio real vs. una distribución objetivo por sectores GICS, coherente con el perfil del usuario, y producir únicamente una tabla profesional de variaciones necesarias.
+## RESTRICCIONES ESTRICTAS
 
-PORTAFOLIO PROPUESTO:
-{{PORTFOLIO}}
+⚠️ **NO incluir texto narrativo, explicaciones, ni comentarios adicionales antes o después de la tabla**
+⚠️ **La tabla debe estar ordenada por la columna "Prioridad" de forma ascendente (1, 2, 3...)**
+⚠️ **Todas las columnas son obligatorias**
+⚠️ **El resumen de ejecución es obligatorio después de la tabla**
 
-El presupuesto real es la imagen suministrada.
+---
 
-FORMATO DE SALIDA (ÚNICO RESULTADO)
-Genera únicamente una tabla profesional sin texto adicional fuera de ella.
+## CONTROL DE CALIDAD (ANTES DE RESPONDER)
 
-Columnas obligatorias:
+- ¿La tabla tiene exactamente 14 columnas?
+- ¿Están todas las filas ordenadas por "Prioridad"?
+- ¿Las Fases 1 y 2 aparecen antes que la Fase 3?
+- ¿La columna "Ticker objetivo" especifica números exactos de tickers a agregar/reducir?
+- ¿Cada fila tiene un "Tipo de orden" coherente con la "Acción"?
+- ¿El resumen de ejecución incluye validación de liquidez?
 
-Sector (GICS)
-Subsector
-Mercado (DM/EM)
-Tickers actuales
-Propuesto % ($)
-Actual % ($)
-Variación (pp)
-Variación $
-Acción
-Ticker objetivo
-Capitalización objetivo
 
-Reglas de la columna “Acción”:
-
-Crear → cuando el peso actual del sector es 0% y se requiere abrir nueva posición.
-
-Aumentar → cuando ya existe exposición y debe incrementarse para alcanzar el % objetivo.
-
-Reducir → cuando existe exposición superior al objetivo pero no es 0%.
-
-Salir → cuando el objetivo del sector es 0%.
-
-Reglas de la columna “Ticker objetivo”:
-
-Si la acción es Aumentar o Reducir, mostrar el/los tickers existentes.
-
-Si la acción es Salir, mostrar el ticker que debe cerrarse.
-
-Si la acción es Crear, mostrar: “Nuevo (a definir)”.
-
-Restricción estricta:
-No incluir narrativa, explicaciones ni texto adicional antes o después de la tabla.
-
-⚠️ No incluir texto adicional fuera de la tabla.
 `;
 
   const perfilInput = document.getElementById("perfilInput");
