@@ -162,18 +162,18 @@ Construir tabla con columnas:
 
 #### Para PERDEDORES/PLANOS (Stop Loss inicial):
 - **Stop Recomendado**: Actual - (2.5 × ATR) → Balance estándar
-- **Tipo stop**: `SL`
-- **Racional**: `"SL inicial [X]% ATR x2.5 (swing), riesgo [Y]%/trade"`
+- **Tipo stop**: \`SL\`
+- **Racional**: \`"SL inicial [X]% ATR x2.5 (swing), riesgo [Y]%/trade"\`
 
 #### Para GANADORES (Trailing Stop momentum):
 - **Stop Recomendado**: Máximo - (2.0 × ATR)
-- **Tipo stop**: `TS`
-- **Racional**: `"TS [X]% ATR x2 (momentum activo), proteger +[Y]%"`
+- **Tipo stop**: \`TS\`
+- **Racional**: \`"TS [X]% ATR x2 (momentum activo), proteger +[Y]%"\`
 
 #### Para GANADORES AVANZADOS (Trailing Stop giveback):
 - **Stop Recomendado**: Entrada + (Actual - Entrada) × 0.55 → Proteger 55%
-- **Tipo stop**: `TS`
-- **Racional**: `"TS giveback 40-70%, dejar correr momentum en +[X]%"`
+- **Tipo stop**: \`TS\`
+- **Racional**: \`"TS giveback 40-70%, dejar correr momentum en +[X]%"\`
 
 #### ATR PROXY POR SECTOR/VOLATILIDAD (swing 1-8 semanas):
 - Technology momentum (NVDA, semiconductores): **4.5%**
@@ -188,10 +188,10 @@ Construir tabla con columnas:
 
 ### 3. COLUMNA "ACCIÓN EJECUTABLE"
 Determinar acción específica:
-- Si stop nuevo > stop actual + 2%: `"Subir trailing a $[X.XX]"`
-- Si categoría Ganador/Ganador avanzado y stop protege profit: `"Mantener (en profit)"`
-- Si categoría Perdedor y cerca de stop: `"REVISAR: considerar salida si rompe $[X.XX]"`
-- Si diferencia < 2%: `"Mantener stop actual"`
+- Si stop nuevo > stop actual + 2%: \`"Subir trailing a $[X.XX]"\`
+- Si categoría Ganador/Ganador avanzado y stop protege profit: \`"Mantener (en profit)"\`
+- Si categoría Perdedor y cerca de stop: \`"REVISAR: considerar salida si rompe $[X.XX]"\`
+- Si diferencia < 2%: \`"Mantener stop actual"\`
 
 ### 4. COLUMNA "PRIORIDAD"
 - **Alta**: Ganadores avanzados que requieren ajuste de trailing (diferencia >3%)
@@ -245,7 +245,6 @@ Incluir al final:
 2. **Métricas portafolio** (5 indicadores clave)
 3. **Resumen ejecutivo** (máximo 8 líneas, bullets)
 
-
 ---
 
 `;
@@ -259,7 +258,8 @@ Incluir al final:
         ? perfil
         : "No proporcionado. Solicita el perfil antes de calcular stops (horizonte, frecuencia, riesgo, broker, mercados, límites por trade).";
 
-      return baseTemplate.replace("{{PERFIL_USUARIO}}", perfilInput);
+      // Inserta el TEXTO (perfilFinal), no el elemento (perfilInput)
+      return baseTemplate.replace("{{PERFIL_USUARIO}}", perfilFinal);
     }
 
     // Generar
@@ -267,12 +267,33 @@ Incluir al final:
       generatedPrompt = buildPrompt();
       out.textContent = generatedPrompt;
       copyBtn.disabled = false;
+
+      // reset del mensaje de copiado si estaba visible
+      copyMsg.hidden = true;
     });
 
     // Copiar el prompt generado (con perfil incluido)
     copyBtn.addEventListener("click", async () => {
+      const textToCopy = generatedPrompt || buildPrompt();
+
       try {
-        await navigator.clipboard.writeText(generatedPrompt || buildPrompt());
+        // Clipboard API
+        if (navigator.clipboard && window.isSecureContext) {
+          await navigator.clipboard.writeText(textToCopy);
+        } else {
+          // Fallback para http / archivos locales
+          const temp = document.createElement("textarea");
+          temp.value = textToCopy;
+          temp.style.position = "fixed";
+          temp.style.left = "-9999px";
+          temp.style.top = "0";
+          document.body.appendChild(temp);
+          temp.focus();
+          temp.select();
+          document.execCommand("copy");
+          document.body.removeChild(temp);
+        }
+
         copyMsg.hidden = false;
         setTimeout(() => (copyMsg.hidden = true), 1500);
       } catch (e) {
@@ -285,5 +306,6 @@ Incluir al final:
   </script>
 </body>
 </html>
+
 
 
