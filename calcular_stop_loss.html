@@ -21,12 +21,14 @@
       box-shadow: 0 2px 10px rgba(0,0,0,.1);
     }
 
-    h1 {
-      margin-bottom: 16px;
-    }
+    h1 { margin-bottom: 16px; }
 
     .controls {
       margin-bottom: 12px;
+      display: flex;
+      gap: 10px;
+      align-items: center;
+      flex-wrap: wrap;
     }
 
     button {
@@ -37,6 +39,10 @@
       border-radius: 10px;
       cursor: pointer;
       font-size: 15px;
+    }
+
+    button.secondary {
+      background: #111827;
     }
 
     button:disabled {
@@ -55,8 +61,43 @@
 
     .copied {
       color: #0a84ff;
-      margin-left: 10px;
+      margin-left: 2px;
       font-size: 14px;
+    }
+
+    .form {
+      margin: 14px 0 6px;
+      display: grid;
+      gap: 10px;
+    }
+
+    label {
+      font-size: 14px;
+      color: #111827;
+      font-weight: 600;
+    }
+
+    textarea {
+      width: 100%;
+      min-height: 110px;
+      resize: vertical;
+      padding: 12px 12px;
+      border-radius: 12px;
+      border: 1px solid #e5e5ea;
+      outline: none;
+      font-size: 14px;
+      background: #ffffff;
+    }
+
+    textarea:focus {
+      border-color: #0a84ff;
+      box-shadow: 0 0 0 3px rgba(10,132,255,.15);
+    }
+
+    .hint {
+      font-size: 13px;
+      color: #6b7280;
+      margin-top: -4px;
     }
   </style>
 </head>
@@ -65,8 +106,19 @@
   <div class="container">
     <h1>Prompt Stop Loss</h1>
 
+    <!-- FORM: Perfil de usuario -->
+    <div class="form">
+      <label for="perfilInput">Perfil de usuario (se insertará en el prompt)</label>
+      <textarea
+        id="perfilInput"
+        placeholder="Pega aquí tu perfil (ej: horizonte, frecuencia, riesgo, broker, mercados, reglas, límites por trade, etc.)"
+      ></textarea>
+      <div class="hint">Tip: mientras más específico el perfil, más precisos serán los stops y reglas.</div>
+    </div>
+
     <div class="controls">
-      <button id="copyBtn">Copiar prompt</button>
+      <button id="genBtn" class="secondary">Generar prompt</button>
+      <button id="copyBtn" disabled>Copiar prompt</button>
       <span id="copyMsg" class="copied" hidden>✔ Texto copiado</span>
     </div>
 
@@ -75,79 +127,163 @@
 
   <script>
     const out = document.getElementById("descripcion");
+    const perfilInput = document.getElementById("perfilInput");
+    const genBtn = document.getElementById("genBtn");
     const copyBtn = document.getElementById("copyBtn");
     const copyMsg = document.getElementById("copyMsg");
 
-    const template = `
+    const baseTemplate = `
 
 **Rol:**
-Actúa como un **gestor institucional de acciones y ETFs** (buy-side). Tu objetivo es **proteger capital, reducir drawdowns y dejar correr tendencias**. Horizonte **1–8 semanas**. Opero **acciones reales y ETFs**.
+Actúa como un **gestor institucional de acciones y ETFs** (buy-side). Tu objetivo es **proteger capital, reducir drawdowns y dejar correr tendencias**. Horizonte **de acuerdo al perfil del usuario**. Opero **de acuerdo al perfil del usuario**.
+
+**Perfil del usuario (OBLIGATORIO):**
+{{PERFIL_USUARIO}}
 
 **Input que te daré (formato tabla o lista):**
 
-* Ticker, Nombre, Tipo (Acción/ETF), Moneda
-* Precio entrada, Precio actual, Máximo desde entrada (si lo tengo), Mínimo reciente (si lo tengo)
-* Stop actual (si existe)
-* Tamaño posición (opcional)
-* Fecha de compra (opcional)
+en las imagenes que se deben anexar se encuentra el portafolio con los stop loss actuales.
 
-**Tareas (OBLIGATORIO):**
+**Tareas (OBLIGATORIO):**## TAREAS OBLIGATORIAS
 
-1. **Diagnóstico por posición**
+### 1. CLASIFICACIÓN DE POSICIONES
+Por cada ticker, clasificar según P&L vs entrada:
+- **Perdedor**: P&L < -2%
+- **Plano**: -2% ≤ P&L < +3%
+- **Ganador**: +3% ≤ P&L < +10%
+- **Ganador avanzado**: P&L ≥ +10%
 
-   * Clasifica cada ticker en: *Perdedor*, *Plano*, *Ganador*, *Ganador avanzado* (define umbrales claros por % vs entrada).
-   * Identifica si el stop actual **no protege capital** o **no protege utilidades**.
+### 2. CÁLCULO DE STOPS TÉCNICOS (3 PERFILES)
+Construir tabla con columnas:
 
-2. **Stops técnicos profesionales (3 perfiles)**
-   Construye una tabla con columnas:
-   **Ticker | Nombre | Tipo | Entrada | Actual | Stop actual | Riesgo Bajo | Riesgo Medio | Riesgo Alto | Tipo de stop (SL/TS) | Racional técnico (1 línea) | Acción hoy (subir/mantener/cancelar)**
+| Ticker | Nombre | Tipo | Sector | Entrada | Actual | Stop actual | Stop Recomendado | Tipo stop | Racional técnico | Acción ejecutable | Prioridad | P&L |
 
-   * Para *Perdedores/Planos*: calcula **Stop inicial (SL)** por volatilidad del activo (no uses números arbitrarios).
-   * Para *Ganadores*: calcula **Trailing stop (TS)** que suba con el precio y **nunca baje**.
-   * En riesgo bajo/medio/alto, define reglas consistentes (por ejemplo: giveback %, ATR/Chandelier, o swing-low + buffer) y aplícalas.
+**Reglas de cálculo**:
 
-3. **Reglas de ejecución**
+#### Para PERDEDORES/PLANOS (Stop Loss inicial):
+- **Stop Recomendado**: Actual - (2.5 × ATR) → Balance estándar
+- **Tipo stop**: `SL`
+- **Racional**: `"SL inicial [X]% ATR x2.5 (swing), riesgo [Y]%/trade"`
 
-   * Si el stop nuevo queda **por debajo del stop actual** (menos protector), **no lo bajes**: deja el mayor (más alto).
-   * Para cada posición indica: **“Mover stop a X”** o “Mantener” y justifica en 1 línea.
-   * Señala 3–5 **riesgos macro/sector** relevantes del día (solo los que afecten a mis tickers).
+#### Para GANADORES (Trailing Stop momentum):
+- **Stop Recomendado**: Máximo - (2.0 × ATR)
+- **Tipo stop**: `TS`
+- **Racional**: `"TS [X]% ATR x2 (momentum activo), proteger +[Y]%"`
 
-4. **Resumen tipo comité (máximo 8 líneas)**
+#### Para GANADORES AVANZADOS (Trailing Stop giveback):
+- **Stop Recomendado**: Entrada + (Actual - Entrada) × 0.55 → Proteger 55%
+- **Tipo stop**: `TS`
+- **Racional**: `"TS giveback 40-70%, dejar correr momentum en +[X]%"`
 
-   * Qué posiciones están en “modo defensa”, cuáles en “modo dejar correr”, y cuáles deberían salir si se rompe nivel.
+#### ATR PROXY POR SECTOR/VOLATILIDAD (swing 1-8 semanas):
+- Technology momentum (NVDA, semiconductores): **4.5%**
+- Materials, Energy, Commodities: **4.0%**
+- Financials (bancos, fintech): **3.5%**
+- Industrials, Consumer Discretionary: **3.0%**
+- Consumer Staples, Utilities: **2.5%**
+- ETFs diversificados: **2.5%**
+- ETFs sector específico: **3.0%**
 
-**Estilo y estándares:**
+**REGLA CRÍTICA**: **Stops nunca bajan**. Si stop calculado < stop actual, usar stop actual.
 
-* Lenguaje profesional, directo, sin relleno.
-* No inventes datos. Si falta *máximo desde entrada* o *mínimo reciente*, usa un método alterno (p. ej., trailing por % + confirmación) y avisa.
-* Enfatiza protección de capital: stops claros, accionables y con disciplina.
+### 3. COLUMNA "ACCIÓN EJECUTABLE"
+Determinar acción específica:
+- Si stop nuevo > stop actual + 2%: `"Subir trailing a $[X.XX]"`
+- Si categoría Ganador/Ganador avanzado y stop protege profit: `"Mantener (en profit)"`
+- Si categoría Perdedor y cerca de stop: `"REVISAR: considerar salida si rompe $[X.XX]"`
+- Si diferencia < 2%: `"Mantener stop actual"`
 
-**Ahora analiza esta cartera:**
-[PEGA AQUÍ TU TABLA / LISTA DE POSICIONES]
+### 4. COLUMNA "PRIORIDAD"
+- **Alta**: Ganadores avanzados que requieren ajuste de trailing (diferencia >3%)
+- **Media**: Perdedores/Planos que necesitan protección mejorada
+- **Baja**: Stops ya bien posicionados
+
+### 5. ORDENAMIENTO DE TABLA
+Ordenar por:
+1. Prioridad (Alta → Media → Baja)
+2. P&L descendente dentro de cada prioridad
+
+### 6. MÉTRICAS DEL PORTAFOLIO
+Incluir al final:
+- Valor total portafolio
+- P&L neto ($ y %)
+- Win rate (N ganadoras / Total posiciones)
+- Posiciones en momentum (P&L > +5%)
+- Drawdown actual máximo
+
+### 7. RESUMEN EJECUTIVO (MÁXIMO 8 LÍNEAS)
+- Posiciones en **modo defensa** (ajustar stops urgente)
+- Posiciones en **modo dejar correr** (momentum activo, no sobre-gestionar)
+- Posiciones **rezagadas** (evaluar rotación sectorial)
+- **Disciplina stops**: Recordar regla nunca bajar stops
+- **Riesgos sector/macro** relevantes del día (solo afectan tickers del portafolio)
 
 ---
 
-Si quieres, te lo adapto a tu “estándar fijo” (por ejemplo: **ATR/Chandelier** como regla oficial) y a tus límites de riesgo (ej. pérdida máxima por trade, % del portafolio por posición).
+## RESTRICCIONES
 
+1. **NO inventar datos**: Si falta máximo histórico, usar precio actual como proxy y avisar
+2. **Lenguaje profesional**: Directo, sin relleno narrativo
+3. **Accionable**: Cada recomendación debe tener precio exacto y razón técnica
+4. **Coherente con perfil**: Riesgo alto = stops más amplios (2.5-3× ATR), tolerar volatilidad swing
+5. **Sin texto adicional**: Solo tabla + métricas + resumen ejecutivo (máximo 8 líneas)
+
+---
+
+## ESTÁNDARES TÉCNICOS
+
+- **Riesgo por trade objetivo**: 2-3% del capital total
+- **Trailing stops**: Aplicar solo cuando P&L > +3%
+- **Giveback method**: Activar cuando P&L > +10%
+- **Rebalanceo stops**: Revisar cada 3-5 sesiones o en cambio significativo de precio (>5%)
+
+---
+
+## OUTPUT ESPERADO
+
+1. **Tabla completa**  (ordenada por Prioridad + P&L)
+2. **Métricas portafolio** (5 indicadores clave)
+3. **Resumen ejecutivo** (máximo 8 líneas, bullets)
+
+
+---
 
 `;
 
-    // Mostrar el template al cargar
-    out.textContent = template;
+    let generatedPrompt = "";
 
+    function buildPrompt() {
+      const perfil = (perfilInput.value || "").trim();
+
+      const perfilFinal = perfil.length
+        ? perfil
+        : "No proporcionado. Solicita el perfil antes de calcular stops (horizonte, frecuencia, riesgo, broker, mercados, límites por trade).";
+
+      return baseTemplate.replace("{{PERFIL_USUARIO}}", perfilFinal);
+    }
+
+    // Generar
+    genBtn.addEventListener("click", () => {
+      generatedPrompt = buildPrompt();
+      out.textContent = generatedPrompt;
+      copyBtn.disabled = false;
+    });
+
+    // Copiar el prompt generado (con perfil incluido)
     copyBtn.addEventListener("click", async () => {
       try {
-        await navigator.clipboard.writeText(template);
+        await navigator.clipboard.writeText(generatedPrompt || buildPrompt());
         copyMsg.hidden = false;
-
-        setTimeout(() => {
-          copyMsg.hidden = true;
-        }, 1500);
+        setTimeout(() => (copyMsg.hidden = true), 1500);
       } catch (e) {
         alert("No se pudo copiar el texto");
       }
     });
+
+    // Estado inicial (vacío hasta generar)
+    out.textContent = "Pega tu perfil arriba y haz clic en “Generar prompt”.";
   </script>
 </body>
 </html>
+
 
