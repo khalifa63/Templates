@@ -1,0 +1,446 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Generador de Prompts - Apple Style</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+            color: #1d1d1f;
+        }
+
+        .container {
+            background: rgba(255, 255, 255, 0.9);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border-radius: 20px;
+            padding: 40px;
+            width: 90%;
+            max-width: 1200px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s ease;
+        }
+
+        .container:hover {
+            transform: translateY(-5px);
+        }
+
+        h1 {
+            font-size: 32px;
+            font-weight: 600;
+            margin-bottom: 12px;
+            letter-spacing: -0.5px;
+            text-align: center;
+        }
+
+        .subtitle {
+            font-size: 17px;
+            color: #86868b;
+            text-align: center;
+            margin-bottom: 32px;
+            font-weight: 400;
+        }
+
+        .form-section {
+            background: #f5f5f7;
+            border-radius: 12px;
+            padding: 24px;
+            margin-bottom: 24px;
+            border: 1px solid rgba(0, 0, 0, 0.05);
+        }
+
+        .form-group {
+            margin-bottom: 16px;
+        }
+
+        .form-label {
+            display: block;
+            font-size: 15px;
+            font-weight: 500;
+            margin-bottom: 8px;
+            color: #1d1d1f;
+        }
+
+        .form-input {
+            width: 100%;
+            padding: 14px 16px;
+            font-size: 16px;
+            border: 1px solid #d2d2d7;
+            border-radius: 10px;
+            background: white;
+            font-family: inherit;
+            transition: all 0.3s ease;
+            color: #1d1d1f;
+        }
+
+        .form-input:focus {
+            outline: none;
+            border-color: #0071e3;
+            box-shadow: 0 0 0 4px rgba(0, 113, 227, 0.1);
+        }
+
+        .form-input::placeholder {
+            color: #86868b;
+        }
+
+        .prompt-container {
+            background: #f5f5f7;
+            border-radius: 12px;
+            padding: 24px;
+            margin-bottom: 24px;
+            position: relative;
+            border: 1px solid rgba(0, 0, 0, 0.05);
+            min-height: 150px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .prompt-text {
+            font-size: 15px;
+            line-height: 1.6;
+            color: #1d1d1f;
+            font-weight: 400;
+            word-wrap: break-word;
+            width: 100%;
+        }
+
+        .prompt-placeholder {
+            color: #86868b;
+            font-style: italic;
+        }
+
+        .button-group {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 16px;
+        }
+
+        .btn {
+            border: none;
+            border-radius: 12px;
+            padding: 16px 24px;
+            font-size: 17px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-family: inherit;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+
+        .btn:active {
+            transform: scale(0.98);
+        }
+
+        .btn-generate {
+            background: #0071e3;
+            color: white;
+        }
+
+        .btn-generate:hover {
+            background: #0077ed;
+            transform: scale(1.02);
+        }
+
+        .btn-generate:disabled {
+            background: #d2d2d7;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .btn-copy {
+            background: #34c759;
+            color: white;
+        }
+
+        .btn-copy:hover {
+            background: #30b350;
+            transform: scale(1.02);
+        }
+
+        .btn-copy:disabled {
+            background: #d2d2d7;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .btn-copy.copied {
+            background: #5856d6;
+        }
+
+        .icon {
+            width: 20px;
+            height: 20px;
+            transition: transform 0.3s ease;
+        }
+
+        .btn.copied .icon {
+            transform: rotate(360deg);
+        }
+
+        .feedback-message {
+            text-align: center;
+            margin-top: 16px;
+            font-size: 14px;
+            color: #34c759;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+            font-weight: 500;
+        }
+
+        .feedback-message.show {
+            opacity: 1;
+        }
+
+        .highlight {
+            background: linear-gradient(120deg, #ffd60a 0%, #ffd60a 100%);
+            background-repeat: no-repeat;
+            background-size: 100% 40%;
+            background-position: 0 85%;
+            padding: 2px 4px;
+            font-weight: 600;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .container {
+                padding: 28px;
+                border-radius: 16px;
+                width: 95%;
+            }
+
+            h1 {
+                font-size: 28px;
+            }
+
+            .subtitle {
+                font-size: 15px;
+                margin-bottom: 24px;
+            }
+
+            .form-section {
+                padding: 20px;
+            }
+
+            .prompt-container {
+                padding: 20px;
+            }
+
+            .prompt-text {
+                font-size: 14px;
+            }
+
+            .button-group {
+                grid-template-columns: 1fr;
+            }
+
+            .btn {
+                padding: 14px 20px;
+                font-size: 16px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            body {
+                padding: 16px;
+            }
+
+            .container {
+                padding: 24px;
+                width: 98%;
+            }
+
+            h1 {
+                font-size: 24px;
+            }
+
+            .subtitle {
+                font-size: 14px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Generador de Prompts</h1>
+        <p class="subtitle">Personaliza tu prompt con el nombre de tu empresa</p>
+        
+        <div class="form-section">
+            <div class="form-group">
+                <label class="form-label" for="empresaInput">Nombre de la Empresa</label>
+                <input 
+                    type="text" 
+                    id="empresaInput" 
+                    class="form-input" 
+                    placeholder="Ej: Apple, Google, Microsoft..."
+                    autocomplete="off"
+                >
+            </div>
+        </div>
+
+        <div class="prompt-container">
+            <p class="prompt-text prompt-placeholder" id="promptText">
+                Genera tu prompt personalizado ingresando el nombre de la empresa
+            </p>
+        </div>
+
+        <div class="button-group">
+            <button class="btn btn-generate" id="generateButton">
+                <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M21.5 2v6h-6M2.5 22v-6h6M2 11.5a10 10 0 0 1 18.8-4.3M22 12.5a10 10 0 0 1-18.8 4.2" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+                <span>Generar Prompt</span>
+            </button>
+
+            <button class="btn btn-copy" id="copyButton" disabled>
+                <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+                    <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+                </svg>
+                <span id="copyButtonText">Copiar Prompt</span>
+            </button>
+        </div>
+
+        <p class="feedback-message" id="feedbackMessage">✓ Copiado al portapapeles</p>
+    </div>
+
+    <script>
+        // Template del prompt
+        const promptTemplate = `Eres un asistente de IA experto en desarrollo web para <span class="highlight">[EMPRESA X]</span>. Tu objetivo es ayudar a crear aplicaciones modernas, responsivas y accesibles siguiendo las mejores prácticas de la industria. 
+
+Debes proporcionar soluciones específicas que se alineen con los valores y estándares de <span class="highlight">[EMPRESA X]</span>, asegurándote de mantener la coherencia con su imagen de marca y filosofía de diseño.
+
+Siempre proporciona código limpio, bien documentado y optimizado para los proyectos de <span class="highlight">[EMPRESA X]</span>.`;
+
+        // Elementos del DOM
+        const empresaInput = document.getElementById('empresaInput');
+        const generateButton = document.getElementById('generateButton');
+        const copyButton = document.getElementById('copyButton');
+        const promptText = document.getElementById('promptText');
+        const copyButtonText = document.getElementById('copyButtonText');
+        const feedbackMessage = document.getElementById('feedbackMessage');
+
+        let currentPromptText = '';
+
+        // Generar prompt
+        generateButton.addEventListener('click', () => {
+            const empresaNombre = empresaInput.value.trim();
+            
+            if (!empresaNombre) {
+                empresaInput.focus();
+                empresaInput.style.borderColor = '#ff3b30';
+                setTimeout(() => {
+                    empresaInput.style.borderColor = '#d2d2d7';
+                }, 1000);
+                return;
+            }
+
+            // Reemplazar [EMPRESA X] con el nombre ingresado
+            const promptGenerado = promptTemplate.replace(/\[EMPRESA X\]/g, empresaNombre);
+            
+            // Guardar versión sin HTML para copiar
+            currentPromptText = promptGenerado.replace(/<span class="highlight">/g, '').replace(/<\/span>/g, '');
+            
+            // Mostrar versión con HTML para resaltar
+            promptText.innerHTML = promptGenerado;
+            promptText.classList.remove('prompt-placeholder');
+            
+            // Habilitar botón de copiar
+            copyButton.disabled = false;
+
+            // Animación de generación
+            generateButton.style.transform = 'rotate(360deg)';
+            setTimeout(() => {
+                generateButton.style.transform = 'rotate(0deg)';
+            }, 600);
+        });
+
+        // Copiar al portapapeles
+        copyButton.addEventListener('click', async () => {
+            if (!currentPromptText) return;
+
+            try {
+                // Usar la API moderna de Clipboard
+                await navigator.clipboard.writeText(currentPromptText);
+                
+                // Feedback visual
+                copyButton.classList.add('copied');
+                copyButtonText.textContent = '¡Copiado!';
+                feedbackMessage.classList.add('show');
+
+                // Cambiar el ícono a check
+                copyButton.querySelector('.icon').innerHTML = `
+                    <path d="M20 6L9 17l-5-5" stroke-linecap="round" stroke-linejoin="round"/>
+                `;
+
+                // Restaurar después de 2 segundos
+                setTimeout(() => {
+                    copyButton.classList.remove('copied');
+                    copyButtonText.textContent = 'Copiar Prompt';
+                    feedbackMessage.classList.remove('show');
+                    
+                    // Restaurar ícono original
+                    copyButton.querySelector('.icon').innerHTML = `
+                        <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+                        <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+                    `;
+                }, 2000);
+
+            } catch (err) {
+                // Fallback para navegadores antiguos
+                console.error('Error al copiar:', err);
+                
+                const textArea = document.createElement('textarea');
+                textArea.value = currentPromptText;
+                textArea.style.position = 'fixed';
+                textArea.style.opacity = '0';
+                document.body.appendChild(textArea);
+                textArea.select();
+                
+                try {
+                    document.execCommand('copy');
+                    copyButtonText.textContent = '¡Copiado!';
+                    feedbackMessage.classList.add('show');
+                    
+                    setTimeout(() => {
+                        copyButtonText.textContent = 'Copiar Prompt';
+                        feedbackMessage.classList.remove('show');
+                    }, 2000);
+                } catch (fallbackErr) {
+                    copyButtonText.textContent = 'Error al copiar';
+                }
+                
+                document.body.removeChild(textArea);
+            }
+        });
+
+        // Habilitar generación con Enter
+        empresaInput.addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') {
+                generateButton.click();
+            }
+        });
+
+        // Limpiar error de borde al escribir
+        empresaInput.addEventListener('input', () => {
+            empresaInput.style.borderColor = '#d2d2d7';
+        });
+    </script>
+</body>
+</html>
