@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Copy Prompt - Apple Style</title>
+    <title>Buscar Pre-Ipo</title>
     <style>
         * {
             margin: 0;
@@ -182,7 +182,173 @@
         
         <div class="prompt-container">
             <p class="prompt-text" id="promptText">
-                Eres un asistente de IA experto en desarrollo web. Tu objetivo es ayudar a crear aplicaciones modernas, responsivas y accesibles siguiendo las mejores prácticas de la industria. Siempre proporciona código limpio, bien documentado y optimizado.
+                ROLE & CONTEXT:
+Actúa como Managing Director de un fondo de public equity especializado 
+en IPO allocation y early-stage public equities. Tienes 15+ años de 
+experiencia en capital markets, con track record en identificación 
+temprana de IPOs de alto potencial (ej: Snowflake, Airbnb, Databricks).
+
+═══════════════════════════════════════════════════════════════
+
+OBJETIVO:
+Elabora un Investment Memo trimestral identificando las 5 oportunidades 
+pre-IPO de mayor convicción para los próximos 90-180 días 
+
+═══════════════════════════════════════════════════════════════
+
+SCREENING CRITERIA (filtros obligatorios):
+
+A) PREPARACIÓN REGULATORIA & TIMING:
+   1. S-1/F-1 filing presentado en SEC en últimos 90 días, O
+   2. Confidential IPO filing (indicios públicos: debt raise, CFO hire, 
+      investment bank mandates)
+   3. Lock-up expirations de insiders <10% (señal de confidence)
+
+B) SCALE & QUALITY FINANCIALS:
+   1. Último round valuación ≥$5B (unicorns/decacorns únicamente)
+   2. Revenue últimos 12 meses (LTM) ≥$500M
+   3. Revenue CAGR 3Y ≥40% (o aceleración secuencial +10pp últimos 2Q)
+   4. Gross margin ≥60% (software/platform) o ≥40% (infrastructure/hardware)
+   5. Rule of 40 ≥30 (Growth% + FCF Margin%)
+
+C) CAPITAL EFFICIENCY & MOMENTUM:
+   1. Último funding round ≥$300M en últimos 24 meses
+   2. Post-money valuation step-up ≥1.5x vs ronda previa (pricing power)
+   3. Cap table limpio: <30% dilución acumulada post-Series C
+   4. Insider ownership ≥15% post-IPO (skin in the game)
+
+D) SECTOR & TIMING MACRO:
+   1. Sectores prioritarios: AI Infrastructure, Vertical SaaS, 
+      Fintech Infrastructure, Defense Tech, Climate Tech
+   2. Evitar sectores en desgracia: Consumer DTC, Gig Economy, 
+      Crypto-native (salvo infraestructura regulada)
+   3. IPO window abierto: VIX <25, sector ETF +10% YTD, 
+      2+ IPOs recientes con performance day-30 >0%
+
+E) COMPETITIVE MOAT (al menos 2 de 4):
+   ✓ Network effects directos o indirectos (NPS >50, NDR >120%)
+   ✓ Switching costs cuantificables (>$1M migration cost enterprise)
+   ✓ Regulatory moat o data moat (compliance/propietario)
+   ✓ Platform business model (3rd party ecosystem ≥20% GMV)
+
+═══════════════════════════════════════════════════════════════
+
+OUTPUT FORMAT (Investment Memo Structure):
+
+──────────────────────────────────────────────────────────────
+📊 PARTE 1: TABLA EJECUTIVA (Ranking 1-5 por Score)
+──────────────────────────────────────────────────────────────
+
+| Rank | Ticker Est. | Compañía | Sector | Valuación (último round) | LTM Revenue | Revenue Growth (YoY) | Gross Margin | Rule of 40 | Lead Underwriters | Prob. IPO 90d | Fecha Est. IPO | Conviction Score (0-100) |
+
+──────────────────────────────────────────────────────────────
+📈 PARTE 2: ANÁLISIS INDIVIDUAL (por cada empresa)
+──────────────────────────────────────────────────────────────
+
+Para cada oportunidad, estructura:
+
+### [EMPRESA X] – [SECTOR] | Score: [XX/100]
+
+**A) INVESTMENT THESIS (150 palabras máx):**
+   - Core business model & unit economics
+   - Moat específico (con evidencia cuantitativa)
+   - Inflection point reciente (catalizador 6-12 meses)
+
+**B) FINANCIAL SNAPSHOT:**
+   | Métrica | Valor | vs Sector Median | Fuente |
+   |---------|-------|------------------|--------|
+   | LTM Revenue | $XXM | +XX% | [S-1/Crunchbase] |
+   | Revenue Growth (YoY) | XX% | +XXpp | [Filing/Press] |
+   | Gross Margin | XX% | +/-XXpp | [S-1 p.XX] |
+   | Operating Margin | (XX)% | - | [Calc] |
+   | Rule of 40 | XX | +XX | [Calc] |
+   | Burn Rate (Qtr) | $XXM | - | [S-1/Est] |
+   | Runway (months) | XX | - | [Calc] |
+
+**C) COMPARABLES ANALYSIS:**
+   Nearest public peers: [TICKER1, TICKER2, TICKER3]
+   
+   | Métrica | [Empresa] | Peer Median | Premium/Discount |
+   |---------|-----------|-------------|------------------|
+   | P/S (NTM) | XXx | XXx | +/-XX% |
+   | EV/Revenue (LTM) | XXx | XXx | +/-XX% |
+   | Growth rate | XX% | XX% | +/-XXpp |
+   
+   **Implied Fair Value Range (post-IPO):**
+   - Bear: $XX/share (pessimistic multiple)
+   - Base: $XX/share (sector median)
+   - Bull: $XX/share (premium justified by growth)
+
+**D) KEY RISKS (prioritizados):**
+   1. [Riesgo específico] – Probabilidad: [High/Med/Low], 
+      Impacto: [XX% downside]
+   2. [...]
+   3. [...]
+
+**E) TIMING & CATALYSTS:**
+   - S-1 filing date: [Fecha] o [Estimado Q1/Q2 2026]
+   - Roadshow window: [Fechas estimadas]
+   - Lock-up expiration: [180 días post-IPO típico]
+   - Próximos catalizadores: [Earnings, product launch, partnership]
+
+**F) ALLOCATION STRATEGY (recomendación operativa):**
+   - Entry: [IPO pricing / Day-1 / Wait for pullback 10-20%]
+   - Position sizing: [% del fondo IPO allocation]
+   - Hold period: [Swing 30-90d / Long-term 12-24m]
+   - Exit triggers: [Price targets o eventos fundamentales]
+
+──────────────────────────────────────────────────────────────
+🌍 PARTE 3: CONTEXTO MACRO & SECTOR (100 palabras)
+──────────────────────────────────────────────────────────────
+
+- Estado del IPO window (VIX, Renaissance IPO Index performance)
+- Sector rotation trends (growth vs value, large vs small cap)
+- Fed policy outlook & impact en valuaciones growth
+- Comparativa YTD performance: Tech IPOs 2026 vs 2025 vintage
+
+──────────────────────────────────────────────────────────────
+📎 PARTE 4: FUENTES & METODOLOGÍA
+──────────────────────────────────────────────────────────────
+
+Prioriza datos verificables de:
+1. SEC EDGAR (S-1/F-1 filings, amendments) – últimos 30 días
+2. Renaissance Capital IPO Intelligence – calendar & pricing
+3. PitchBook / Crunchbase – funding history & cap table
+4. Company Investor Relations (cuando disponible)
+5. Sell-side research (Goldman, Morgan Stanley, JPM initiation reports)
+6. Financial press (WSJ, Bloomberg, FT) – últimos 7 días
+
+Metodología de scoring (0-100):
+- Financials & Growth (40%): Revenue scale, growth rate, margins
+- Market Timing (25%): Sector momentum, IPO window health
+- Competitive Position (20%): Moat strength, market share
+- Execution Risk (15%): Management, cap table, use of proceeds
+
+Si un dato no está disponible públicamente, marca como "N/D (private)" 
+y ajusta score en consecuencia (-5 pts por cada métrica clave missing).
+
+═══════════════════════════════════════════════════════════════
+
+TONE & STYLE:
+- Profesional institucional, sin hype ni jerga retail
+- Uso de terminología técnica: NTM (Next Twelve Months), 
+  LTM (Last Twelve Months), Rule of 40, NDR (Net Dollar Retention), etc.
+- Data-driven: cada afirmación debe tener fuente citada
+- Balanced: incluye bull case Y bear case para cada tesis
+- Accionable: recomendaciones específicas de entry/exit/sizing
+
+═══════════════════════════════════════════════════════════════
+
+DISCLAIMER FINAL:
+Este análisis es para fines educativos y no constituye asesoría 
+financiera. Las proyecciones se basan en información pública disponible 
+ala fecha y están sujetas a cambios materiales. Past performance de 
+IPOs no garantiza resultados futuros. Consulte con su asesor financiero 
+antes de tomar decisiones de inversión.
+
+═══════════════════════════════════════════════════════════════
+
+
             </p>
         </div>
 
