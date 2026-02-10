@@ -322,11 +322,423 @@
 
     <script>
         // Template del prompt
-        const promptTemplate = `Eres un asistente de IA experto en desarrollo web para <span class="highlight">[EMPRESA X]</span>. Tu objetivo es ayudar a crear aplicaciones modernas, responsivas y accesibles siguiendo las mejores prácticas de la industria. 
+        const promptTemplate = `
+        ROLE & CONTEXT:
+Actúas como Lead Analyst en el equipo de IPO Research de un fondo 
+institucional ($2B+ AUM). Tu mandato es producir un Pre-IPO Deep Dive 
+Report para el Investment Committee, evaluando si [EMPRESA X] cumple 
+los criterios de asignación de capital del fondo (minimum $10M position, 
+IRR target 25%+ anual, hold period 18-36 meses).
 
-Debes proporcionar soluciones específicas que se alineen con los valores y estándares de <span class="highlight">[EMPRESA X]</span>, asegurándote de mantener la coherencia con su imagen de marca y filosofía de diseño.
+Tu análisis será usado para:
+1. Decisión binaria: Pursue allocation SI/NO
+2. Position sizing (% del fondo)
+3. Entry strategy (IPO vs Day-1 vs esperar pullback)
+4. Risk management (stop-loss, hedging considerations)
 
-Siempre proporciona código limpio, bien documentado y optimizado para los proyectos de <span class="highlight">[EMPRESA X]</span>.`;
+═══════════════════════════════════════════════════════════════
+
+EMPRESA OBJETIVO: [EMPRESA X]
+Fecha de análisis: [FECHA ACTUAL]
+Analista: [TU NOMBRE] | Revisión: Pre-IPO Committee
+
+═══════════════════════════════════════════════════════════════
+
+ESTRUCTURA DE ANÁLISIS (Investment-Grade Report):
+
+──────────────────────────────────────────────────────────────
+I. EXECUTIVE SUMMARY (200 palabras máx)
+──────────────────────────────────────────────────────────────
+
+**A) QUICK FACTS:**
+| Métrica | Valor | Fuente | Fecha |
+|---------|-------|--------|-------|
+| Sector / Subsector | | | |
+| Último round valuación | $XXB (Series X) | | |
+| LTM Revenue (más reciente) | $XXM | | |
+| Revenue Growth (YoY) | XX% | | |
+| Gross Margin | XX% | | |
+| Burn Rate (Qtr) | $XXM | | |
+| Runway (meses, sin IPO) | XX | | |
+| Employees | X,XXX | | |
+| Founded | YYYY | | |
+| HQ Location | | | |
+
+**B) INVESTMENT RECOMMENDATION (una frase):**
+[PURSUE AGGRESSIVELY / PURSUE SELECTIVELY / PASS / MONITOR]
+
+Rationale (3 bullets):
+• [Fortaleza clave #1]
+• [Fortaleza clave #2]
+• [Risk principal que limita convicción]
+
+──────────────────────────────────────────────────────────────
+II. BUSINESS MODEL & COMPETITIVE MOAT ANALYSIS
+──────────────────────────────────────────────────────────────
+
+**A) BUSINESS MODEL BREAKDOWN:**
+
+1. **Revenue Streams (% del total):**
+   - Stream 1: [XX%] – [Descripción, ej: "Subscription SaaS, annual contracts"]
+   - Stream 2: [XX%] – [...]
+   - Stream 3: [XX%] – [...]
+
+2. **Customer Segmentation:**
+   | Segment | % Revenue | ACV (avg) | # Customers | Growth YoY | Churn Rate |
+   |---------|-----------|-----------|-------------|------------|------------|
+   | Enterprise (>$1M ARR) | XX% | $XXk | XXX | +XX% | X.X% |
+   | Mid-Market ($100k-1M) | XX% | $XXk | X,XXX | +XX% | X.X% |
+   | SMB (<$100k) | XX% | $XXk | XX,XXX | +XX% | XX% |
+
+3. **Go-to-Market Strategy:**
+   - Primary: [Direct sales / PLG / Channel partners / Hybrid]
+   - Sales cycle: [XX días promedio]
+   - Sales efficiency (Magic Number): [X.Xx] (benchmark: >0.75 = healthy)
+
+**B) COMPETITIVE MOAT ASSESSMENT (Porter's 5 Forces adaptado):**
+
+Evalúa cada dimensión en escala 0-10 (10 = moat más fuerte):
+
+| Moat Type | Score (0-10) | Evidencia Cuantitativa | Sostenibilidad (5Y view) |
+|-----------|--------------|------------------------|--------------------------|
+| **Network Effects** | | NDR: XX% (>120% = strong) <br> DAU/MAU ratio: XX% <br> Cross-side network: [Sí/No] | [Alta/Media/Baja] |
+| **Switching Costs** | | Avg migration cost: $XXk-XXM <br> Data lock-in: [Años de data histórica] <br> Integration depth: [XX APIs/workflows] | |
+| **Economies of Scale** | | Unit cost decline: XX% por 2x volume <br> Gross margin expansion: +XXpp en 3Y | |
+| **Intangible Assets** | | Patents: XX (vs XX competitors) <br> Proprietary data: [TB/PB scale] <br> Brand NPS: XX (vs XX industry avg) | |
+| **Cost Advantages** | | COGS/unit: XX% below nearest comp <br> Cloud infra efficiency: [specific metric] | |
+
+**MOAT SCORE TOTAL: [XX/50]**
+- 40-50: Exceptional (Google/Meta tier)
+- 30-39: Strong (Snowflake/Datadog tier)
+- 20-29: Moderate (vulnerable pero defendible)
+- <20: Weak (high competitive risk)
+
+**C) COMPETITIVE LANDSCAPE:**
+
+| Competitor | Market Share (est.) | Differentiation | Threat Level (H/M/L) |
+|------------|---------------------|-----------------|----------------------|
+| [Comp 1] | XX% | [1 frase] | |
+| [Comp 2] | XX% | | |
+| [Startup emergente] | <5% | [Disruptive angle] | |
+
+**Positioning Statement (elevator pitch):**
+[2-3 frases: Por qué [EMPRESA X] gana vs competencia]
+
+──────────────────────────────────────────────────────────────
+III. UNIT ECONOMICS & PATH TO PROFITABILITY
+──────────────────────────────────────────────────────────────
+
+**A) COHORT ECONOMICS (si disponible):**
+
+| Cohort Metric | Valor | Benchmark (sector) | Grade (A-F) |
+|---------------|-------|-----------------------|-------------|
+| **CAC (Customer Acquisition Cost)** | $XXk | $XXk | |
+| **LTV (Lifetime Value)** | $XXk | $XXk | |
+| **LTV/CAC Ratio** | X.Xx | >3.0 (healthy) | |
+| **Payback Period (meses)** | XX | <18 (good), <12 (excellent) | |
+| **Net Revenue Retention (NDR)** | XX% | >110% (best-in-class) | |
+| **Gross Retention** | XX% | >90% (SaaS standard) | |
+
+**B) P&L STRUCTURE (LTM o más reciente):**
+
+| Línea | $M | % Revenue | Trend (YoY) | vs Peer Median |
+|-------|-----|-----------|-------------|----------------|
+| **Revenue** | $XXX | 100% | +XX% | |
+| **COGS** | $(XX) | XX% | | |
+| **Gross Profit** | $XXX | **XX%** | +/-XXpp | XXpp |
+| **R&D** | $(XX) | XX% | | |
+| **S&M (Sales & Marketing)** | $(XX) | XX% | | |
+| **G&A** | $(XX) | XX% | | |
+| **Operating Income** | $(XX) | **(XX)%** | | |
+| **EBITDA (adjusted)** | $(XX) | **(XX)%** | | |
+| **Free Cash Flow** | $(XX) | **(XX)%** | | |
+
+**C) RULE OF 40 ANALYSIS:**
+
+Formula: Revenue Growth% + FCF Margin% (o EBITDA Margin%)
+
+[EMPRESA X]: XX% growth + (XX)% margin = **[XX]**
+
+Interpretation:
+- >40: Exceptional (rarísimo pre-IPO)
+- 30-40: Strong (IPO-ready)
+- 20-30: Adequate (común en growth stage)
+- <20: Concerning (burn ineficiente)
+
+**D) PATH TO PROFITABILITY (Scenario Planning):**
+
+| Scenario | Timeline | Assumptions | Implied Valuation Impact |
+|----------|----------|-------------|--------------------------|
+| **Bear** | 20XX | Growth slows to XX%, opex stays XX% | -XX% vs base |
+| **Base** | 20XX | Growth XX%, opex leverage XXpp/year | Base case |
+| **Bull** | 20XX | Growth accelerates XX%, margins hit XX% | +XX% vs base |
+
+**Key Profitability Levers:**
+1. [Ej: "S&M efficiency - reducir de 55% a 40% revenue via PLG"]
+2. [Ej: "Gross margin expansion - 70% → 80% con escala cloud"]
+3. [Ej: "International expansion - opex leverage con existing platform"]
+
+──────────────────────────────────────────────────────────────
+IV. VALUATION & COMPARABLES ANALYSIS
+──────────────────────────────────────────────────────────────
+
+**A) PEER GROUP SELECTION (public comps):**
+
+Criterios: Similar business model, growth profile, go-to-market
+
+| Ticker | Company | Sector | Market Cap | P/S (NTM) | Revenue Growth | Gross Margin | Rule of 40 |
+|--------|---------|--------|------------|-----------|----------------|--------------|------------|
+| [COMP1] | | | $XXB | XXx | XX% | XX% | XX |
+| [COMP2] | | | | | | | |
+| [COMP3] | | | | | | | |
+| **Median** | | | | **XXx** | **XX%** | **XX%** | **XX** |
+
+**B) IMPLIED VALUATION (usando peer medians):**
+
+Method 1: **P/S Multiple (NTM)**
+- [EMPRESA X] NTM Revenue (est): $XXB
+- Peer median P/S: XXx
+- **Implied Value = $XXB**
+
+Method 2: **EV/Revenue (LTM)**
+- [EMPRESA X] LTM Revenue: $XXB
+- Peer median EV/Revenue: XXx
+- Adjust for: Growth premium (+XX%), Margin discount (-XX%)
+- **Implied Value = $XXB**
+
+Method 3: **DCF (Discounted Cash Flow) - abreviado**
+- 5Y Revenue CAGR: XX%
+- Terminal FCF margin: XX%
+- WACC: XX% (typical for growth stage)
+- **Implied Value = $XXB**
+
+**C) VALUATION SUMMARY:**
+
+| Method | Implied Value | vs Last Round ($XXB) | vs IPO Range (est $XX-XXB) |
+|--------|---------------|----------------------|----------------------------|
+| P/S (NTM) | $XXB | +/-XX% | +/-XX% |
+| EV/Revenue | $XXB | +/-XX% | +/-XX% |
+| DCF | $XXB | +/-XX% | +/-XX% |
+| **Fair Value (weighted avg)** | **$XXB** | **+/-XX%** | **+/-XX%** |
+
+**D) POST-IPO PRICE TARGETS (per share, assume XX shares outstanding):**
+
+| Scenario | Valuation | Price/Share | Assumptions | Probability |
+|----------|-----------|-------------|-------------|-------------|
+| **Bear** | $XXB | $XX | Growth miss, multiple compression to XXx P/S | 20% |
+| **Base** | $XXB | $XX | In-line execution, sector median multiple | 50% |
+| **Bull** | $XXB | $XX | Beat & raise, premium multiple XXx P/S | 30% |
+
+**Expected Value (probability-weighted): $XX/share**
+
+**E) SENSITIVITY ANALYSIS:**
+
+¿Qué pasa si...?
+- Growth rate ±10pp → Price impact: ±XX%
+- P/S multiple ±2x → Price impact: ±XX%
+- Dilution adicional +10% → Price impact: -XX%
+
+──────────────────────────────────────────────────────────────
+V. RISK ANALYSIS & MITIGATION
+──────────────────────────────────────────────────────────────
+
+**A) RISK MATRIX (priorizado por Impact × Probability):**
+
+| # | Risk Factor | Category | Probability (H/M/L) | Impact (% downside) | Mitigation / Hedge |
+|---|-------------|----------|---------------------|---------------------|-------------------|
+| 1 | [Ej: "Competition from [BigTech X] entering vertical"] | Competitive | Medium | 30-40% | Monitor product launches, diversify sector exposure |
+| 2 | [Ej: "Regulatory change in [Region/Law]"] | Regulatory | Low | 50%+ | Legal analysis, scenario planning |
+| 3 | [Ej: "Customer concentration - Top 10 = XX% revenue"] | Business Model | High | 20-30% | Track NDR of top accounts, diversification roadmap |
+| 4 | [Ej: "Key person risk - Founder departure"] | Management | Low | 15-25% | Due diligence on succession, retention agreements |
+| 5 | [Ej: "Valuation multiple compression (macro)"] | Market | Medium | 40-60% | Hedge via sector shorts, reduce position size |
+
+**B) DILUTION ANALYSIS:**
+
+| Event | Shares Created | % Dilution | Impact on Valuation |
+|-------|----------------|------------|---------------------|
+| IPO (primary offering) | XXM | XX% | Uso de proceeds: [descrip] |
+| Greenshoe (overallotment) | XXM | XX% | Underwriter option (typical 15%) |
+| Employee options (unvested) | XXM | XX% | 4Y vesting, assume XX% turnover |
+| **Total dilution (IPO+3Y)** | | **XX%** | Reduce price target by XX% |
+
+**C) BEAR CASE THESIS (steel-man the short):**
+
+¿Por qué un short-seller atacaría [EMPRESA X]?
+1. [Ej: "Unit economics no escalan - S&M costs sticky en XX% revenue"]
+2. [Ej: "Technology obsolescence - [Competitor X] tiene next-gen approach"]
+3. [Ej: "Overvaluation - trading XXx P/S vs XXx sector median sin justificar"]
+
+**Rebuttal (si aplica):**
+[Tu contra-argumento con datos]
+
+──────────────────────────────────────────────────────────────
+VI. IPO TIMING & TECHNICAL SIGNALS
+──────────────────────────────────────────────────────────────
+
+**A) REGULATORY FILINGS (SEC timeline):**
+
+| Event | Date (actual/estimado) | Status | Source |
+|-------|------------------------|--------|--------|
+| Confidential S-1 filing | | ☐ Rumored / ☑ Confirmed | |
+| Public S-1 / S-1A amendment | | | SEC EDGAR |
+| Pricing range announcement | | | |
+| Roadshow dates | | | |
+| IPO pricing (final) | | | |
+| Trading Day 1 | | | |
+| Lock-up expiration (180d typ) | | | |
+
+**B) PRE-IPO SIGNALS (indirect indicators):**
+
+Checked items indicate preparedness:
+- ☐ **Debt raise** ($XXM+ en últimos 12M) → extends runway, signals IPO optionality
+- ☐ **C-suite hires** (CFO con IPO experience, GC, IR head)
+- ☐ **Underwriter mandates** (Goldman, Morgan Stanley, JPM announced)
+- ☐ **Secondary share sales** (insiders liquidating XX% stakes = confidence check)
+- ☐ **Audited financials** (Big 4 firm, 3Y history prepared)
+- ☐ **Board additions** (independent directors, compliance expertise)
+- ☐ **Pre-IPO marketing** (increased PR, conference appearances)
+
+**C) MARKET WINDOW ASSESSMENT:**
+
+| Factor | Status | Implication |
+|--------|--------|-------------|
+| **VIX (volatility)** | XX (target <20) | ☑ Green / ☐ Yellow / ☐ Red |
+| **Sector ETF (YTD)** | +XX% | Positive = supportive |
+| **Recent IPO performance** | [Comp IPO] +XX% (D+30) | Validates pricing appetite |
+| **Fed policy** | [Hawkish/Neutral/Dovish] | Impact on growth multiples |
+| **IPO pipeline** | XX deals in queue | Congestion risk: [H/M/L] |
+
+**WINDOW VERDICT:** ☐ OPEN / ☐ CAUTIOUS / ☐ CLOSED
+
+**D) OPTIMAL ENTRY STRATEGY:**
+
+| Strategy | Entry Point | Rationale | Risk/Reward |
+|----------|-------------|-----------|-------------|
+| **A) IPO Allocation** | $XX (midpoint range) | Get in early, liquidity day-1 | Medium risk, asymmetric upside if scarce allocation |
+| **B) Day-1 Market** | $XX (+5-10% pop typical) | Avoid allocation uncertainty | High risk (FOMO pricing) |
+| **C) Wait for Pullback** | $XX (-15-25% from open) | Better entry, 60% of IPOs pullback D+30 | Miss risk if doesn't pullback |
+
+**RECOMMENDED STRATEGY:** [A/B/C] based on allocation size available and conviction level
+
+──────────────────────────────────────────────────────────────
+VII. INVESTMENT DECISION FRAMEWORK
+──────────────────────────────────────────────────────────────
+
+**A) SCORING SUMMARY (weighted factors):**
+
+| Category | Weight | Score (0-10) | Weighted | Commentary |
+|----------|--------|--------------|----------|------------|
+| Business Model & Moat | 25% | X.X | X.X | |
+| Unit Economics | 20% | X.X | X.X | |
+| Growth Trajectory | 20% | X.X | X.X | |
+| Valuation (risk/reward) | 15% | X.X | X.X | |
+| Management & Execution | 10% | X.X | X.X | |
+| Market Timing | 10% | X.X | X.X | |
+| **TOTAL SCORE** | **100%** | | **X.X/10** | |
+
+**GRADE INTERPRETATION:**
+- 8.5-10.0: **A** → High Conviction (max position size)
+- 7.0-8.4: **B** → Qualified Interest (standard position)
+- 5.5-6.9: **C** → Selective/Monitor (small position or pass)
+- <5.5: **D/F** → Pass (fundamental issues)
+
+**B) POSITION SIZING RECOMMENDATION:**
+
+| Conviction Level | % of IPO Fund | $ Amount (assume $XXM fund) | Rationale |
+|------------------|---------------|----------------------------|-----------|
+| Score >8.5 (A) | 4-6% | $XX-XXM | Overweight vs typical 2-3% |
+| Score 7-8.4 (B) | 2-3% | $XX-XXM | Standard position |
+| Score 5.5-6.9 (C) | 0.5-1% | $XX-XXM | Toe-in-the-water |
+| Score <5.5 (D/F) | 0% | $0 | Pass |
+
+**PROPOSED POSITION: [X.X%] = $XXM**
+
+**C) RISK MANAGEMENT PLAN:**
+
+| Parameter | Value | Trigger | Action |
+|-----------|-------|---------|--------|
+| **Stop-loss (technical)** | $XX (-XX% from entry) | Breaks support + volume spike | Sell 50-100% |
+| **Trailing stop** | -15% from peak | After +30% gain | Lock in profits |
+| **Fundamental stop** | N/A | Earnings miss >10%, guide down >15% | Immediate review, likely exit |
+| **Time stop** | [Date, +18-24M] | If thesis not playing out | Rotate capital |
+
+**D) CATALYSTS & MILESTONES TO MONITOR:**
+
+| Timeframe | Event | Bull Case | Bear Case |
+|-----------|-------|-----------|-----------|
+| **0-3M post-IPO** | Q1 earnings | Beat by >5%, raise FY guide | Miss or in-line, maintain guide |
+| **3-6M** | Lock-up expiration | <5% selling pressure, insiders buy | Insider selling >20% stakes |
+| **6-12M** | Product launch / expansion | New vertical adds >$XXM ARR | Launch delays or low adoption |
+| **12-18M** | M&A activity | Strategic acquisition (accretive) | Distressed acquisition (dilutive) |
+
+──────────────────────────────────────────────────────────────
+VIII. DATA SOURCES & VERIFICATION
+──────────────────────────────────────────────────────────────
+
+**INFORMATION HIERARCHY (priorizar en este orden):**
+
+Tier 1 (highest confidence):
+☑ SEC filings (S-1, 10-K, 8-K) - [Link] - [Date]
+☑ Company Investor Relations - [Link] - [Date]
+☑ Earnings transcripts / Press releases - [Link] - [Date]
+
+Tier 2 (verified third-party):
+☐ PitchBook / Crunchbase (funding history) - [Date]
+☐ Sell-side research (Goldman, MS, JPM) - [Analyst] - [Date]
+☐ Industry reports (Gartner, Forrester) - [Report name] - [Date]
+
+Tier 3 (use with caution):
+☐ Financial media (WSJ, Bloomberg, FT) - [Article] - [Date]
+☐ Company blog / product announcements - [Link] - [Date]
+☐ Glassdoor / Blind (employee sentiment) - [Aggregate data only]
+
+**DATA GAPS IDENTIFIED:**
+- [Métrica X]: Not publicly disclosed, estimated via [method]
+- [Métrica Y]: Conflicting sources ([Source A]: XX vs [Source B]: XX), using [X] based on [rationale]
+
+**LAST UPDATED:** [FECHA]
+**NEXT REVIEW:** [FECHA +30 días, or upon material news]
+
+──────────────────────────────────────────────────────────────
+IX. APPENDIX (Optional, if needed)
+──────────────────────────────────────────────────────────────
+
+A) Cap Table Analysis (if available)
+B) Management Biographies & Track Records
+C) Product Roadmap (public information only)
+D) Customer Case Studies / Testimonials
+E) Patent Portfolio Analysis
+F) Financial Model (Excel attachment reference)
+
+══════════════════════════════════════════════════════════════
+
+FINAL RECOMMENDATION TO INVESTMENT COMMITTEE:
+
+☐ **PURSUE AGGRESSIVELY** (Score >8.5, request max allocation)
+☐ **PURSUE SELECTIVELY** (Score 7-8.4, standard position)
+☐ **MONITOR / SMALL POSITION** (Score 5.5-6.9, toe-in only)
+☐ **PASS** (Score <5.5, fundamental issues outweigh opportunity)
+
+**ONE-SENTENCE SUMMARY:**
+[Tu veredicto final con rationale específico]
+
+══════════════════════════════════════════════════════════════
+
+ANALYST CERTIFICATION:
+I, [Analista], certify that:
+1. This analysis is based on publicly available information as of [FECHA]
+2. I have no material conflict of interest with [EMPRESA X]
+3. My compensation is not tied to the recommendation in this report
+4. All data sources are cited and assumptions are disclosed
+
+This report is for institutional use only and does not constitute 
+investment advice to retail investors.
+
+══════════════════════════════════════════════════════════════
+
+
+
+`;
 
         // Elementos del DOM
         const empresaInput = document.getElementById('empresaInput');
