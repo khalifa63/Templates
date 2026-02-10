@@ -1,0 +1,264 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Copy Prompt - Apple Style</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+            color: #1d1d1f;
+        }
+
+        .container {
+            background: rgba(255, 255, 255, 0.9);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border-radius: 20px;
+            padding: 40px;
+            max-width: 600px;
+            width: 100%;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s ease;
+        }
+
+        .container:hover {
+            transform: translateY(-5px);
+        }
+
+        h1 {
+            font-size: 32px;
+            font-weight: 600;
+            margin-bottom: 12px;
+            letter-spacing: -0.5px;
+            text-align: center;
+        }
+
+        .subtitle {
+            font-size: 17px;
+            color: #86868b;
+            text-align: center;
+            margin-bottom: 32px;
+            font-weight: 400;
+        }
+
+        .prompt-container {
+            background: #f5f5f7;
+            border-radius: 12px;
+            padding: 24px;
+            margin-bottom: 24px;
+            position: relative;
+            border: 1px solid rgba(0, 0, 0, 0.05);
+        }
+
+        .prompt-text {
+            font-size: 15px;
+            line-height: 1.6;
+            color: #1d1d1f;
+            font-weight: 400;
+            word-wrap: break-word;
+        }
+
+        .copy-button {
+            width: 100%;
+            background: #0071e3;
+            color: white;
+            border: none;
+            border-radius: 12px;
+            padding: 16px 24px;
+            font-size: 17px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-family: inherit;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+
+        .copy-button:hover {
+            background: #0077ed;
+            transform: scale(1.02);
+        }
+
+        .copy-button:active {
+            transform: scale(0.98);
+        }
+
+        .copy-button.copied {
+            background: #34c759;
+        }
+
+        .icon {
+            width: 20px;
+            height: 20px;
+            transition: transform 0.3s ease;
+        }
+
+        .copy-button.copied .icon {
+            transform: rotate(360deg);
+        }
+
+        .feedback-message {
+            text-align: center;
+            margin-top: 16px;
+            font-size: 14px;
+            color: #34c759;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+            font-weight: 500;
+        }
+
+        .feedback-message.show {
+            opacity: 1;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .container {
+                padding: 28px;
+                border-radius: 16px;
+            }
+
+            h1 {
+                font-size: 28px;
+            }
+
+            .subtitle {
+                font-size: 15px;
+                margin-bottom: 24px;
+            }
+
+            .prompt-container {
+                padding: 20px;
+            }
+
+            .prompt-text {
+                font-size: 14px;
+            }
+
+            .copy-button {
+                padding: 14px 20px;
+                font-size: 16px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            body {
+                padding: 16px;
+            }
+
+            .container {
+                padding: 24px;
+            }
+
+            h1 {
+                font-size: 24px;
+            }
+
+            .subtitle {
+                font-size: 14px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Prompt Copy Tool</h1>
+        <p class="subtitle">Copia tu prompt con un solo clic</p>
+        
+        <div class="prompt-container">
+            <p class="prompt-text" id="promptText">
+                Eres un asistente de IA experto en desarrollo web. Tu objetivo es ayudar a crear aplicaciones modernas, responsivas y accesibles siguiendo las mejores prácticas de la industria. Siempre proporciona código limpio, bien documentado y optimizado.
+            </p>
+        </div>
+
+        <button class="copy-button" id="copyButton">
+            <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+                <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+            </svg>
+            <span id="buttonText">Copiar Prompt</span>
+        </button>
+
+        <p class="feedback-message" id="feedbackMessage">✓ Copiado al portapapeles</p>
+    </div>
+
+    <script>
+        const copyButton = document.getElementById('copyButton');
+        const promptText = document.getElementById('promptText');
+        const buttonText = document.getElementById('buttonText');
+        const feedbackMessage = document.getElementById('feedbackMessage');
+
+        copyButton.addEventListener('click', async () => {
+            try {
+                // Usar la API moderna de Clipboard
+                await navigator.clipboard.writeText(promptText.textContent.trim());
+                
+                // Feedback visual
+                copyButton.classList.add('copied');
+                buttonText.textContent = '¡Copiado!';
+                feedbackMessage.classList.add('show');
+
+                // Cambiar el ícono a check
+                copyButton.querySelector('.icon').innerHTML = `
+                    <path d="M20 6L9 17l-5-5" stroke-linecap="round" stroke-linejoin="round"/>
+                `;
+
+                // Restaurar después de 2 segundos
+                setTimeout(() => {
+                    copyButton.classList.remove('copied');
+                    buttonText.textContent = 'Copiar Prompt';
+                    feedbackMessage.classList.remove('show');
+                    
+                    // Restaurar ícono original
+                    copyButton.querySelector('.icon').innerHTML = `
+                        <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+                        <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+                    `;
+                }, 2000);
+
+            } catch (err) {
+                // Fallback para navegadores antiguos
+                console.error('Error al copiar:', err);
+                
+                // Método alternativo
+                const textArea = document.createElement('textarea');
+                textArea.value = promptText.textContent.trim();
+                textArea.style.position = 'fixed';
+                textArea.style.opacity = '0';
+                document.body.appendChild(textArea);
+                textArea.select();
+                
+                try {
+                    document.execCommand('copy');
+                    buttonText.textContent = '¡Copiado!';
+                    feedbackMessage.classList.add('show');
+                    
+                    setTimeout(() => {
+                        buttonText.textContent = 'Copiar Prompt';
+                        feedbackMessage.classList.remove('show');
+                    }, 2000);
+                } catch (fallbackErr) {
+                    buttonText.textContent = 'Error al copiar';
+                }
+                
+                document.body.removeChild(textArea);
+            }
+        });
+    </script>
+</body>
+</html>
