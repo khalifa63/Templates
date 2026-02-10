@@ -28,8 +28,8 @@
             -webkit-backdrop-filter: blur(20px);
             border-radius: 20px;
             padding: 40px;
-            max-width: 600px;
-            width: 100%;
+            width: 90%;
+            max-width: 1400px;
             box-shadow: 0 20px 60px rgba(0, 0, 0, 0.1);
             transition: transform 0.3s ease;
         }
@@ -61,6 +61,27 @@
             margin-bottom: 24px;
             position: relative;
             border: 1px solid rgba(0, 0, 0, 0.05);
+            max-height: 600px;
+            overflow-y: auto;
+        }
+
+        /* Scrollbar personalizado */
+        .prompt-container::-webkit-scrollbar {
+            width: 10px;
+        }
+
+        .prompt-container::-webkit-scrollbar-track {
+            background: #e5e5e7;
+            border-radius: 10px;
+        }
+
+        .prompt-container::-webkit-scrollbar-thumb {
+            background: #c3c3c5;
+            border-radius: 10px;
+        }
+
+        .prompt-container::-webkit-scrollbar-thumb:hover {
+            background: #a8a8aa;
         }
 
         .prompt-text {
@@ -69,6 +90,7 @@
             color: #1d1d1f;
             font-weight: 400;
             word-wrap: break-word;
+            white-space: pre-wrap;
         }
 
         .copy-button {
@@ -127,10 +149,22 @@
         }
 
         /* Responsive */
+        @media (max-width: 1024px) {
+            .container {
+                width: 92%;
+                padding: 36px;
+            }
+
+            .prompt-container {
+                max-height: 500px;
+            }
+        }
+
         @media (max-width: 768px) {
             .container {
                 padding: 28px;
                 border-radius: 16px;
+                width: 95%;
             }
 
             h1 {
@@ -144,6 +178,7 @@
 
             .prompt-container {
                 padding: 20px;
+                max-height: 450px;
             }
 
             .prompt-text {
@@ -163,6 +198,7 @@
 
             .container {
                 padding: 24px;
+                width: 98%;
             }
 
             h1 {
@@ -172,17 +208,25 @@
             .subtitle {
                 font-size: 14px;
             }
+
+            .prompt-container {
+                padding: 18px;
+                max-height: 400px;
+            }
+
+            .prompt-text {
+                font-size: 13px;
+            }
         }
     </style>
 </head>
 <body>
     <div class="container">
-        <h1>Prompt Para analisis Pre-IPO</h1>
+        <h1>Prompt Para análisis Pre-IPO</h1>
         <p class="subtitle">Copia tu prompt con un solo clic</p>
         
         <div class="prompt-container">
-            <p class="prompt-text" id="promptText">
-                ROLE & CONTEXT:
+            <p class="prompt-text" id="promptText">ROLE & CONTEXT:
 Actúa como Managing Director de un fondo de public equity especializado 
 en IPO allocation y early-stage public equities. Tienes 15+ años de 
 experiencia en capital markets, con track record en identificación 
@@ -342,14 +386,11 @@ TONE & STYLE:
 DISCLAIMER FINAL:
 Este análisis es para fines educativos y no constituye asesoría 
 financiera. Las proyecciones se basan en información pública disponible 
-ala fecha y están sujetas a cambios materiales. Past performance de 
+a la fecha y están sujetas a cambios materiales. Past performance de 
 IPOs no garantiza resultados futuros. Consulte con su asesor financiero 
 antes de tomar decisiones de inversión.
 
-═══════════════════════════════════════════════════════════════
-
-
-            </p>
+═══════════════════════════════════════════════════════════════</p>
         </div>
 
         <button class="copy-button" id="copyButton">
