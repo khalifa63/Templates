@@ -1,0 +1,277 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Analizar Portafolio</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background-color: #f5f5f7;
+            color: #1d1d1f;
+        }
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            background-color: white;
+            border-radius: 18px;
+            padding: 30px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+        h1 {
+            font-size: 32px;
+            font-weight: 600;
+            margin-bottom: 30px;
+            color: #1d1d1f;
+        }
+        p {
+            font-size: 16px;
+            line-height: 1.6;
+            color: #1d1d1f;
+            margin-bottom: 20px;
+        }
+
+        /* Botón de copiar */
+        .controls {
+            display: flex;
+            gap: 12px;
+            align-items: center;
+        }
+        .btn-copy {
+            background-color: #0a84ff;
+            color: white;
+            border: none;
+            padding: 10px 16px;
+            border-radius: 10px;
+            font-size: 15px;
+            cursor: pointer;
+            transition: background-color 0.15s ease;
+        }
+        .btn-copy:active { transform: translateY(1px); }
+        .btn-copy:disabled {
+            background-color: #7fb6ff;
+            cursor: default;
+        }
+        .sr-only {
+            position: absolute;
+            width: 1px;
+            height: 1px;
+            padding: 0;
+            margin: -1px;
+            overflow: hidden;
+            clip: rect(0,0,0,0);
+            white-space: nowrap;
+            border: 0;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Grafico de rendimiento</h1>
+        <p id="descripcion">
+        📊 PROMPT OPTIMIZADO: ANÁLISIS SEMÁFORO DE PORTAFOLIO
+ROL: Trader profesional + Gestor institucional especializado en swing trading. Enfoque: trailing stops, dejar correr ganadoras, control de riesgo disciplinado. Sin teoría, solo decisiones tipo semáforo basadas en datos históricos.
+
+DATOS REQUERIDOS:
+
+📸 Imagen/tabla del portafolio actual (posiciones abiertas, P/L, precios)
+
+📁 Historial de cuenta (operaciones cerradas últimos 30 días)
+
+🎯 TABLERO DE EJECUCIÓN
+1) Estado General
+
+Valor total: ___
+
+P/L no realizado: ___ ($___)
+
+P/L realizado (histórico): ___ ($___)
+
+Riesgo hoy: Bajo/Medio/Alto (razón + comparación con historial)
+
+2) 🟢 MANTENER (sin tocar)
+
+🟢 ___ (+% o -%, día X) - Razón específica
+
+🟢 ___ - Justificación con timing swing
+
+3) 🟡 VIGILAR (con stop mental, NO vender aún)
+
+🟡 ___ → Stop mental: -___% (esperar confirmación)
+
+🟡 ___ → Trailing stop sugerido: % (protege +%)
+
+4) 🟢 TRAILING STOPS (proteger ganadoras, NO vender)
+
+🟢 ___ (+%) → Trailing stop % en $ (protege +%)
+
+🟢 ___ (+___%) → Trailing stop ___% (upside ilimitado)
+
+Razón histórica: Comparar con trades pasados similares
+
+5) 🔴 REDUCIR/SALIR (solo casos críticos)
+
+🔴 ___ → VENDER ___% HOY porque:
+
+Pérdida >-___% (supera límite swing)
+
+O concentración >15%
+
+O ganancia extrema >+30% sin trailing disponible
+
+Comparar con historial: ¿Repetir errores pasados?
+
+6) Movimientos Hoy (máx. 3)
+
+___ (especificar: trailing stop o venta)
+
+🚫 Si nada urgente: "Hoy solo colocar trailing stops"
+
+7) Control de Concentración
+
+Mayor posición: ___% (⚠️ si >15%)
+
+Mayor sector: ___% (⚠️ si >30%)
+
+Rebalanceo: ___ (considerar trailing stops vs ventas)
+
+8) Análisis de Patrones Históricos
+
+Win rate histórico: ___%
+
+Promedio ganancia: $___
+
+Promedio pérdida: $___
+
+⚠️ Patrón detectado: (ej: "Cortas ganancias pronto", "Aguantas pérdidas")
+
+💡 Corrección sugerida: ___
+
+9) Timing Swing (para posiciones negativas)
+
+Días 1-5: Rango normal ±3%
+
+Días 6-15: Debe mostrar dirección
+
+Días 15+: Decisión necesaria
+
+Lista por fase: [posición, días, %]
+
+10) Recordatorio
+
+Basado en TU historial: ___
+
+Evitar repetir: ___
+
+Ejecutar plan sin emoción.
+
+📋 REGLAS CLAVE DEL ANÁLISIS
+Prioridad Trailing Stops:
+
++10% a +25%: Trailing stop 15-18% (NO vender)
+
++25% a +30%: Evaluar híbrido (25% venta + 75% trailing)
+
++30%: Venta parcial + trailing en resto
+
+Swing Timing:
+
+Días 1-5 + pérdida <-3%: MANTENER (volatilidad normal)
+
+Días 1-5 + pérdida >-4%: REDUCIR 50% (entrada fallida)
+
+Días 6-15 + pérdida >-3%: VIGILAR (tesis en duda)
+
+Días 15+ + negativo: SALIR (ya no es swing)
+
+Stop Universal:
+
+-6% en cualquier posición = salida automática (sin excepción)
+
+Análisis Histórico:
+
+Comparar posiciones actuales con trades pasados similares
+
+Identificar patrones de venta prematura o pérdidas grandes
+
+Ajustar decisiones para NO repetir errores
+
+🎯 OBJETIVO DEL PROMPT
+Maximizar ganancias usando trailing stops (evitar vender pronto)
+
+Proteger capital con stops disciplinados (evitar pérdidas grandes)
+
+Reducir sobre-operación (set & forget con trailing)
+
+Aprender del historial (no repetir patrones negativos)
+
+Cambios Clave vs Versión Original:
+✅ Añadido: Sección de Trailing Stops (antes solo "recortar")
+✅ Añadido: Análisis de patrones históricos obligatorio
+✅ Añadido: Timing swing (días de tenencia)
+✅ Modificado: Prioridad en trailing stops sobre ventas parciales
+✅ Añadido: Comparación histórica para cada decisión crítica
+✅ Más específico: Niveles exactos de trailing stops recomendados
+
+        </p>
+
+        <div class="controls" aria-live="polite">
+            <button id="copyBtn" class="btn-copy" type="button" aria-describedby="copyDesc">Copiar texto</button>
+            <span id="copyDesc" class="sr-only">Copia el texto del párrafo anterior al portapapeles</span>
+        </div>
+    </div>
+
+    <script>
+        (function() {
+            const p = document.getElementById('descripcion');
+            const btn = document.getElementById('copyBtn');
+
+            async function fallbackCopyTextToClipboard(text) {
+                const textarea = document.createElement('textarea');
+                textarea.value = text;
+                // Evita que la textarea sea visible en el diseño
+                textarea.style.position = 'fixed';
+                textarea.style.top = '-9999px';
+                document.body.appendChild(textarea);
+                textarea.focus();
+                textarea.select();
+                try {
+                    document.execCommand('copy');
+                } catch (err) {
+                    console.error('Fallo el copy fallback', err);
+                }
+                document.body.removeChild(textarea);
+            }
+
+            async function copyText(text) {
+                if (navigator.clipboard && navigator.clipboard.writeText) {
+                    return navigator.clipboard.writeText(text);
+                } else {
+                    return fallbackCopyTextToClipboard(text);
+                }
+            }
+
+            btn.addEventListener('click', async () => {
+                const text = p.innerText || p.textContent;
+                btn.disabled = true;
+                const originalText = btn.textContent;
+                try {
+                    await copyText(text);
+                    btn.textContent = '¡Copiado!';
+                } catch (err) {
+                    console.error('No se pudo copiar:', err);
+                    btn.textContent = 'Error al copiar';
+                } finally {
+                    // Restaurar el texto del botón después de 1.5s
+                    setTimeout(() => {
+                        btn.textContent = originalText;
+                        btn.disabled = false;
+                    }, 1500);
+                }
+            });
+        })();
+    </script>
+</body>
+</html>
